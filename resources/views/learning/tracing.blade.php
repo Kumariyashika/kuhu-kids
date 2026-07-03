@@ -1,10 +1,40 @@
 @extends('layouts.app')
 
-@section('title', 'Kuhu Kids Learning - Alphabet Tracing')
+@section('title', 'Kuhu Kids Learning - Alphabet Writing')
 
 @section('content')
     <!-- Include Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Category Selection Overlay Modal -->
+    <div id="categorySelectionOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(140, 82, 255, 0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s ease;">
+        <div style="background: radial-gradient(circle, #FFFDF0 0%, #FFF5D1 100%); border: 6px solid var(--color-purple); border-radius: 36px; padding: 40px; box-shadow: 0 16px 0 var(--color-purple-shadow); max-width: 800px; width: 90%; text-align: center; transform: scale(1); transition: transform 0.3s ease; position: relative; font-family: 'Fredoka', sans-serif;">
+            <h2 style="font-size: 2.8rem; color: var(--color-purple); font-weight: 900; margin: 0 0 10px 0; text-shadow: 2px 2px 0px #FFF, 4px 4px 0px var(--color-purple-shadow);">
+                Choose What to Trace! ✏️
+            </h2>
+            <p style="font-size: 1.4rem; color: #4A3B00; font-weight: bold; margin-bottom: 35px;">
+                क्या लिखना सीखना है? सिलेक्ट करें!
+            </p>
+            
+            <div style="display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;">
+                <!-- Option 1: English -->
+                <button onclick="selectCategoryFromOverlay('english')" class="btn-3d" style="flex: 1; min-width: 200px; padding: 24px 16px; font-size: 1.5rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 12px; background: #FF66B2; border-bottom: 8px solid #D94B9F; color: white; border-radius: 24px; cursor: pointer;">
+                    <span style="font-size: 4rem;">🔤</span>
+                    <span>A to Z</span>
+                </button>
+                <!-- Option 2: Numbers -->
+                <button onclick="selectCategoryFromOverlay('numbers')" class="btn-3d" style="flex: 1; min-width: 200px; padding: 24px 16px; font-size: 1.5rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 12px; background: #FFDE59; border-bottom: 8px solid #CCB143; color: #4A3B00; border-radius: 24px; cursor: pointer;">
+                    <span style="font-size: 4rem;">🔢</span>
+                    <span>1 to 50</span>
+                </button>
+                <!-- Option 3: Hindi -->
+                <button onclick="selectCategoryFromOverlay('hindi')" class="btn-3d" style="flex: 1; min-width: 200px; padding: 24px 16px; font-size: 1.5rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 12px; background: #8C52FF; border-bottom: 8px solid #6E3CD9; color: white; border-radius: 24px; cursor: pointer;">
+                    <span style="font-size: 4rem;">🕉️</span>
+                    <span>क से ज्ञ</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <style>
         @keyframes spin {
@@ -109,7 +139,7 @@
         <!-- Header with dynamic Level and Stars counters -->
         <div class="inner-header">
             <h1 class="inner-title" style="margin: 0; display: flex; align-items: center; gap: 10px;">
-                <span style="color: var(--color-purple);">✍️ Alphabet Tracing</span>
+                <span style="color: var(--color-purple);">✍️ Let's Write!</span>
             </h1>
 
             <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
@@ -129,12 +159,12 @@
         </div>
 
         <!-- Category Tabs -->
-        <div class="category-tabs">
+        <div class="category-tabs" style="display: none;">
             <button onclick="setCategory('english')" id="tab-english" class="btn-3d btn-pink category-tab-btn">
                 🔤 English (A-Z)
             </button>
             <button onclick="setCategory('numbers')" id="tab-numbers" class="btn-3d btn-yellow category-tab-btn">
-                🔢 Numbers (1-20)
+                🔢 Numbers (1-50)
             </button>
             <button onclick="setCategory('hindi')" id="tab-hindi" class="btn-3d btn-yellow category-tab-btn">
                 🕉️ Hindi (क-ज्ञ)
@@ -142,11 +172,8 @@
         </div>
 
         <div class="tracing-board-wrapper">
-            <!-- Instruction Banner -->
-            <div id="instructionBanner" 
-                style="background: #FFFDF0; border: 3px solid var(--color-purple); border-radius: 20px; padding: 12px 20px; font-weight: bold; color: var(--color-purple); text-align: center; margin-bottom: 16px; box-shadow: 0 4px 0 var(--color-purple-shadow); font-size: 1.25rem; transition: all 0.3s ease;">
-                Trace Letter: Connect the dots ✏️
-            </div>
+            <!-- Instruction Banner (Hidden) -->
+            <div id="instructionBanner" style="display: none;"></div>
 
             <!-- Canvas Area -->
             <div class="canvas-area">
@@ -165,6 +192,12 @@
                     ☝️
                 </div>
 
+                <!-- Path Deviation Warning Message -->
+                <div id="pathWarning"
+                    style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(255, 82, 82, 0.95); color: white; padding: 10px 24px; border-radius: 20px; font-weight: bold; font-size: 1.25rem; border: 3px solid #FFF; box-shadow: 0 6px 12px rgba(0,0,0,0.15); opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 80; white-space: nowrap; font-family: 'Fredoka', sans-serif;">
+                    ⚠️ Stay on the line! ✏️
+                </div>
+
                 <!-- Celebration Screen Overlay -->
                 <div id="successOverlay"
                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; z-index: 50; text-align: center; padding: 20px;">
@@ -173,7 +206,7 @@
                         style="font-size: 2.2rem; color: var(--color-green-real); text-shadow: 2px 2px 0px #FFF, 4px 4px 0px var(--color-green-real-shadow); font-weight: 900; margin: 15px 0;">
                         LEVEL UP!</h2>
                     <p id="successText" style="font-size: 1.3rem; font-weight: bold; color: var(--color-text);">Fantastic
-                        Tracing! You reached Level 2!</p>
+                        Writing! You reached Level 2!</p>
                     <div style="margin-top: 20px; display: flex; gap: 10px;">
                         <div
                             style="background: var(--color-yellow); border: 3px solid var(--color-yellow-shadow); padding: 8px 16px; border-radius: 16px; font-weight: bold; font-size: 1.1rem; color: #4A3B00;">
@@ -193,7 +226,7 @@
                         missed some dots! Connect all of them to level up!</p>
                     <button onclick="hideFailOverlay()" class="btn-3d btn-pink"
                         style="margin-top: 15px; font-size: 1.1rem; padding: 8px 20px;">
-                        🔄 Retry Tracing
+                        🔄 Try Again
                     </button>
                 </div>
             </div>
@@ -215,7 +248,7 @@
     <script>
         const categorySequences = {
             english: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-            numbers: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
+            numbers: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50'],
             hindi: ['क', 'ख', 'ग', 'घ', 'ङ', 'च', 'छ', 'ज', 'झ', 'ञ', 'ट', 'ठ', 'ड', 'ढ', 'ण', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ']
         };
 
@@ -265,6 +298,164 @@
         let helperPauseTimer = 0;
         let isHelperRunning = false;
         let idleTimer = null;
+
+        // Strict Tracing & Deviation Enforcer Variables and Helpers
+        let strokeStartDotIndex = 0;
+        let warningTimeout = null;
+        let maxProgressReached = 0; // Monotonic progress along stroke to block wiggles and backtracking
+
+        function showPathWarning(msg) {
+            const warningEl = document.getElementById('pathWarning');
+            if (!warningEl) return;
+            warningEl.innerText = msg;
+            warningEl.style.opacity = '1';
+            
+            if (warningTimeout) clearTimeout(warningTimeout);
+            warningTimeout = setTimeout(() => {
+                warningEl.style.opacity = '0';
+            }, 1800);
+        }
+
+        function playWarningSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime); // Low buzz sound
+                osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.25);
+                
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.25);
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        function getSegmentProjection(x, y, x1, y1, x2, y2) {
+            const A = x - x1;
+            const B = y - y1;
+            const C = x2 - x1;
+            const D = y2 - y1;
+            
+            const dot = A * C + B * D;
+            const lenSq = C * C + D * D;
+            let t = -1;
+            if (lenSq !== 0) {
+                t = dot / lenSq;
+            }
+            
+            let xx, yy;
+            if (t < 0) {
+                t = 0;
+                xx = x1;
+                yy = y1;
+            } else if (t > 1) {
+                t = 1;
+                xx = x2;
+                yy = y2;
+            } else {
+                xx = x1 + t * C;
+                yy = y1 + t * D;
+            }
+            
+            const dx = x - xx;
+            const dy = y - yy;
+            return {
+                distance: Math.sqrt(dx * dx + dy * dy),
+                t: t
+            };
+        }
+
+        function getActiveStrokeProjection(x, y) {
+            const guides = getActiveGuides(currentLetter);
+            if (!guides || !guides[currentStrokeIndex]) return { distance: Infinity, progress: 0 };
+            
+            const points = guides[currentStrokeIndex].points;
+            let minDistance = Infinity;
+            let bestSegment = 0;
+            let bestT = 0;
+            
+            for (let i = 0; i < points.length - 1; i++) {
+                const p1 = { x: points[i].x * canvas.width, y: points[i].y * canvas.height };
+                const p2 = { x: points[i + 1].x * canvas.width, y: points[i + 1].y * canvas.height };
+                
+                const result = getSegmentProjection(x, y, p1.x, p1.y, p2.x, p2.y);
+                if (result.distance < minDistance) {
+                    minDistance = result.distance;
+                    bestSegment = i;
+                    bestT = result.t;
+                }
+            }
+
+            // Calculate progress in pixels along the stroke guide line
+            let progressPixels = 0;
+            for (let i = 0; i < bestSegment; i++) {
+                const p1 = { x: points[i].x * canvas.width, y: points[i].y * canvas.height };
+                const p2 = { x: points[i + 1].x * canvas.width, y: points[i + 1].y * canvas.height };
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                progressPixels += Math.sqrt(dx * dx + dy * dy);
+            }
+            
+            if (bestSegment < points.length - 1) {
+                const p1 = { x: points[bestSegment].x * canvas.width, y: points[bestSegment].y * canvas.height };
+                const p2 = { x: points[bestSegment + 1].x * canvas.width, y: points[bestSegment + 1].y * canvas.height };
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const segmentLength = Math.sqrt(dx * dx + dy * dy);
+                progressPixels += bestT * segmentLength;
+            }
+            
+            return {
+                distance: minDistance,
+                progress: progressPixels
+            };
+        }
+
+        function cancelCurrentStroke(msgEn, msgHi) {
+            isDrawing = false;
+            currentStroke = null;
+            if (drawingStrokes.length > 0) {
+                drawingStrokes.pop(); // Remove the failed stroke
+            }
+            
+            // Reset connections made in this stroke
+            nextDotIndex = strokeStartDotIndex;
+            targetDots.forEach((d, idx) => {
+                if (idx >= strokeStartDotIndex) {
+                    d.connected = false;
+                }
+            });
+            
+            const msg = currentCategory === 'hindi' ? msgHi : msgEn;
+            showPathWarning(msg);
+            playWarningSound();
+            redrawCanvas();
+        }
+
+        function selectCategoryFromOverlay(cat) {
+            const overlay = document.getElementById('categorySelectionOverlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                overlay.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 300);
+            }
+            
+            setCategory(cat);
+
+            setTimeout(() => {
+                startHelperAnimation();
+            }, 1500);
+        }
 
 
 
@@ -696,6 +887,17 @@
             if (canvas.width > 0) {
                 generateTargetDots();
                 clearCanvas();
+            }
+
+            // Speak category using the global child's voice engine
+            if (window.SoundFX && typeof window.SoundFX.speak === 'function') {
+                if (cat === 'english') {
+                    window.SoundFX.speak("Let's trace English Alphabets!", "en-US");
+                } else if (cat === 'numbers') {
+                    window.SoundFX.speak("Let's trace Numbers!", "en-US");
+                } else if (cat === 'hindi') {
+                    window.SoundFX.speak("चलो हिंदी अक्षर लिखना सीखें!", "hi-IN");
+                }
             }
         }
 
@@ -1168,7 +1370,7 @@
                             starsPill.innerText = data.new_stars;
                         }
 
-                        document.getElementById('successText').innerText = `Fantastic Tracing! You reached Level ${data.new_level}!`;
+                        document.getElementById('successText').innerText = `Fantastic! You reached Level ${data.new_level}!`;
 
                         // Update local unlocked level
                         currentUnlockedLevel = data.new_level;
@@ -1293,11 +1495,6 @@
             canvas.addEventListener('touchstart', startDrawingTouch);
             canvas.addEventListener('touchmove', drawTouch);
             canvas.addEventListener('touchend', stopDrawing);
-
-            // Start helper hand animation
-            setTimeout(() => {
-                startHelperAnimation();
-            }, 1500);
         });
 
         function resizeCanvas() {
@@ -1329,11 +1526,29 @@
         function startDrawing(e) {
             if (isCelebrated) return;
             resetIdleTimer();
-            isDrawing = true;
 
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+
+            // Strict checking: must start near the active target dot
+            const activeDot = targetDots[nextDotIndex];
+            if (activeDot) {
+                const distSq = (activeDot.x - x) * (activeDot.x - x) + (activeDot.y - y) * (activeDot.y - y);
+                if (distSq > 55 * 55) { // 55px threshold for starting dot
+                    const msg = currentCategory === 'hindi' ? "चमकते बिंदु से शुरू करें! 🌟" : "Start from the glowing dot! 🌟";
+                    showPathWarning(msg);
+                    playWarningSound();
+                    return;
+                }
+            }
+
+            isDrawing = true;
+            strokeStartDotIndex = nextDotIndex; // Save where we started this stroke
+            
+            // Get initial progress along the active guide stroke
+            const proj = getActiveStrokeProjection(x, y);
+            maxProgressReached = proj.progress;
 
             currentStroke = [{ x, y }];
             drawingStrokes.push(currentStroke);
@@ -1349,6 +1564,26 @@
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
+            // Strict checking: must stay near the active stroke path and move forward
+            const proj = getActiveStrokeProjection(x, y);
+            
+            // 1. Path deviation check (stricter 25px threshold)
+            if (proj.distance > 25) {
+                cancelCurrentStroke("Stay on the line! ✏️", "रेखा के ऊपर ही चलें! ✏️");
+                return;
+            }
+            
+            // 2. Monotonic progress check (stricter 15px backtracking tolerance)
+            if (proj.progress < maxProgressReached - 15) { 
+                cancelCurrentStroke("Draw in one direction! ✏️", "एक ही दिशा में लिखें! ✏️");
+                return;
+            }
+            
+            // Update max progress if valid
+            if (proj.progress > maxProgressReached) {
+                maxProgressReached = proj.progress;
+            }
+
             currentStroke.push({ x, y });
             checkCollision(x, y);
             redrawCanvas();
@@ -1357,11 +1592,31 @@
         function startDrawingTouch(e) {
             if (isCelebrated) return;
             resetIdleTimer();
-            isDrawing = true;
+
             const rect = canvas.getBoundingClientRect();
             const touch = e.touches[0];
             const x = touch.clientX - rect.left;
             const y = touch.clientY - rect.top;
+
+            // Strict checking: must start near the active target dot
+            const activeDot = targetDots[nextDotIndex];
+            if (activeDot) {
+                const distSq = (activeDot.x - x) * (activeDot.x - x) + (activeDot.y - y) * (activeDot.y - y);
+                if (distSq > 55 * 55) { // 55px threshold for starting dot
+                    const msg = currentCategory === 'hindi' ? "चमकते बिंदु से शुरू करें! 🌟" : "Start from the glowing dot! 🌟";
+                    showPathWarning(msg);
+                    playWarningSound();
+                    e.preventDefault();
+                    return;
+                }
+            }
+
+            isDrawing = true;
+            strokeStartDotIndex = nextDotIndex; // Save where we started this stroke
+            
+            // Get initial progress along the active guide stroke
+            const proj = getActiveStrokeProjection(x, y);
+            maxProgressReached = proj.progress;
 
             currentStroke = [{ x, y }];
             drawingStrokes.push(currentStroke);
@@ -1376,10 +1631,33 @@
             const rect = canvas.getBoundingClientRect();
             const touch = e.touches[0];
             const x = touch.clientX - rect.left;
-            const y = touch.clientY - rect.top;
+            const y = touch.clientY - touch.target.getBoundingClientRect().top; // fix potential offset issues or clientY - rect.top
+            const yCorrected = touch.clientY - rect.top;
 
-            currentStroke.push({ x, y });
-            checkCollision(x, y);
+            // Strict checking: must stay near the active stroke path and move forward
+            const proj = getActiveStrokeProjection(x, yCorrected);
+            
+            // 1. Path deviation check (stricter 25px threshold)
+            if (proj.distance > 25) {
+                cancelCurrentStroke("Stay on the line! ✏️", "रेखा के ऊपर ही चलें! ✏️");
+                e.preventDefault();
+                return;
+            }
+            
+            // 2. Monotonic progress check (stricter 15px backtracking tolerance)
+            if (proj.progress < maxProgressReached - 15) { 
+                cancelCurrentStroke("Draw in one direction! ✏️", "एक ही दिशा में लिखें! ✏️");
+                e.preventDefault();
+                return;
+            }
+            
+            // Update max progress if valid
+            if (proj.progress > maxProgressReached) {
+                maxProgressReached = proj.progress;
+            }
+
+            currentStroke.push({ x, y: yCorrected });
+            checkCollision(x, yCorrected);
             redrawCanvas();
             e.preventDefault();
         }
@@ -1415,12 +1693,12 @@
             const currentStrokeNum = currentStrokeIndex + 1;
 
             if (completedStrokes.length === totalStrokes) {
-                banner.innerHTML = `Awesome! Tracing ${charLabel} completed! 🌟`;
+                banner.innerHTML = `Awesome! ${charLabel} completed! 🌟`;
                 banner.style.borderColor = "var(--color-green-real)";
                 banner.style.color = "var(--color-green-real)";
                 banner.style.boxShadow = "0 4px 0 var(--color-green-real-shadow)";
             } else {
-                banner.innerHTML = `Trace <strong style="color: var(--color-purple); font-weight: 900;">${charLabel}</strong>: Draw line <span style="color: #FF914D; font-size: 1.35rem; font-weight: 900;">${currentStrokeNum}</span> of <span style="color: var(--color-purple); font-size: 1.35rem; font-weight: 900;">${totalStrokes}</span>! Connect the dots. ✏️`;
+                banner.innerHTML = `<strong style="color: var(--color-purple); font-weight: 900;">${charLabel}</strong>: Draw line <span style="color: #FF914D; font-size: 1.35rem; font-weight: 900;">${currentStrokeNum}</span> of <span style="color: var(--color-purple); font-size: 1.35rem; font-weight: 900;">${totalStrokes}</span>! Connect the dots. ✏️`;
                 banner.style.borderColor = "var(--color-purple)";
                 banner.style.color = "var(--color-purple)";
                 banner.style.boxShadow = "0 4px 0 var(--color-purple-shadow)";

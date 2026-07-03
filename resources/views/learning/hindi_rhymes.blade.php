@@ -4,117 +4,266 @@
 
 @section('content')
 <div class="inner-container">
-    <div class="inner-header">
-        <h1 class="inner-title">
+    <div class="inner-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+        <h1 class="inner-title" style="margin: 0;">
             <span style="color: var(--color-teal);">🎵 मजेदार हिंदी कविताएँ</span>
         </h1>
-        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow">&lt; Back to Home</a>
+        
+        <!-- Live Stars Pill -->
+        <div class="stars-pill" style="display: flex; align-items: center; gap: 8px; background: white; padding: 8px 18px; border-radius: 24px; border: 3px solid var(--color-yellow); font-weight: 800; color: var(--color-orange); box-shadow: 0 4px 0 var(--color-yellow-shadow); font-size: 1.15rem; z-index: 10;">
+            <span>⭐</span>
+            <span class="stars-count">{{ $activeChild->stars }}</span>
+        </div>
+        
+        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="margin: 0;">&lt; Back to Home</a>
     </div>
 
-    <div class="rhyme-layout">
-        <!-- Sidebar Hindi Rhymes list -->
-        <div class="rhymes-list">
-            <h3 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 10px; color: var(--color-text);">📖 कविता चुनिए</h3>
+    <!-- Reels Swiper Viewport -->
+    <div class="reels-viewport" style="border-color: rgba(18, 176, 197, 0.25);">
+        <!-- Playlist drawer toggle -->
+        <button class="drawer-toggle-btn" style="border-color: var(--color-teal);" onclick="toggleDrawer(true)" title="कविता सूची">☰</button>
+        
+        <!-- Playlist slide-out drawer -->
+        <div class="reels-drawer" style="border-right-color: var(--color-teal);" id="reelsDrawer">
+            <button class="drawer-close-btn" onclick="toggleDrawer(false)">&times;</button>
+            <h3 class="reels-drawer-title" style="color: var(--color-teal);">📖 कविता सूची</h3>
+            <div class="reels-drawer-list">
+                @foreach($course->lessons as $index => $lesson)
+                    <div class="reels-drawer-item {{ $index === 0 ? 'active' : '' }}" 
+                         id="drawer-item-{{ $index }}"
+                         onclick="scrollToReel({{ $index }})">
+                        {{ $index + 1 }}. {{ $lesson->title }}
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Vertical Reels snapping container -->
+        <div class="reels-container" id="reelsContainer">
             @foreach($course->lessons as $index => $lesson)
-                <div class="rhyme-list-item {{ $index === 0 ? 'active' : '' }}" 
-                     style="font-size: 1.1rem;"
-                     onclick="loadHindiRhyme({{ $lesson->id }}, '{{ addslashes($lesson->title) }}', '{{ addslashes(str_replace("\n", '\\n', $lesson->body_content)) }}', this)">
-                    {{ $lesson->title }}
+                <div class="reel-card" 
+                     id="reel-{{ $index }}" 
+                     data-index="{{ $index }}">
+                     
+                     <!-- Decorative floaties -->
+                     <span class="floating-element" style="top: 15%; left: 8%; animation-delay: 0s;">🎶</span>
+                     <span class="floating-element" style="top: 12%; right: 10%; animation-delay: 1.5s;">⭐</span>
+                     <span class="floating-element" style="bottom: 22%; left: 9%; animation-delay: 0.8s;">✨</span>
+                     <span class="floating-element" style="bottom: 18%; right: 7%; animation-delay: 2.2s;">🎵</span>
+                     
+                     <h2 class="reel-title" style="color: var(--color-teal); font-size: 2.1rem;">{{ $lesson->title }}</h2>
+                     
+                     <div class="reel-content-box" style="border-color: #E0F7FA; background: rgba(255,255,255,0.92);">
+                         <div class="reel-lyrics" style="font-size: 1.8rem; line-height: 2;" id="lyrics-{{ $index }}">{{ $lesson->body_content }}</div>
+                     </div>
+                     
+                     <div class="reel-footer">
+                         <!-- Play/Stop controls -->
+                         <div class="audio-controls" style="margin: 0;">
+                             <button onclick="toggleSpeak({{ $index }})" class="btn-3d btn-yellow play-btn" style="font-size: 1.15rem; padding: 10px 24px;">
+                                 ▶️ कविता सुनें
+                             </button>
+                             <button onclick="stopSpeak()" class="btn-3d btn-pink stop-btn" style="font-size: 1.15rem; padding: 10px 24px; display: none;">
+                                 ⏸️ रोकें
+                             </button>
+                         </div>
+                         
+                         <!-- Speaking progress track -->
+                         <div class="reel-progress-container">
+                             <div class="reel-progress-bar" id="progress-bar-{{ $index }}" style="background: var(--color-teal);"></div>
+                         </div>
+                         
+                         <!-- Stars reward display -->
+                         <div style="font-weight: 900; color: var(--color-orange); font-size: 1.2rem; display: flex; align-items: center; gap: 4px; background: white; padding: 6px 12px; border-radius: 16px; border: 2px solid #E0F7FA;">
+                             <span>⭐</span><span>+5</span>
+                         </div>
+                     </div>
                 </div>
             @endforeach
         </div>
-
-        <!-- Rhyme Lyrics & Player -->
-        <div class="rhyme-player-view" style="border-color: var(--color-teal);">
-            <h2 id="rhymeTitle" style="font-size: 2rem; color: var(--color-teal); font-weight: 900; margin-bottom: 15px;">
-                {{ $course->lessons[0]->title }}
-            </h2>
-            
-            <div class="lyrics-container" id="lyricsBox" style="font-size: 1.7rem; line-height: 2;">
-                {{ $course->lessons[0]->body_content }}
-            </div>
-
-            <!-- Playback Controls -->
-            <div class="audio-controls">
-                <button onclick="playHindiRhyme()" class="btn-3d btn-yellow" id="playBtn" style="font-size: 1.4rem; padding: 12px 32px;">
-                    ▶️ कविता सुनें
-                </button>
-                <button onclick="stopHindiRhyme()" class="btn-3d btn-pink" id="stopBtn" style="font-size: 1.4rem; padding: 12px 32px; display: none;">
-                    ⏸️ रोकें
-                </button>
-            </div>
-            
-            <div id="earningProgress" style="margin-top: 20px; font-weight: bold; color: var(--color-orange); display: none;">
-                🎉 कविता का आनंद लें...
-            </div>
+        
+        <!-- Desktop vertical navigation buttons -->
+        <div class="reels-navigation">
+            <button class="reels-nav-btn" style="border-color: var(--color-teal);" onclick="scrollPrev()" title="पिछली कविता">▲</button>
+            <button class="reels-nav-btn" style="border-color: var(--color-teal);" onclick="scrollNext()" title="अगली कविता">▼</button>
         </div>
+        
+        <div class="swipe-tip">ऊपर या नीचे स्वाइप/स्क्रॉल करें! 🔽</div>
     </div>
 </div>
 
 <script>
-    let activeRhymeTitle = "{{ $course->lessons[0]->title }}";
-    let activeRhymeBody = `{!! str_replace("\n", '\\n', $course->lessons[0]->body_content) !!}`;
-    let isSpeaking = false;
+    let activeIndex = 0;
+    let speakingIndex = -1;
+    let speakProgressInterval = null;
+    let observer = null;
+    let lessons = [];
+    let autoplayTimeout = null;
 
-    function loadHindiRhyme(id, title, body, element) {
-        stopHindiRhyme();
-        activeRhymeTitle = title;
-        activeRhymeBody = body;
+    // Populate lessons array for JavaScript playback control
+    @foreach($course->lessons as $index => $lesson)
+        lessons.push({
+            id: {{ $lesson->id }},
+            title: `{!! addslashes($lesson->title) !!}`,
+            body: `{!! str_replace("\n", '\\n', addslashes($lesson->body_content)) !!}`
+        });
+    @endforeach
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('reelsContainer');
+        const cards = document.querySelectorAll('.reel-card');
         
-        document.getElementById('rhymeTitle').innerText = title;
-        document.getElementById('lyricsBox').innerText = body.replace(/\\n/g, "\n");
+        // IntersectionObserver configuration
+        const observerOptions = {
+            root: container,
+            threshold: 0.6 // Snaps when 60% of card height is visible
+        };
         
-        // Handle list selection styling
-        document.querySelectorAll('.rhyme-list-item').forEach(item => item.classList.remove('active'));
-        element.classList.add('active');
-        SoundFX.play('click');
+        observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = parseInt(entry.target.getAttribute('data-index'));
+                    setActiveReel(idx);
+                }
+            });
+        }, observerOptions);
+        
+        cards.forEach(card => observer.observe(card));
+        
+        // Initial setup
+        setActiveReel(0);
+    });
+
+    function setActiveReel(idx) {
+        if (activeIndex === idx && speakingIndex === idx) return;
+        
+        // If active index changes, stop current speaking
+        if (activeIndex !== idx) {
+            stopSpeak();
+        }
+        
+        activeIndex = idx;
+        
+        // Update playlist drawer highlight
+        document.querySelectorAll('.reels-drawer-item').forEach((item, index) => {
+            if (index === idx) {
+                item.classList.add('active');
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                item.classList.remove('active');
+            }
+        });
+        
+        // Predefined pastel gradient backgrounds for each reel slide (Teal/Green/Orange theme for Hindi)
+        const gradients = [
+            'linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%)',
+            'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)',
+            'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)',
+            'linear-gradient(135deg, #FFFDE7 0%, #FFF59D 100%)',
+            'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)',
+            'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)'
+        ];
+        
+        const card = document.getElementById(`reel-${idx}`);
+        if (card) {
+            card.style.background = gradients[idx % gradients.length];
+        }
+        
+        // Wait for scroll snapping deceleration before starting auto-play speech
+        clearTimeout(autoplayTimeout);
+        autoplayTimeout = setTimeout(() => {
+            autoPlayActiveReel();
+        }, 800);
     }
 
-    function playHindiRhyme() {
-        if ('speechSynthesis' in window) {
-            isSpeaking = true;
-            document.getElementById('playBtn').style.display = 'none';
-            document.getElementById('stopBtn').style.display = 'inline-flex';
-            document.getElementById('earningProgress').style.display = 'block';
+    function autoPlayActiveReel() {
+        if (localStorage.getItem('voice_enabled') === 'false') return;
+        
+        const lesson = lessons[activeIndex];
+        if (lesson) {
+            speakRhyme(activeIndex, lesson.title, lesson.body);
+        }
+    }
 
-            window.speechSynthesis.cancel();
-            
-            // Speak the whole rhyme text in Hindi locale
-            const textToSpeak = activeRhymeTitle + ". " + activeRhymeBody.replace(/\\n/g, ". ");
-            const utterance = new SpeechSynthesisUtterance(textToSpeak);
-            utterance.lang = 'hi-IN'; // HINDI LOCALE
-            utterance.rate = 0.75; // Speak slower for kids clarity
-            utterance.pitch = 1.25;
+    function speakRhyme(idx, title, body) {
+        stopSpeak();
+        
+        speakingIndex = idx;
+        const card = document.getElementById(`reel-${idx}`);
+        if (!card) return;
+        
+        // Toggle play controls
+        card.querySelector('.play-btn').style.display = 'none';
+        card.querySelector('.stop-btn').style.display = 'inline-flex';
+        
+        // Estimate speech duration to animate the progress bar smoothly
+        const textToSpeak = title + ". " + body.replace(/\\n/g, ". ");
+        const wordCount = textToSpeak.split(/\s+/).length;
+        const durationSec = Math.max(6, wordCount / 1.5); // 1.5 words per second for slower, clear Hindi speaking
+        
+        let elapsed = 0;
+        const progressBar = document.getElementById(`progress-bar-${idx}`);
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        
+        clearInterval(speakProgressInterval);
+        speakProgressInterval = setInterval(() => {
+            elapsed += 0.1;
+            const percentage = Math.min(100, (elapsed / durationSec) * 100);
+            if (progressBar) {
+                progressBar.style.width = percentage + '%';
+            }
+            if (percentage >= 100) {
+                clearInterval(speakProgressInterval);
+            }
+        }, 100);
+        
+        // Play the speech synthesis using Hindi locale hi-IN
+        SoundFX.speak(textToSpeak, 'hi-IN', () => {
+            finishRhyme(idx, title);
+        });
+    }
 
-            utterance.onend = () => {
-                finishHindiRhyme();
-            };
-
-            window.speechSynthesis.speak(utterance);
+    function toggleSpeak(idx) {
+        const lesson = lessons[idx];
+        if (!lesson) return;
+        
+        if (speakingIndex === idx) {
+            stopSpeak();
         } else {
-            alert('Speech Synthesis not supported.');
+            speakRhyme(idx, lesson.title, lesson.body);
         }
     }
 
-    function stopHindiRhyme() {
-        if (isSpeaking) {
-            window.speechSynthesis.cancel();
-            isSpeaking = false;
-            document.getElementById('playBtn').style.display = 'inline-flex';
-            document.getElementById('stopBtn').style.display = 'none';
-            document.getElementById('earningProgress').style.display = 'none';
+    function stopSpeak() {
+        if (speakingIndex !== -1) {
+            const card = document.getElementById(`reel-${speakingIndex}`);
+            if (card) {
+                card.querySelector('.play-btn').style.display = 'inline-flex';
+                card.querySelector('.stop-btn').style.display = 'none';
+                
+                const progressBar = document.getElementById(`progress-bar-${speakingIndex}`);
+                if (progressBar) {
+                    progressBar.style.width = '0%';
+                }
+            }
+            speakingIndex = -1;
         }
+        clearInterval(speakProgressInterval);
+        window.speechSynthesis.cancel();
     }
 
-    function finishHindiRhyme() {
-        isSpeaking = false;
-        document.getElementById('playBtn').style.display = 'inline-flex';
-        document.getElementById('stopBtn').style.display = 'none';
-        document.getElementById('earningProgress').style.display = 'none';
-
+    function finishRhyme(idx, title) {
+        if (speakingIndex !== idx) return; // User scrolled away
+        
+        stopSpeak();
         SoundFX.play('cheer');
         
-        // Award stars
+        // Star particle effect
+        triggerStarCompletion(idx);
+        
+        // Award stars via API
         fetch("{{ route('api.add_stars') }}", {
             method: 'POST',
             headers: {
@@ -123,20 +272,92 @@
             },
             body: JSON.stringify({
                 stars: 5,
-                activity_name: 'Listened to Hindi Rhyme: ' + activeRhymeTitle
+                activity_name: 'Listened to Hindi Rhyme: ' + title
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const starsPill = document.querySelector('.stars-pill span');
-                if (starsPill) {
-                    starsPill.innerText = data.new_stars;
+                // Update header stars display
+                const starsCountText = document.querySelector('.stars-count');
+                if (starsCountText) {
+                    starsCountText.innerText = data.new_stars;
                 }
             }
         });
     }
 
+    function triggerStarCompletion(idx) {
+        const card = document.getElementById(`reel-${idx}`);
+        if (!card) return;
+        
+        // Generate exploding stars
+        for (let i = 0; i < 10; i++) {
+            const star = document.createElement('div');
+            star.innerText = '⭐';
+            star.style.position = 'absolute';
+            star.style.left = '50%';
+            star.style.top = '50%';
+            star.style.fontSize = '2.5rem';
+            star.style.zIndex = '99';
+            star.style.pointerEvents = 'none';
+            star.style.transition = 'all 1.2s cubic-bezier(0.1, 0.8, 0.3, 1)';
+            
+            card.appendChild(star);
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 90 + Math.random() * 150;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance - 120; // float upwards
+            
+            setTimeout(() => {
+                star.style.transform = `translate(${x}px, ${y}px) scale(0) rotate(${Math.random() * 360}deg)`;
+                star.style.opacity = '0';
+            }, 50);
+            
+            setTimeout(() => {
+                star.remove();
+            }, 1250);
+        }
+    }
+
+    function scrollNext() {
+        if (activeIndex < lessons.length - 1) {
+            scrollToReel(activeIndex + 1);
+        }
+    }
+
+    function scrollPrev() {
+        if (activeIndex > 0) {
+            scrollToReel(activeIndex - 1);
+        }
+    }
+
+    function scrollToReel(idx) {
+        const container = document.getElementById('reelsContainer');
+        const card = document.getElementById(`reel-${idx}`);
+        if (container && card) {
+            container.scrollTo({
+                top: card.offsetTop,
+                behavior: 'smooth'
+            });
+            toggleDrawer(false);
+        }
+    }
+
+    function toggleDrawer(open) {
+        const drawer = document.getElementById('reelsDrawer');
+        if (drawer) {
+            if (open) {
+                drawer.classList.add('open');
+                SoundFX.play('click');
+            } else {
+                drawer.classList.remove('open');
+            }
+        }
+    }
+
+    // Stop synthesis when unloading the page
     window.addEventListener('beforeunload', () => {
         window.speechSynthesis.cancel();
     });

@@ -3,280 +3,343 @@
 @section('title', 'Kuhu Kids Learning - Devotional Learning')
 
 @section('content')
-<style>
-    .devo-tabs {
-        display: flex;
-        gap: 6px;
-        margin-bottom: 20px;
-        background: #F1F5F9;
-        padding: 5px;
-        border-radius: 24px;
-        border: 2px solid #E2E8F0;
-    }
-    .devo-tab {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-        padding: 10px 4px;
-        border-radius: 18px;
-        border: none;
-        background: transparent;
-        color: #64748B;
-        font-weight: 800;
-        font-size: 0.85rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-    }
-    .devo-tab span {
-        font-size: 1.2rem;
-        transition: transform 0.2s ease;
-    }
-    .devo-tab:hover {
-        color: var(--color-purple);
-        background: rgba(140, 82, 255, 0.05);
-    }
-    .devo-tab:hover span {
-        transform: scale(1.15);
-    }
-    .devo-tab.active {
-        background: var(--color-purple);
-        color: white;
-        box-shadow: 0 4px 6px rgba(140, 82, 255, 0.2);
-    }
-    .devo-tab.active span {
-        transform: scale(1.2);
-    }
-    
-    .rhyme-list-item.devotional-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        background: #F8FAFC;
-        border: 3px solid #E2E8F0;
-        border-bottom-width: 6px;
-        border-radius: 16px;
-        padding: 16px;
-        cursor: pointer;
-        font-weight: 700;
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .rhyme-list-item.devotional-item.active {
-        background: var(--color-purple);
-        color: white;
-        border-color: var(--color-purple-shadow);
-        box-shadow: 0 6px 12px rgba(140, 82, 255, 0.15);
-        transform: scale(1.02);
-    }
-    .rhyme-list-item.devotional-item:hover:not(.active) {
-        border-color: var(--color-purple);
-        background: rgba(140, 82, 255, 0.03);
-        transform: translateY(-2px);
-    }
-    .rhyme-list-item-icon {
-        font-size: 1.4rem;
-        line-height: 1;
-    }
-    .devotional-player-view {
-        border-color: var(--color-purple);
-        background: radial-gradient(circle at top left, #FFFDF0 0%, #FAF7E6 100%);
-    }
-</style>
-
 <div class="inner-container">
-    <div class="inner-header">
-        <h1 class="inner-title">
+    <div class="inner-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 15px;">
+        <h1 class="inner-title" style="margin: 0;">
             <span style="color: var(--color-purple);">🕉️ Devotional Learning</span>
         </h1>
-        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow">&lt; Back to Home</a>
+        
+        <!-- Live Stars Pill -->
+        <div class="stars-pill" style="display: flex; align-items: center; gap: 8px; background: white; padding: 8px 18px; border-radius: 24px; border: 3px solid var(--color-yellow); font-weight: 800; color: var(--color-orange); box-shadow: 0 4px 0 var(--color-yellow-shadow); font-size: 1.15rem; z-index: 10;">
+            <span>⭐</span>
+            <span class="stars-count">{{ $activeChild->stars }}</span>
+        </div>
+        
+        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="margin: 0;">&lt; Back to Home</a>
     </div>
 
-    <div class="rhyme-layout">
-        <!-- Sidebar Devotional list -->
-        <div class="rhymes-list">
-            <h3 style="font-weight: 800; font-size: 1.2rem; margin-bottom: 10px; color: var(--color-text);">🙏 Select Learning</h3>
-            
-            <!-- Category Tabs -->
-            <div class="devo-tabs">
-                <button class="devo-tab active" onclick="filterDevotional('all', this)">
-                    <span>🕉️</span>All
-                </button>
-                <button class="devo-tab" onclick="filterDevotional('mantra', this)">
-                    <span>📿</span>Mantras
-                </button>
-                <button class="devo-tab" onclick="filterDevotional('aarti', this)">
-                    <span>🕯️</span>Aartis
-                </button>
-                <button class="devo-tab" onclick="filterDevotional('story', this)">
-                    <span>📖</span>Stories
-                </button>
-            </div>
+    <!-- Category Filter Tabs above Reels -->
+    <div class="category-tabs" style="display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; width: 100%;">
+        <button onclick="filterCategory('all', this)" class="btn-3d category-tab-btn active-tab-btn" style="background-color: var(--color-purple); color: white; border-bottom: 5px solid var(--color-purple-shadow); min-width: 110px; padding: 8px 16px;">
+            🕉️ All
+        </button>
+        <button onclick="filterCategory('mantra', this)" class="btn-3d category-tab-btn" style="background-color: var(--color-yellow); color: #4A3B00; border-bottom: 5px solid var(--color-yellow-shadow); min-width: 110px; padding: 8px 16px;">
+            📿 Mantras
+        </button>
+        <button onclick="filterCategory('aarti', this)" class="btn-3d category-tab-btn" style="background-color: var(--color-yellow); color: #4A3B00; border-bottom: 5px solid var(--color-yellow-shadow); min-width: 110px; padding: 8px 16px;">
+            🕯️ Aartis
+        </button>
+        <button onclick="filterCategory('story', this)" class="btn-3d category-tab-btn" style="background-color: var(--color-yellow); color: #4A3B00; border-bottom: 5px solid var(--color-yellow-shadow); min-width: 110px; padding: 8px 16px;">
+            📖 Stories
+        </button>
+    </div>
 
-            <div class="devotional-items-container" style="display: flex; flex-direction: column; gap: 12px; max-height: 480px; overflow-y: auto; padding-right: 4px;">
-                @foreach($course->lessons as $index => $lesson)
-                    @php
-                        $icon = '🕉️';
-                        if ($lesson->content_type === 'mantra') $icon = '📿';
-                        elseif ($lesson->content_type === 'aarti') $icon = '🕯️';
-                        elseif ($lesson->content_type === 'story') $icon = '📖';
-                    @endphp
-                    <div class="rhyme-list-item devotional-item {{ $index === 0 ? 'active' : '' }}" 
-                         data-type="{{ $lesson->content_type }}"
-                         onclick="loadDevotional({{ $lesson->id }}, '{{ addslashes($lesson->title) }}', '{{ addslashes(str_replace("\n", '\\n', $lesson->body_content)) }}', this)">
-                        <span class="rhyme-list-item-icon">{{ $icon }}</span>
-                        <span style="flex: 1;">{{ $lesson->title }}</span>
-                    </div>
-                @endforeach
+    <!-- Reels Swiper Viewport -->
+    <div class="reels-viewport" style="border-color: rgba(140, 82, 255, 0.25);">
+        <!-- Playlist drawer toggle -->
+        <button class="drawer-toggle-btn" style="border-color: var(--color-purple);" onclick="toggleDrawer(true)" title="Select Lesson">☰</button>
+        
+        <!-- Playlist slide-out drawer -->
+        <div class="reels-drawer" style="border-right-color: var(--color-purple);" id="reelsDrawer">
+            <button class="drawer-close-btn" onclick="toggleDrawer(false)">&times;</button>
+            <h3 class="reels-drawer-title" style="color: var(--color-purple);">🙏 Devotional Library</h3>
+            <div class="reels-drawer-list">
+                <!-- Populated dynamically via JS -->
             </div>
         </div>
 
-        <!-- Devotional Content & Player -->
-        <div class="rhyme-player-view devotional-player-view">
-            <h2 id="devoTitle" style="font-size: 2rem; color: var(--color-purple); font-weight: 900; margin-bottom: 15px;">
-                {{ $course->lessons[0]->title }}
-            </h2>
-            
-            <div class="lyrics-container" id="lyricsBox" style="font-size: 1.5rem; line-height: 1.8;">
-                {{ $course->lessons[0]->body_content }}
-            </div>
-
-            <!-- Controls -->
-            <div class="audio-controls">
-                <button onclick="playDevotional()" class="btn-3d btn-yellow" id="playBtn" style="font-size: 1.4rem; padding: 12px 32px;">
-                    ▶️ Play Audio
-                </button>
-                <button onclick="stopDevotional()" class="btn-3d btn-pink" id="stopBtn" style="font-size: 1.4rem; padding: 12px 32px; display: none;">
-                    ⏸️ Stop
-                </button>
-            </div>
-            
-            <div id="earningProgress" style="margin-top: 20px; font-weight: bold; color: var(--color-purple); display: none;">
-                🙏 Meditating and listening...
-            </div>
+        <!-- Vertical Reels snapping container -->
+        <div class="reels-container" id="reelsContainer">
+            <!-- Populated dynamically via JS -->
         </div>
+        
+        <!-- Desktop vertical navigation buttons -->
+        <div class="reels-navigation">
+            <button class="reels-nav-btn" style="border-color: var(--color-purple);" onclick="scrollPrev()" title="Previous">▲</button>
+            <button class="reels-nav-btn" style="border-color: var(--color-purple);" onclick="scrollNext()" title="Next">▼</button>
+        </div>
+        
+        <div class="swipe-tip">Swipe/scroll up or down for more learning! 🔽</div>
     </div>
 </div>
 
 <script>
-    let activeTitle = "{{ $course->lessons[0]->title }}";
-    let activeBody = `{!! str_replace("\n", '\\n', $course->lessons[0]->body_content) !!}`;
-    let isSpeaking = false;
-    let activeFilter = 'all';
+    let allLessons = [];
+    let filteredLessons = [];
+    let activeIndex = 0;
+    let speakingIndex = -1;
+    let speakProgressInterval = null;
+    let observer = null;
+    let autoplayTimeout = null;
 
-    function loadDevotional(id, title, body, element) {
-        stopDevotional();
-        activeTitle = title;
-        activeBody = body;
+    // Populate all devotional lessons in JS array
+    @foreach($course->lessons as $lesson)
+        allLessons.push({
+            id: {{ $lesson->id }},
+            title: `{!! addslashes($lesson->title) !!}`,
+            contentType: '{{ $lesson->content_type }}',
+            body: `{!! str_replace("\n", '\\n', addslashes($lesson->body_content)) !!}`
+        });
+    @endforeach
+
+    filteredLessons = [...allLessons];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderReels();
+    });
+
+    function filterCategory(category, button) {
+        SoundFX.play('click');
         
-        document.getElementById('devoTitle').innerText = title;
-        document.getElementById('lyricsBox').innerText = body.replace(/\\n/g, "\n");
+        // Update active tab styles
+        document.querySelectorAll('.category-tab-btn').forEach(btn => {
+            btn.style.backgroundColor = "var(--color-yellow)";
+            btn.style.borderBottomColor = "var(--color-yellow-shadow)";
+            btn.style.color = "#4A3B00";
+            btn.classList.remove('active-tab-btn');
+        });
         
-        // Handle list selection styling
-        document.querySelectorAll('.devotional-item').forEach(item => item.classList.remove('active'));
-        element.classList.add('active');
+        button.style.backgroundColor = "var(--color-purple)";
+        button.style.borderBottomColor = "var(--color-purple-shadow)";
+        button.style.color = "#FFF";
+        button.classList.add('active-tab-btn');
         
-        // Play click sound using global SoundFX
-        if (typeof SoundFX !== 'undefined') {
-            SoundFX.play('click');
+        // Filter lessons
+        if (category === 'all') {
+            filteredLessons = [...allLessons];
+        } else {
+            filteredLessons = allLessons.filter(l => l.contentType === category);
         }
+        
+        renderReels();
     }
 
-    function filterDevotional(category, button) {
-        stopDevotional();
-        activeFilter = category;
+    function renderReels() {
+        stopSpeak();
+        const container = document.getElementById('reelsContainer');
+        const drawerList = document.querySelector('.reels-drawer-list');
         
-        // Update active tab button style
-        document.querySelectorAll('.devo-tab').forEach(tab => tab.classList.remove('active'));
-        button.classList.add('active');
+        container.innerHTML = '';
+        drawerList.innerHTML = '';
         
-        // Filter items
-        let firstVisible = null;
-        let activeVisible = false;
+        if (filteredLessons.length === 0) {
+            container.innerHTML = `
+                <div class="reel-card" style="justify-content: center; background: #FAF9F5; height: 100%;">
+                    <h2 class="reel-title" style="color: var(--color-purple);">No lessons found 🕉️</h2>
+                    <p style="font-size: 1.3rem; text-align: center; color: var(--color-gray);">Please try another category!</p>
+                </div>
+            `;
+            return;
+        }
         
-        document.querySelectorAll('.devotional-item').forEach(item => {
-            const type = item.getAttribute('data-type');
-            if (category === 'all' || type === category) {
-                item.style.display = 'flex';
-                if (!firstVisible) {
-                    firstVisible = item;
+        const gradients = [
+            'linear-gradient(135deg, #F3E5F5 0%, #D1C4E9 100%)',
+            'linear-gradient(135deg, #EDE7F6 0%, #C5CAE9 100%)',
+            'linear-gradient(135deg, #E8EAF6 0%, #C5CAE9 100%)',
+            'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)'
+        ];
+        
+        filteredLessons.forEach((lesson, index) => {
+            let icon = '🕉️';
+            if (lesson.contentType === 'mantra') icon = '📿';
+            else if (lesson.contentType === 'aarti') icon = '🕯️';
+            else if (lesson.contentType === 'story') icon = '📖';
+            
+            // Build card html
+            const card = document.createElement('div');
+            card.className = 'reel-card';
+            card.id = `reel-${index}`;
+            card.setAttribute('data-index', index);
+            card.style.background = gradients[index % gradients.length];
+            
+            card.innerHTML = `
+                <span class="floating-element" style="top: 15%; left: 8%; animation-delay: 0s;">${icon}</span>
+                <span class="floating-element" style="top: 12%; right: 10%; animation-delay: 1.5s;">⭐</span>
+                <span class="floating-element" style="bottom: 22%; left: 9%; animation-delay: 0.8s;">✨</span>
+                <span class="floating-element" style="bottom: 18%; right: 7%; animation-delay: 2.2s;">🙏</span>
+                
+                <h2 class="reel-title" style="color: var(--color-purple); font-size: 2rem;">${lesson.title}</h2>
+                
+                <div class="reel-content-box" style="border-color: #EDE7F6; background: rgba(255,255,255,0.92);">
+                    <div class="reel-lyrics" style="font-size: 1.45rem; line-height: 1.75;" id="lyrics-${index}"></div>
+                </div>
+                
+                <div class="reel-footer">
+                    <div class="audio-controls" style="margin: 0;">
+                        <button onclick="toggleSpeak(${index})" class="btn-3d btn-yellow play-btn" style="font-size: 1.1rem; padding: 8px 20px;">
+                            ▶️ Play
+                        </button>
+                        <button onclick="stopSpeak()" class="btn-3d btn-pink stop-btn" style="font-size: 1.1rem; padding: 8px 20px; display: none;">
+                            ⏸️ Stop
+                        </button>
+                    </div>
+                    
+                    <div class="reel-progress-container">
+                        <div class="reel-progress-bar" id="progress-bar-${index}" style="background: var(--color-purple);"></div>
+                    </div>
+                    
+                    <div style="font-weight: 900; color: var(--color-orange); font-size: 1.15rem; display: flex; align-items: center; gap: 4px; background: white; padding: 6px 12px; border-radius: 16px; border: 2px solid #EDE7F6;">
+                        <span>⭐</span><span>+5</span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+            
+            // Set text content safely
+            document.getElementById(`lyrics-${index}`).innerText = lesson.body.replace(/\\n/g, "\n");
+            
+            // Build drawer playlist items
+            const drawerItem = document.createElement('div');
+            drawerItem.className = `reels-drawer-item ${index === 0 ? 'active' : ''}`;
+            drawerItem.id = `drawer-item-${index}`;
+            drawerItem.onclick = () => scrollToReel(index);
+            drawerItem.innerHTML = `${index + 1}. ${icon} ${lesson.title}`;
+            drawerList.appendChild(drawerItem);
+        });
+        
+        setupObserver();
+        scrollToReel(0);
+    }
+
+    function setupObserver() {
+        if (observer) {
+            observer.disconnect();
+        }
+        
+        const container = document.getElementById('reelsContainer');
+        const cards = document.querySelectorAll('.reel-card');
+        
+        const observerOptions = {
+            root: container,
+            threshold: 0.6
+        };
+        
+        observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = parseInt(entry.target.getAttribute('data-index'));
+                    setActiveReel(idx);
                 }
-                if (item.classList.contains('active')) {
-                    activeVisible = true;
-                }
+            });
+        }, observerOptions);
+        
+        cards.forEach(card => observer.observe(card));
+    }
+
+    function setActiveReel(idx) {
+        if (activeIndex === idx && speakingIndex === idx) return;
+        
+        if (activeIndex !== idx) {
+            stopSpeak();
+        }
+        
+        activeIndex = idx;
+        
+        // Highlight playlist drawer item
+        document.querySelectorAll('.reels-drawer-item').forEach((item, index) => {
+            if (index === idx) {
+                item.classList.add('active');
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             } else {
-                item.style.display = 'none';
+                item.classList.remove('active');
             }
         });
         
-        // If the currently active item is hidden, automatically select and click the first visible item
-        if (!activeVisible && firstVisible) {
-            firstVisible.click();
-        } else {
-            if (typeof SoundFX !== 'undefined') {
-                SoundFX.play('click');
-            }
+        clearTimeout(autoplayTimeout);
+        autoplayTimeout = setTimeout(() => {
+            autoPlayActiveReel();
+        }, 800);
+    }
+
+    function autoPlayActiveReel() {
+        if (localStorage.getItem('voice_enabled') === 'false') return;
+        
+        const lesson = filteredLessons[activeIndex];
+        if (lesson) {
+            speakDevotional(activeIndex, lesson.title, lesson.body);
         }
     }
 
-    // Smart detector for Hindi / Devanagari text
     function containsDevanagari(text) {
         return /[\u0900-\u097F]/.test(text);
     }
 
-    function playDevotional() {
-        if ('speechSynthesis' in window) {
-            isSpeaking = true;
-            document.getElementById('playBtn').style.display = 'none';
-            document.getElementById('stopBtn').style.display = 'inline-flex';
-            document.getElementById('earningProgress').style.display = 'block';
-
-            window.speechSynthesis.cancel();
-            
-            const cleanText = activeTitle + ". " + activeBody.replace(/\\n/g, ". ");
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            
-            // Set language dynamically
-            if (containsDevanagari(activeBody)) {
-                utterance.lang = 'hi-IN';
-                utterance.rate = 0.7; // Slower for shlokas/mantras
-                utterance.pitch = 1.1;
-            } else {
-                utterance.lang = 'en-US';
-                utterance.rate = 0.8;
-                utterance.pitch = 1.2;
+    function speakDevotional(idx, title, body) {
+        stopSpeak();
+        
+        speakingIndex = idx;
+        const card = document.getElementById(`reel-${idx}`);
+        if (!card) return;
+        
+        card.querySelector('.play-btn').style.display = 'none';
+        card.querySelector('.stop-btn').style.display = 'inline-flex';
+        
+        const cleanText = title + ". " + body.replace(/\\n/g, ". ");
+        const wordCount = cleanText.split(/\s+/).length;
+        const isHindi = containsDevanagari(body);
+        const durationSec = Math.max(6, wordCount / (isHindi ? 1.4 : 1.8)); // Sanskrit/Hindi is spoken slower
+        
+        let elapsed = 0;
+        const progressBar = document.getElementById(`progress-bar-${idx}`);
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+        
+        clearInterval(speakProgressInterval);
+        speakProgressInterval = setInterval(() => {
+            elapsed += 0.1;
+            const percentage = Math.min(100, (elapsed / durationSec) * 100);
+            if (progressBar) {
+                progressBar.style.width = percentage + '%';
             }
+            if (percentage >= 100) {
+                clearInterval(speakProgressInterval);
+            }
+        }, 100);
+        
+        const lang = isHindi ? 'hi-IN' : 'en-US';
+        SoundFX.speak(cleanText, lang, () => {
+            finishDevotional(idx, title);
+        });
+    }
 
-            utterance.onend = () => {
-                finishDevotional();
-            };
-
-            window.speechSynthesis.speak(utterance);
+    function toggleSpeak(idx) {
+        const lesson = filteredLessons[idx];
+        if (!lesson) return;
+        
+        if (speakingIndex === idx) {
+            stopSpeak();
         } else {
-            alert('Speech Synthesis not supported.');
+            speakDevotional(idx, lesson.title, lesson.body);
         }
     }
 
-    function stopDevotional() {
-        if (isSpeaking) {
-            window.speechSynthesis.cancel();
-            isSpeaking = false;
-            document.getElementById('playBtn').style.display = 'inline-flex';
-            document.getElementById('stopBtn').style.display = 'none';
-            document.getElementById('earningProgress').style.display = 'none';
+    function stopSpeak() {
+        if (speakingIndex !== -1) {
+            const card = document.getElementById(`reel-${speakingIndex}`);
+            if (card) {
+                card.querySelector('.play-btn').style.display = 'inline-flex';
+                card.querySelector('.stop-btn').style.display = 'none';
+                
+                const progressBar = document.getElementById(`progress-bar-${speakingIndex}`);
+                if (progressBar) {
+                    progressBar.style.width = '0%';
+                }
+            }
+            speakingIndex = -1;
         }
+        clearInterval(speakProgressInterval);
+        window.speechSynthesis.cancel();
     }
 
-    function finishDevotional() {
-        isSpeaking = false;
-        document.getElementById('playBtn').style.display = 'inline-flex';
-        document.getElementById('stopBtn').style.display = 'none';
-        document.getElementById('earningProgress').style.display = 'none';
-
-        if (typeof SoundFX !== 'undefined') {
-            SoundFX.play('cheer');
-        }
+    function finishDevotional(idx, title) {
+        if (speakingIndex !== idx) return; // User scrolled away
+        
+        stopSpeak();
+        SoundFX.play('cheer');
+        
+        // Stars particles
+        triggerStarCompletion(idx);
         
         // Award stars
         fetch("{{ route('api.add_stars') }}", {
@@ -287,22 +350,92 @@
             },
             body: JSON.stringify({
                 stars: 5,
-                activity_name: 'Completed Devotional Lesson: ' + activeTitle
+                activity_name: 'Completed Devotional Lesson: ' + title
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const starsPill = document.querySelector('.stars-pill span');
-                if (starsPill) {
-                    starsPill.innerText = data.new_stars;
+                const starsCountText = document.querySelector('.stars-count');
+                if (starsCountText) {
+                    starsCountText.innerText = data.new_stars;
                 }
             }
         });
     }
 
+    function triggerStarCompletion(idx) {
+        const card = document.getElementById(`reel-${idx}`);
+        if (!card) return;
+        
+        for (let i = 0; i < 10; i++) {
+            const star = document.createElement('div');
+            star.innerText = '⭐';
+            star.style.position = 'absolute';
+            star.style.left = '50%';
+            star.style.top = '50%';
+            star.style.fontSize = '2.5rem';
+            star.style.zIndex = '99';
+            star.style.pointerEvents = 'none';
+            star.style.transition = 'all 1.2s cubic-bezier(0.1, 0.8, 0.3, 1)';
+            
+            card.appendChild(star);
+            
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 90 + Math.random() * 150;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance - 120;
+            
+            setTimeout(() => {
+                star.style.transform = `translate(${x}px, ${y}px) scale(0) rotate(${Math.random() * 360}deg)`;
+                star.style.opacity = '0';
+            }, 50);
+            
+            setTimeout(() => {
+                star.remove();
+            }, 1250);
+        }
+    }
+
+    function scrollNext() {
+        if (activeIndex < filteredLessons.length - 1) {
+            scrollToReel(activeIndex + 1);
+        }
+    }
+
+    // Stop speaking when unloading the page
     window.addEventListener('beforeunload', () => {
         window.speechSynthesis.cancel();
     });
+
+    function scrollPrev() {
+        if (activeIndex > 0) {
+            scrollToReel(activeIndex - 1);
+        }
+    }
+
+    function scrollToReel(idx) {
+        const container = document.getElementById('reelsContainer');
+        const card = document.getElementById(`reel-${idx}`);
+        if (container && card) {
+            container.scrollTo({
+                top: card.offsetTop,
+                behavior: 'smooth'
+            });
+            toggleDrawer(false);
+        }
+    }
+
+    function toggleDrawer(open) {
+        const drawer = document.getElementById('reelsDrawer');
+        if (drawer) {
+            if (open) {
+                drawer.classList.add('open');
+                SoundFX.play('click');
+            } else {
+                drawer.classList.remove('open');
+            }
+        }
+    }
 </script>
 @endsection
