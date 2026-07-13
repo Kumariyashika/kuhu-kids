@@ -4,18 +4,17 @@
 
 @section('content')
 <div class="inner-container">
-    <div class="inner-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-        <h1 class="inner-title" style="margin: 0;">
+    <div class="inner-header" style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; gap: 15px;">
+        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 40px; height: 40px; padding: 0; text-decoration: none; margin: 0; flex-shrink: 0;" title="Back to Home">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+
+        <h1 class="inner-title" style="margin: 0; font-size: 1.7rem; line-height: 1.2;">
             <span style="color: var(--color-pink);">🏆 English Rhymes</span>
         </h1>
-        
-        <!-- Live Stars Pill -->
-        <div class="stars-pill" style="display: flex; align-items: center; gap: 8px; background: white; padding: 8px 18px; border-radius: 24px; border: 3px solid var(--color-yellow); font-weight: 800; color: var(--color-orange); box-shadow: 0 4px 0 var(--color-yellow-shadow); font-size: 1.15rem; z-index: 10;">
-            <span>⭐</span>
-            <span class="stars-count">{{ $activeChild->stars }}</span>
-        </div>
-        
-        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="margin: 0;">&lt; Back to Home</a>
     </div>
 
     <!-- Reels Swiper Viewport -->
@@ -32,7 +31,7 @@
                     <div class="reels-drawer-item {{ $index === 0 ? 'active' : '' }}" 
                          id="drawer-item-{{ $index }}"
                          onclick="scrollToReel({{ $index }})">
-                        {{ $index + 1 }}. {{ $lesson->title }}
+                         {{ $index + 1 }}. {{ $lesson->title }}
                     </div>
                 @endforeach
             </div>
@@ -47,37 +46,22 @@
                      
                      <!-- Decorative floaties -->
                      <span class="floating-element" style="top: 15%; left: 8%; animation-delay: 0s;">🎵</span>
-                     <span class="floating-element" style="top: 12%; right: 10%; animation-delay: 1.5s;">⭐</span>
+                     <span class="floating-element" style="top: 12%; right: 10%; animation-delay: 1.5s;">🎈</span>
                      <span class="floating-element" style="bottom: 22%; left: 9%; animation-delay: 0.8s;">✨</span>
                      <span class="floating-element" style="bottom: 18%; right: 7%; animation-delay: 2.2s;">🎶</span>
                      
-                     <h2 class="reel-title" style="color: var(--color-pink);">{{ $lesson->title }}</h2>
+                     <h2 class="reel-title" style="color: var(--color-pink); margin-bottom: 20px;">{{ $lesson->title }}</h2>
                      
-                     <div class="reel-content-box">
-                         <div class="reel-lyrics" id="lyrics-{{ $index }}">{{ $lesson->body_content }}</div>
+                     @if($lesson->video_url)
+                     <!-- Sleek Video Playback Container -->
+                     <div class="video-container" id="video-wrapper-{{ $index }}">
+                         <div id="video-placeholder-{{ $index }}" data-src="{{ $lesson->video_url }}" style="width: 100%; height: 100%;"></div>
                      </div>
-                     
-                     <div class="reel-footer">
-                         <!-- Play/Stop controls -->
-                         <div class="audio-controls" style="margin: 0;">
-                             <button onclick="toggleSpeak({{ $index }})" class="btn-3d btn-yellow play-btn" style="font-size: 1.15rem; padding: 10px 24px;">
-                                 ▶️ Play
-                             </button>
-                             <button onclick="stopSpeak()" class="btn-3d btn-pink stop-btn" style="font-size: 1.15rem; padding: 10px 24px; display: none;">
-                                 ⏸️ Stop
-                             </button>
-                         </div>
-                         
-                         <!-- Speaking progress track -->
-                         <div class="reel-progress-container">
-                             <div class="reel-progress-bar" id="progress-bar-{{ $index }}"></div>
-                         </div>
-                         
-                         <!-- Stars reward display -->
-                         <div style="font-weight: 900; color: var(--color-orange); font-size: 1.2rem; display: flex; align-items: center; gap: 4px; background: white; padding: 6px 12px; border-radius: 16px; border: 2px solid #FFEBEF;">
-                             <span>⭐</span><span>+5</span>
-                         </div>
+                     @else
+                     <div style="text-align: center; padding: 40px; font-size: 1.5rem; color: var(--color-gray);">
+                         📺 Video not available.
                      </div>
+                     @endif
                 </div>
             @endforeach
         </div>
@@ -94,18 +78,17 @@
 
 <script>
     let activeIndex = 0;
-    let speakingIndex = -1;
-    let speakProgressInterval = null;
     let observer = null;
     let lessons = [];
     let autoplayTimeout = null;
+    let starAwardTimeout = null;
 
     // Populate lessons array for JavaScript playback control
     @foreach($course->lessons as $index => $lesson)
         lessons.push({
             id: {{ $lesson->id }},
             title: `{!! addslashes($lesson->title) !!}`,
-            body: `{!! str_replace("\n", '\\n', addslashes($lesson->body_content)) !!}`
+            video_url: `{{ $lesson->video_url }}`
         });
     @endforeach
 
@@ -132,15 +115,11 @@
         
         // Initial setup
         setActiveReel(0);
+        loadActiveVideo(0);
     });
 
     function setActiveReel(idx) {
-        if (activeIndex === idx && speakingIndex === idx) return;
-        
-        // If active index changes, stop current speaking
-        if (activeIndex !== idx) {
-            stopSpeak();
-        }
+        if (activeIndex === idx) return;
         
         activeIndex = idx;
         
@@ -169,99 +148,49 @@
             card.style.background = gradients[idx % gradients.length];
         }
         
-        // Wait for scroll snapping deceleration before starting auto-play speech
+        // Wait for scroll snapping deceleration before loading active video
         clearTimeout(autoplayTimeout);
         autoplayTimeout = setTimeout(() => {
-            autoPlayActiveReel();
+            loadActiveVideo(idx);
         }, 800);
     }
 
-    function autoPlayActiveReel() {
-        if (localStorage.getItem('voice_enabled') === 'false') return;
-        
-        const lesson = lessons[activeIndex];
-        if (lesson) {
-            speakRhyme(activeIndex, lesson.title, lesson.body);
-        }
-    }
-
-    function speakRhyme(idx, title, body) {
-        stopSpeak();
-        
-        speakingIndex = idx;
-        const card = document.getElementById(`reel-${idx}`);
-        if (!card) return;
-        
-        // Toggle play controls
-        card.querySelector('.play-btn').style.display = 'none';
-        card.querySelector('.stop-btn').style.display = 'inline-flex';
-        
-        // Estimate speech duration to animate the progress bar smoothly
-        const textToSpeak = title + ". " + body.replace(/\\n/g, ". ");
-        const wordCount = textToSpeak.split(/\s+/).length;
-        const durationSec = Math.max(6, wordCount / 1.8); // 1.8 words per second for clarity
-        
-        let elapsed = 0;
-        const progressBar = document.getElementById(`progress-bar-${idx}`);
-        if (progressBar) {
-            progressBar.style.width = '0%';
-        }
-        
-        clearInterval(speakProgressInterval);
-        speakProgressInterval = setInterval(() => {
-            elapsed += 0.1;
-            const percentage = Math.min(100, (elapsed / durationSec) * 100);
-            if (progressBar) {
-                progressBar.style.width = percentage + '%';
+    function loadActiveVideo(idx) {
+        // Reset/unload other videos first to prevent overlaps
+        lessons.forEach((lesson, i) => {
+            const placeholder = document.getElementById(`video-placeholder-${i}`);
+            if (placeholder) {
+                placeholder.innerHTML = '';
             }
-            if (percentage >= 100) {
-                clearInterval(speakProgressInterval);
-            }
-        }, 100);
-        
-        // Play the speech synthesis with global cancel workaround
-        SoundFX.speak(textToSpeak, 'en-US', () => {
-            finishRhyme(idx, title);
         });
-    }
-
-    function toggleSpeak(idx) {
-        const lesson = lessons[idx];
-        if (!lesson) return;
         
-        if (speakingIndex === idx) {
-            stopSpeak();
-        } else {
-            speakRhyme(idx, lesson.title, lesson.body);
-        }
-    }
-
-    function stopSpeak() {
-        if (speakingIndex !== -1) {
-            const card = document.getElementById(`reel-${speakingIndex}`);
-            if (card) {
-                card.querySelector('.play-btn').style.display = 'inline-flex';
-                card.querySelector('.stop-btn').style.display = 'none';
+        // Clear any pending star awards
+        clearTimeout(starAwardTimeout);
+        
+        // Load active video
+        const activePlaceholder = document.getElementById(`video-placeholder-${idx}`);
+        if (activePlaceholder) {
+            const videoUrl = activePlaceholder.getAttribute('data-src');
+            if (videoUrl) {
+                const iframe = document.createElement('iframe');
+                // Auto play video when it snapped to view
+                iframe.setAttribute('src', videoUrl + "?autoplay=1&rel=0");
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                iframe.setAttribute('allowfullscreen', 'true');
+                activePlaceholder.appendChild(iframe);
                 
-                const progressBar = document.getElementById(`progress-bar-${speakingIndex}`);
-                if (progressBar) {
-                    progressBar.style.width = '0%';
-                }
+                // Award stars after 10 seconds of watching
+                const lesson = lessons[idx];
+                starAwardTimeout = setTimeout(() => {
+                    awardRhymeStars(lesson.title);
+                }, 10000);
             }
-            speakingIndex = -1;
         }
-        clearInterval(speakProgressInterval);
-        window.speechSynthesis.cancel();
     }
 
-    function finishRhyme(idx, title) {
-        if (speakingIndex !== idx) return; // User scrolled away
-        
-        stopSpeak();
+    function awardRhymeStars(title) {
         SoundFX.play('cheer');
-        
-        // Star particle effect
-        triggerStarCompletion(idx);
         
         // Award stars via API
         fetch("{{ route('api.add_stars') }}", {
@@ -272,7 +201,7 @@
             },
             body: JSON.stringify({
                 stars: 5,
-                activity_name: 'Listened to English Rhyme: ' + title
+                activity_name: 'Watched English Rhyme: ' + title
             })
         })
         .then(response => response.json())
@@ -285,40 +214,6 @@
                 }
             }
         });
-    }
-
-    function triggerStarCompletion(idx) {
-        const card = document.getElementById(`reel-${idx}`);
-        if (!card) return;
-        
-        // Generate exploding stars
-        for (let i = 0; i < 10; i++) {
-            const star = document.createElement('div');
-            star.innerText = '⭐';
-            star.style.position = 'absolute';
-            star.style.left = '50%';
-            star.style.top = '50%';
-            star.style.fontSize = '2.5rem';
-            star.style.zIndex = '99';
-            star.style.pointerEvents = 'none';
-            star.style.transition = 'all 1.2s cubic-bezier(0.1, 0.8, 0.3, 1)';
-            
-            card.appendChild(star);
-            
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 90 + Math.random() * 150;
-            const x = Math.cos(angle) * distance;
-            const y = Math.sin(angle) * distance - 120; // float upwards
-            
-            setTimeout(() => {
-                star.style.transform = `translate(${x}px, ${y}px) scale(0) rotate(${Math.random() * 360}deg)`;
-                star.style.opacity = '0';
-            }, 50);
-            
-            setTimeout(() => {
-                star.remove();
-            }, 1250);
-        }
     }
 
     function scrollNext() {
@@ -356,10 +251,5 @@
             }
         }
     }
-
-    // Stop synthesis when unloading the page
-    window.addEventListener('beforeunload', () => {
-        window.speechSynthesis.cancel();
-    });
 </script>
 @endsection

@@ -4,18 +4,17 @@
 
 @section('content')
 <div class="inner-container">
-    <div class="inner-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-        <h1 class="inner-title" style="margin: 0;">
+    <div class="inner-header" style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; gap: 15px; width: 100%;">
+        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 40px; height: 40px; padding: 0; text-decoration: none; margin: 0; flex-shrink: 0;" title="Back to Home">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+
+        <h1 class="inner-title" style="margin: 0; font-size: 1.7rem; line-height: 1.2;">
             <span style="color: var(--color-orange);">📖 Moral Stories</span>
         </h1>
-        
-        <!-- Live Stars Pill -->
-        <div class="stars-pill" style="display: flex; align-items: center; gap: 8px; background: white; padding: 8px 18px; border-radius: 24px; border: 3px solid var(--color-yellow); font-weight: 800; color: var(--color-orange); box-shadow: 0 4px 0 var(--color-yellow-shadow); font-size: 1.15rem; z-index: 10;">
-            <span>⭐</span>
-            <span class="stars-count">{{ $activeChild->stars }}</span>
-        </div>
-        
-        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="margin: 0;">&lt; Back to Home</a>
     </div>
 
     <!-- Reels Swiper Viewport -->

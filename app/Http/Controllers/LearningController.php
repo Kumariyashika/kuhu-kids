@@ -80,7 +80,7 @@ class LearningController extends Controller
         $activeChild = $this->getActiveChild();
         if ($activeChild) {
             $activeChild->increment('stars', $request->stars);
-            
+
             $levelIncreased = false;
             if ($request->input('increase_level')) {
                 $activeChild->increment('level');

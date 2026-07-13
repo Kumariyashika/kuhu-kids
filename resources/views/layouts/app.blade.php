@@ -24,6 +24,8 @@
             alt="3D Elephant Background Decor">
         <img src="{{ asset('images/backgrounds/3d_giraffe.png') }}" class="animal-bg giraffe-bg"
             alt="3D Giraffe Background Decor">
+        <img src="{{ asset('images/backgrounds/3d_rainbow.png') }}" class="rainbow-3d"
+            alt="3D Rainbow Background Decor">
         <!-- Rising Background Butterflies -->
         <img src="{{ asset('images/backgrounds/3d_butterfly.png') }}" class="rising-butterfly"
             style="left: 8%; width: 140px; animation-duration: 22s; animation-delay: 0s;" alt="3D Butterfly">
@@ -37,8 +39,6 @@
             style="left: 78%; width: 130px; animation-duration: 28s; animation-delay: 6s;" alt="3D Butterfly">
         <img src="{{ asset('images/backgrounds/3d_butterfly.png') }}" class="rising-butterfly"
             style="left: 92%; width: 100px; animation-duration: 24s; animation-delay: 11s;" alt="3D Butterfly">
-        <img src="{{ asset('images/backgrounds/3d_rainbow.png') }}" class="rainbow-3d"
-            alt="3D Rainbow Background Decor">
 
         <!-- Rising Background Balloons -->
         <div class="rising-balloon"
@@ -209,18 +209,34 @@
                 }
                 if ('speechSynthesis' in window) {
                     window.speechSynthesis.cancel();
+                    window.speechSynthesis.resume();
 
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = lang;
-                    utterance.rate = 0.85; // Speak a bit slower for children
-                    utterance.pitch = 1.3; // Higher, cute voice tone
+                    utterance.rate = 0.85;
+                    utterance.pitch = 1.3;
+
+                    try {
+                        const voices = window.speechSynthesis.getVoices();
+                        if (voices && voices.length > 0) {
+                            let voice = voices.find(v => v.lang.toLowerCase() === lang.toLowerCase());
+                            if (!voice) {
+                                const prefix = lang.split('-')[0].toLowerCase();
+                                voice = voices.find(v => v.lang.toLowerCase().startsWith(prefix));
+                            }
+                            if (voice) {
+                                utterance.voice = voice;
+                            }
+                        }
+                    } catch (e) {
+                        console.log("Voice matching error:", e);
+                    }
 
                     if (onend) {
                         utterance.onend = onend;
                         utterance.onerror = onend;
                     }
 
-                    // Chrome bug fix: wait 100ms after cancel() to start speaking
                     setTimeout(() => {
                         window.speechSynthesis.speak(utterance);
                     }, 100);
@@ -229,6 +245,7 @@
                 }
             }
         };
+
 
         // Attach global click event sounds to interactive buttons and cards
         document.addEventListener('DOMContentLoaded', () => {

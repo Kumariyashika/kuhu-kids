@@ -40,7 +40,7 @@ Route::prefix('learning')->group(function () {
     Route::get('/hindi-rhymes', [LearningController::class, 'hindiRhymes'])->name('learning.hindi_rhymes');
     Route::get('/devotional', [LearningController::class, 'devotional'])->name('learning.devotional');
     Route::get('/cultural', [LearningController::class, 'cultural'])->name('learning.cultural');
-    
+
     // NEW Routes
     Route::get('/numbers', [LearningController::class, 'numbers'])->name('learning.numbers');
     Route::get('/shapes', [LearningController::class, 'shapes'])->name('learning.shapes');

@@ -4,18 +4,17 @@
 
 @section('content')
 <div class="inner-container">
-    <div class="inner-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 15px;">
-        <h1 class="inner-title" style="margin: 0;">
+    <div class="inner-header" style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 15px; gap: 15px; width: 100%;">
+        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 40px; height: 40px; padding: 0; text-decoration: none; margin: 0; flex-shrink: 0;" title="Back to Home">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </a>
+
+        <h1 class="inner-title" style="margin: 0; font-size: 1.7rem; line-height: 1.2;">
             <span style="color: var(--color-purple);">🕉️ Devotional Learning</span>
         </h1>
-        
-        <!-- Live Stars Pill -->
-        <div class="stars-pill" style="display: flex; align-items: center; gap: 8px; background: white; padding: 8px 18px; border-radius: 24px; border: 3px solid var(--color-yellow); font-weight: 800; color: var(--color-orange); box-shadow: 0 4px 0 var(--color-yellow-shadow); font-size: 1.15rem; z-index: 10;">
-            <span>⭐</span>
-            <span class="stars-count">{{ $activeChild->stars }}</span>
-        </div>
-        
-        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="margin: 0;">&lt; Back to Home</a>
     </div>
 
     <!-- Category Filter Tabs above Reels -->
@@ -67,10 +66,9 @@
     let allLessons = [];
     let filteredLessons = [];
     let activeIndex = 0;
-    let speakingIndex = -1;
-    let speakProgressInterval = null;
     let observer = null;
     let autoplayTimeout = null;
+    let starAwardTimeout = null;
 
     // Populate all devotional lessons in JS array
     @foreach($course->lessons as $lesson)
@@ -78,7 +76,7 @@
             id: {{ $lesson->id }},
             title: `{!! addslashes($lesson->title) !!}`,
             contentType: '{{ $lesson->content_type }}',
-            body: `{!! str_replace("\n", '\\n', addslashes($lesson->body_content)) !!}`
+            video_url: `{{ $lesson->video_url }}`
         });
     @endforeach
 
@@ -88,6 +86,7 @@
         renderReels();
     });
 
+    // Toggle categories
     function filterCategory(category, button) {
         SoundFX.play('click');
         
@@ -115,7 +114,10 @@
     }
 
     function renderReels() {
-        stopSpeak();
+        // Stop currently loaded videos
+        clearTimeout(autoplayTimeout);
+        clearTimeout(starAwardTimeout);
+        
         const container = document.getElementById('reelsContainer');
         const drawerList = document.querySelector('.reels-drawer-list');
         
@@ -158,35 +160,20 @@
                 <span class="floating-element" style="bottom: 22%; left: 9%; animation-delay: 0.8s;">✨</span>
                 <span class="floating-element" style="bottom: 18%; right: 7%; animation-delay: 2.2s;">🙏</span>
                 
-                <h2 class="reel-title" style="color: var(--color-purple); font-size: 2rem;">${lesson.title}</h2>
+                <h2 class="reel-title" style="color: var(--color-purple); font-size: 2rem; margin-bottom: 20px;">${lesson.title}</h2>
                 
-                <div class="reel-content-box" style="border-color: #EDE7F6; background: rgba(255,255,255,0.92);">
-                    <div class="reel-lyrics" style="font-size: 1.45rem; line-height: 1.75;" id="lyrics-${index}"></div>
+                ${lesson.video_url ? `
+                <!-- Sleek Video Playback Container -->
+                <div class="video-container video-container-devotional" id="video-wrapper-${index}">
+                    <div id="video-placeholder-${index}" data-src="${lesson.video_url}" style="width: 100%; height: 100%;"></div>
                 </div>
-                
-                <div class="reel-footer">
-                    <div class="audio-controls" style="margin: 0;">
-                        <button onclick="toggleSpeak(${index})" class="btn-3d btn-yellow play-btn" style="font-size: 1.1rem; padding: 8px 20px;">
-                            ▶️ Play
-                        </button>
-                        <button onclick="stopSpeak()" class="btn-3d btn-pink stop-btn" style="font-size: 1.1rem; padding: 8px 20px; display: none;">
-                            ⏸️ Stop
-                        </button>
-                    </div>
-                    
-                    <div class="reel-progress-container">
-                        <div class="reel-progress-bar" id="progress-bar-${index}" style="background: var(--color-purple);"></div>
-                    </div>
-                    
-                    <div style="font-weight: 900; color: var(--color-orange); font-size: 1.15rem; display: flex; align-items: center; gap: 4px; background: white; padding: 6px 12px; border-radius: 16px; border: 2px solid #EDE7F6;">
-                        <span>⭐</span><span>+5</span>
-                    </div>
+                ` : `
+                <div style="text-align: center; padding: 40px; font-size: 1.5rem; color: var(--color-gray);">
+                    📺 Video not available.
                 </div>
+                `}
             `;
             container.appendChild(card);
-            
-            // Set text content safely
-            document.getElementById(`lyrics-${index}`).innerText = lesson.body.replace(/\\n/g, "\n");
             
             // Build drawer playlist items
             const drawerItem = document.createElement('div');
@@ -198,7 +185,10 @@
         });
         
         setupObserver();
-        scrollToReel(0);
+        
+        // Initial load
+        activeIndex = 0;
+        loadActiveVideo(0);
     }
 
     function setupObserver() {
@@ -227,11 +217,7 @@
     }
 
     function setActiveReel(idx) {
-        if (activeIndex === idx && speakingIndex === idx) return;
-        
-        if (activeIndex !== idx) {
-            stopSpeak();
-        }
+        if (activeIndex === idx) return;
         
         activeIndex = idx;
         
@@ -247,99 +233,46 @@
         
         clearTimeout(autoplayTimeout);
         autoplayTimeout = setTimeout(() => {
-            autoPlayActiveReel();
+            loadActiveVideo(idx);
         }, 800);
     }
 
-    function autoPlayActiveReel() {
-        if (localStorage.getItem('voice_enabled') === 'false') return;
-        
-        const lesson = filteredLessons[activeIndex];
-        if (lesson) {
-            speakDevotional(activeIndex, lesson.title, lesson.body);
-        }
-    }
-
-    function containsDevanagari(text) {
-        return /[\u0900-\u097F]/.test(text);
-    }
-
-    function speakDevotional(idx, title, body) {
-        stopSpeak();
-        
-        speakingIndex = idx;
-        const card = document.getElementById(`reel-${idx}`);
-        if (!card) return;
-        
-        card.querySelector('.play-btn').style.display = 'none';
-        card.querySelector('.stop-btn').style.display = 'inline-flex';
-        
-        const cleanText = title + ". " + body.replace(/\\n/g, ". ");
-        const wordCount = cleanText.split(/\s+/).length;
-        const isHindi = containsDevanagari(body);
-        const durationSec = Math.max(6, wordCount / (isHindi ? 1.4 : 1.8)); // Sanskrit/Hindi is spoken slower
-        
-        let elapsed = 0;
-        const progressBar = document.getElementById(`progress-bar-${idx}`);
-        if (progressBar) {
-            progressBar.style.width = '0%';
-        }
-        
-        clearInterval(speakProgressInterval);
-        speakProgressInterval = setInterval(() => {
-            elapsed += 0.1;
-            const percentage = Math.min(100, (elapsed / durationSec) * 100);
-            if (progressBar) {
-                progressBar.style.width = percentage + '%';
+    function loadActiveVideo(idx) {
+        // Reset/unload other videos first to prevent overlaps
+        filteredLessons.forEach((lesson, i) => {
+            const placeholder = document.getElementById('video-placeholder-' + i);
+            if (placeholder) {
+                placeholder.innerHTML = '';
             }
-            if (percentage >= 100) {
-                clearInterval(speakProgressInterval);
-            }
-        }, 100);
-        
-        const lang = isHindi ? 'hi-IN' : 'en-US';
-        SoundFX.speak(cleanText, lang, () => {
-            finishDevotional(idx, title);
         });
-    }
-
-    function toggleSpeak(idx) {
-        const lesson = filteredLessons[idx];
-        if (!lesson) return;
         
-        if (speakingIndex === idx) {
-            stopSpeak();
-        } else {
-            speakDevotional(idx, lesson.title, lesson.body);
-        }
-    }
-
-    function stopSpeak() {
-        if (speakingIndex !== -1) {
-            const card = document.getElementById(`reel-${speakingIndex}`);
-            if (card) {
-                card.querySelector('.play-btn').style.display = 'inline-flex';
-                card.querySelector('.stop-btn').style.display = 'none';
+        // Clear any pending star awards
+        clearTimeout(starAwardTimeout);
+        
+        // Load active video
+        const activePlaceholder = document.getElementById('video-placeholder-' + idx);
+        if (activePlaceholder) {
+            const videoUrl = activePlaceholder.getAttribute('data-src');
+            if (videoUrl) {
+                const iframe = document.createElement('iframe');
+                // Auto play video when it snapped to view
+                iframe.setAttribute('src', videoUrl + "?autoplay=1&rel=0");
+                iframe.setAttribute('frameborder', '0');
+                iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+                iframe.setAttribute('allowfullscreen', 'true');
+                activePlaceholder.appendChild(iframe);
                 
-                const progressBar = document.getElementById(`progress-bar-${speakingIndex}`);
-                if (progressBar) {
-                    progressBar.style.width = '0%';
-                }
+                // Award stars after 10 seconds of watching
+                const lesson = filteredLessons[idx];
+                starAwardTimeout = setTimeout(() => {
+                    awardDevotionalStars(lesson.title);
+                }, 10000);
             }
-            speakingIndex = -1;
         }
-        clearInterval(speakProgressInterval);
-        window.speechSynthesis.cancel();
     }
 
-    function finishDevotional(idx, title) {
-        if (speakingIndex !== idx) return; // User scrolled away
-        
-        stopSpeak();
+    function awardDevotionalStars(title) {
         SoundFX.play('cheer');
-        
-        // Stars particles
-        triggerStarCompletion(idx);
         
         // Award stars
         fetch("{{ route('api.add_stars') }}", {
@@ -364,49 +297,11 @@
         });
     }
 
-    function triggerStarCompletion(idx) {
-        const card = document.getElementById(`reel-${idx}`);
-        if (!card) return;
-        
-        for (let i = 0; i < 10; i++) {
-            const star = document.createElement('div');
-            star.innerText = '⭐';
-            star.style.position = 'absolute';
-            star.style.left = '50%';
-            star.style.top = '50%';
-            star.style.fontSize = '2.5rem';
-            star.style.zIndex = '99';
-            star.style.pointerEvents = 'none';
-            star.style.transition = 'all 1.2s cubic-bezier(0.1, 0.8, 0.3, 1)';
-            
-            card.appendChild(star);
-            
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 90 + Math.random() * 150;
-            const x = Math.cos(angle) * distance;
-            const y = Math.sin(angle) * distance - 120;
-            
-            setTimeout(() => {
-                star.style.transform = `translate(${x}px, ${y}px) scale(0) rotate(${Math.random() * 360}deg)`;
-                star.style.opacity = '0';
-            }, 50);
-            
-            setTimeout(() => {
-                star.remove();
-            }, 1250);
-        }
-    }
-
     function scrollNext() {
         if (activeIndex < filteredLessons.length - 1) {
             scrollToReel(activeIndex + 1);
         }
     }
-
-    // Stop speaking when unloading the page
-    window.addEventListener('beforeunload', () => {
-        window.speechSynthesis.cancel();
-    });
 
     function scrollPrev() {
         if (activeIndex > 0) {

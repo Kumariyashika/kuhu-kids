@@ -32,6 +32,8 @@
 
         /* 3D Animated Logo */
         .splash-logo-wrapper {
+            position: relative;
+            z-index: 1;
             margin-bottom: 40px;
             text-align: center;
             animation: bounceLogo 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate;
@@ -170,6 +172,8 @@
             alt="3D Elephant Background Decor">
         <img src="{{ asset('images/backgrounds/3d_giraffe.png') }}" class="animal-bg giraffe-bg"
             alt="3D Giraffe Background Decor">
+        <img src="{{ asset('images/backgrounds/3d_rainbow.png') }}" class="rainbow-3d"
+            alt="3D Rainbow Background Decor">
         <!-- Rising Background Butterflies -->
         <img src="{{ asset('images/backgrounds/3d_butterfly.png') }}" class="rising-butterfly"
             style="left: 8%; width: 140px; animation-duration: 22s; animation-delay: 0s;" alt="3D Butterfly">
@@ -183,8 +187,6 @@
             style="left: 78%; width: 130px; animation-duration: 28s; animation-delay: 6s;" alt="3D Butterfly">
         <img src="{{ asset('images/backgrounds/3d_butterfly.png') }}" class="rising-butterfly"
             style="left: 92%; width: 100px; animation-duration: 24s; animation-delay: 11s;" alt="3D Butterfly">
-        <img src="{{ asset('images/backgrounds/3d_rainbow.png') }}" class="rainbow-3d"
-            alt="3D Rainbow Background Decor">
 
         <!-- Rising Background Balloons -->
         <div class="rising-balloon"
