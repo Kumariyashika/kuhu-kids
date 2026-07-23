@@ -32,20 +32,20 @@ class Lesson extends Model
             'तीतर और बटेर' => 'https://youtube.com/shorts/ogzSxKjvj6w?si=MpI9JgLpStE3I3qP',
 
             // Devotional Mantras
-            'Gayatri Mantra' => 'https://youtube.com/shorts/Us2nDMkKSTc?si=4EDkWRbYJkoN721X',
-            'Mahamrityunjaya Mantra' => 'https://youtube.com/shorts/XMb4KsoCRrY?si=RP3fUus5M2SI9ZyA',
-            'Ganesh Mantra' => 'https://youtube.com/shorts/t4uXh2M90Wo?si=ZnnOBdisO8FPRicc',
-            'Hare Krishna Maha Mantra' => 'https://youtube.com/shorts/6KbIXzb1h4I?si=shhDbt2QJ3MMHzTx',
+            'Gayatri Mantra' => 'https://youtube.com/shorts/LJSmHX7m8r0?si=bfiP3zbPG969l-ze',
+            'Mahamrityunjaya Mantra' => 'https://youtube.com/shorts/XMb4KsoCRrY?si=1lxfJhKoLlBvE28o',
+            'Ganesh Mantra' => 'https://youtube.com/shorts/X01px_YPIYA?si=U4H39pZUOpM4DGJ2',
+            'Hare Krishna Maha Mantra' => 'https://youtube.com/shorts/6KbIXzb1h4I?si=AHxt7WV4wPnxlvGH',
             'Saraswati Mantra' => 'https://youtube.com/shorts/AFGPatLpZFw?si=ZgtChpGoKyuJvlxW',
-            'Guru Mantra' => 'https://youtube.com/shorts/cq-m4--aaQY?si=mYwIPyKdeLoGHGky',
+            'Guru Mantra' => 'https://youtube.com/shorts/ycvqpPFyQSU?si=HcIM6ZwM3zF2Aq5t',
 
             // Devotional Aartis
-            'Ganesh Aarti' => 'https://youtube.com/shorts/Us2nDMkKSTc?si=lZibMV_aDiP3yD81',
-            'Om Jai Jagdish Hare' => 'https://youtube.com/shorts/lcd91UbYcRw?si=5OB9qhSJzMVQy9tw',
-            'Hanuman Aarti' => 'https://youtube.com/shorts/SIS_43inaDw?si=E8e-isi2SgtGy5OQ',
-            'Shiva Aarti' => 'https://youtube.com/shorts/yltOEUSqb2Q?si=qp6yNylKb0xghpzA',
-            'Laxmi Aarti' => 'https://youtube.com/shorts/0KLnBBKb1eI?si=Rv0Etd1DPtZNKLDN',
-            'Ambe Maa Aarti' => 'https://youtube.com/shorts/pYRZ0nHTYfM?si=_Dc5c4ojzTbuSnDL',
+            'Ganesh Aarti' => 'https://youtube.com/shorts/ZIWSLspXV5Y?si=OxoApbrU57Z80YvT',
+            'Om Jai Jagdish Hare' => 'https://youtube.com/shorts/tD_F52vcxpE?si=99qwQztvOSJlVdNq',
+            'Hanuman Aarti' => 'https://youtube.com/shorts/vzPZkP-yVgE?si=JieF-oWZH9t-pR8q',
+            'Shiva Aarti' => 'https://youtube.com/shorts/Xg8ww3mt-zs?si=o46tGUJ5FckP9NIu',
+            'Laxmi Aarti' => 'https://youtube.com/shorts/KZcbwD8CB8M?si=1BoOsE3sf0Kk1_hf',
+            'Ambe Maa Aarti' => 'https://youtube.com/shorts/x-j5JcByNk0?si=oBui33a1TJnwpjhG',
 
             // Devotional Stories
             'Baby Krishna Story' => 'https://www.youtube.com/embed/ZfC6o5N0mEE',

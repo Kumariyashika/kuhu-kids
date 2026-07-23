@@ -258,4 +258,15 @@
     </script>
 </body>
 
+</html> // Attach global click event sounds to interactive buttons and cards
+document.addEventListener('DOMContentLoaded', () => {
+document.querySelectorAll('.module-card, .btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
+el.addEventListener('click', () => {
+SoundFX.play('click');
+});
+});
+});
+</script>
+</body>
+
 </html>

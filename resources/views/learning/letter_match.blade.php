@@ -3,7 +3,7 @@
 @section('title', 'Kuhu Kids Learning - Letter Match')
 
 @section('content')
-<div class="inner-container">
+<div class="inner-container" style="position: relative;">
     <div class="inner-header">
         <h1 class="inner-title">
             <span style="color: var(--color-blue);">🧩 Letter Match Game</span>
@@ -35,6 +35,20 @@
         <div class="match-column" id="lowercaseColumn" style="display: flex; flex-direction: column; gap: 24px; z-index: 10; width: 40%;">
             <!-- Populated dynamically -->
         </div>
+    </div>
+
+    <!-- Mini Game Overlay (Balloon/Bubble Pop) -->
+    <div id="miniGameOverlay" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #A1E3FF 0%, #D4F3FF 100%); border-radius: 30px; z-index: 100; flex-direction: column; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; text-align: center; overflow: hidden;">
+        <h2 id="miniGameTitle" style="color: #FF5252; font-size: 2.2rem; font-weight: 900; margin: 0 0 5px 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.05); font-family: 'Fredoka', sans-serif;">🎈 Balloon Pop Bonus!</h2>
+        <p id="miniGameSub" style="font-size: 1.3rem; font-weight: 800; color: #4A3B00; margin: 0 0 20px 0; font-family: 'Fredoka', sans-serif;">Pop 5 balloons to unlock the next level!</p>
+        
+        <div id="miniGameArea" style="width: 100%; flex: 1; position: relative; background: rgba(255, 255, 255, 0.4); border-radius: 24px; border: 3px dashed #FFF; overflow: hidden; cursor: crosshair;">
+            <!-- Balloons or bubbles will spawn dynamically here -->
+        </div>
+
+        <button id="miniGameNextBtn" class="btn-3d" style="display: none; background: var(--color-green-real); border-bottom: 6px solid var(--color-green-real-shadow); color: white; font-size: 1.4rem; padding: 12px 36px; border-radius: 20px; margin-top: 20px; cursor: pointer; font-family: 'Fredoka', sans-serif;">
+            Play Level 2 ➡️
+        </button>
     </div>
 </div>
 
@@ -374,13 +388,39 @@
         }
     }
 
+    let currentLevel = 1;
+    let balloonsPopped = 0;
+    
+    const levelDisplay = document.getElementById('levelDisplay');
+    const starsDisplay = document.getElementById('starsDisplay');
+    const coinsDisplay = document.getElementById('coinsDisplay');
+    const miniGameOverlay = document.getElementById('miniGameOverlay');
+    const miniGameTitle = document.getElementById('miniGameTitle');
+    const miniGameSub = document.getElementById('miniGameSub');
+    const miniGameArea = document.getElementById('miniGameArea');
+    const miniGameNextBtn = document.getElementById('miniGameNextBtn');
+    let balloonInterval = null;
+
     function victoryCheer() {
         SoundFX.play('cheer');
+        
+        let starsToAward = 15;
+        let coinsToAward = 0;
+        const isLevel20 = (currentLevel === 20);
+        
+        if (isLevel20) {
+            coinsToAward = 100; // award 100 coins on completing level 20!
+        }
+        
         if (localStorage.getItem('voice_enabled') !== 'false') {
-            SoundFX.speak("Excellent matching! You earned 15 stars!");
+            if (isLevel20) {
+                SoundFX.speak("Outstanding! You completed level 20 and earned 100 bonus coins!");
+            } else {
+                SoundFX.speak(`Excellent matching! Level ${currentLevel} complete!`);
+            }
         }
 
-        // Award stars to DB
+        // Award stars/coins to DB
         fetch("{{ route('api.add_stars') }}", {
             method: 'POST',
             headers: {
@@ -388,22 +428,184 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             body: JSON.stringify({
-                stars: 15,
-                activity_name: 'Cross Match Letters Game'
+                stars: starsToAward,
+                coins: coinsToAward,
+                activity_name: 'Letter Match Level ' + currentLevel
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const starsPill = document.querySelector('.stars-pill span');
-                if (starsPill) {
-                    starsPill.innerText = data.new_stars;
-                }
+                if (starsDisplay) starsDisplay.innerText = data.new_stars;
+                if (coinsDisplay && data.new_coins !== undefined) coinsDisplay.innerText = data.new_coins;
             }
         });
 
-        // Restart with fresh letters after delay
-        setTimeout(generateNewSet, 2600);
+        // Trigger mini game overlay after every level complete!
+        setTimeout(startMiniGame, 1800);
+    }
+
+    // --- Balloon / Bubble Pop Mini Game Logic ---
+
+    function startMiniGame() {
+        miniGameOverlay.style.display = 'flex';
+        miniGameArea.style.display = 'block';
+        balloonsPopped = 0;
+        miniGameArea.innerHTML = '';
+        miniGameNextBtn.style.display = 'none';
+
+        const isBubbleMode = (currentLevel % 2 === 0);
+        if (currentLevel === 20) {
+            miniGameTitle.innerText = "🏆 GRAND CHAMPION! 🏆";
+            miniGameSub.innerText = "You completed all 20 levels! Pop 5 bubbles to claim your 100 bonus coins! 🪙";
+        } else {
+            const icon = isBubbleMode ? '🫧' : '🎈';
+            const typeText = isBubbleMode ? 'bubbles' : 'balloons';
+            miniGameTitle.innerText = `${icon} Level ${currentLevel} Complete! ${icon}`;
+            miniGameSub.innerText = `Pop 5 ${typeText} to unlock Level ${currentLevel + 1}!`;
+        }
+
+        spawnBalloon();
+        balloonInterval = setInterval(spawnBalloon, 800);
+    }
+
+    function spawnBalloon() {
+        if (balloonsPopped >= 5) {
+            clearInterval(balloonInterval);
+            return;
+        }
+
+        const areaRect = miniGameArea.getBoundingClientRect();
+        const balloon = document.createElement('div');
+        const isBubbleMode = (currentLevel % 2 === 0);
+        
+        balloon.style.position = 'absolute';
+        balloon.style.bottom = '-100px';
+        
+        const size = Math.floor(Math.random() * 25) + 55; // 55 to 80px
+        balloon.style.width = size + 'px';
+        balloon.style.height = (isBubbleMode ? size : size * 1.25) + 'px';
+        
+        const randomX = Math.random() * (areaRect.width - size - 20) + 10;
+        balloon.style.left = randomX + 'px';
+        
+        if (isBubbleMode) {
+            // Bubble Style
+            balloon.style.background = 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(56, 182, 255, 0.45) 50%, rgba(140, 82, 255, 0.6) 100%)';
+            balloon.style.borderRadius = '50%';
+            balloon.style.border = '2.5px solid rgba(255, 255, 255, 0.6)';
+            balloon.style.boxShadow = 'inset -5px -5px 15px rgba(0,0,0,0.08), 0 5px 10px rgba(0,0,0,0.05)';
+        } else {
+            // Balloon Style
+            const colorsList = ['#FF66C4', '#38B6FF', '#FFDE59', '#7ED957', '#8C52FF', '#FF914D'];
+            const color = colorsList[Math.floor(Math.random() * colorsList.length)];
+            balloon.style.backgroundColor = color;
+            balloon.style.borderRadius = '50% 50% 50% 50% / 40% 40% 60% 60%';
+            balloon.style.boxShadow = 'inset -8px -8px 0 rgba(0,0,0,0.15)';
+            
+            const string = document.createElement('div');
+            string.style.position = 'absolute';
+            string.style.bottom = '-14px';
+            string.style.left = '50%';
+            string.style.width = '2px';
+            string.style.height = '14px';
+            string.style.backgroundColor = '#8D6E63';
+            balloon.appendChild(string);
+        }
+        
+        balloon.style.cursor = 'pointer';
+        balloon.style.transition = 'transform 0.1s ease';
+        
+        const popHandler = (e) => {
+            e.stopPropagation();
+            if (balloon.dataset.popped === 'true') return;
+            balloon.dataset.popped = 'true';
+            
+            SoundFX.play('pop');
+            
+            balloon.style.transform = 'scale(1.4)';
+            balloon.style.opacity = '0';
+            
+            if (typeof confetti === 'function') {
+                const rect = balloon.getBoundingClientRect();
+                confetti({
+                    particleCount: 15,
+                    spread: 45,
+                    origin: { 
+                        x: (rect.left + rect.width/2) / window.innerWidth, 
+                        y: (rect.top + rect.height/2) / window.innerHeight 
+                    },
+                    colors: ['#FFD700', '#FF69B4', '#00FFFF', '#32CD32']
+                });
+            }
+
+            setTimeout(() => balloon.remove(), 100);
+
+            balloonsPopped++;
+            if (isBubbleMode) {
+                miniGameSub.innerText = `Popped: ${balloonsPopped} / 5 🫧`;
+            } else {
+                miniGameSub.innerText = `Popped: ${balloonsPopped} / 5 🎈`;
+            }
+
+            if (balloonsPopped === 5) {
+                handleMiniGameVictory();
+            }
+        };
+
+        balloon.addEventListener('mousedown', popHandler);
+        balloon.addEventListener('touchstart', popHandler);
+
+        miniGameArea.appendChild(balloon);
+
+        // Animate float
+        let posY = -100;
+        const speed = Math.random() * 1.5 + 2.5; 
+        
+        function floatUp() {
+            if (balloon.dataset.popped === 'true') return;
+            posY += speed;
+            balloon.style.bottom = posY + 'px';
+            
+            const wobble = Math.sin(posY / 30) * 8;
+            balloon.style.transform = `translateX(${wobble}px)`;
+
+            if (posY < areaRect.height + 120) {
+                requestAnimationFrame(floatUp);
+            } else {
+                balloon.remove();
+            }
+        }
+        
+        requestAnimationFrame(floatUp);
+    }
+
+    function handleMiniGameVictory() {
+        clearInterval(balloonInterval);
+        SoundFX.play('cheer');
+        
+        if (currentLevel === 20) {
+            miniGameTitle.innerText = "👑 CONGRATULATIONS! 👑";
+            miniGameSub.innerText = "You earned 100 bonus coins! All 20 levels completed successfully!";
+            miniGameNextBtn.innerText = "Play Again 🔄";
+            miniGameNextBtn.onclick = () => {
+                miniGameOverlay.style.display = 'none';
+                currentLevel = 1;
+                if (levelDisplay) levelDisplay.innerText = currentLevel;
+                generateNewSet();
+            };
+        } else {
+            miniGameTitle.innerText = "🌟 BONUS COMPLETED! 🌟";
+            miniGameSub.innerText = `Awesome! Level ${currentLevel + 1} is now unlocked!`;
+            miniGameNextBtn.innerText = `Play Level ${currentLevel + 1} ➡️`;
+            miniGameNextBtn.onclick = () => {
+                miniGameOverlay.style.display = 'none';
+                currentLevel++;
+                if (levelDisplay) levelDisplay.innerText = currentLevel;
+                generateNewSet();
+            };
+        }
+        miniGameNextBtn.style.display = 'inline-block';
     }
 
     document.addEventListener('DOMContentLoaded', () => {

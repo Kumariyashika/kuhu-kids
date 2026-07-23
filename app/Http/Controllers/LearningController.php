@@ -75,11 +75,18 @@ class LearningController extends Controller
             'stars' => 'required|integer|min:1',
             'activity_name' => 'required|string|max:100',
             'increase_level' => 'nullable|boolean',
+            'coins' => 'nullable|integer|min:0',
         ]);
 
         $activeChild = $this->getActiveChild();
         if ($activeChild) {
             $activeChild->increment('stars', $request->stars);
+
+            $coinsEarned = 0;
+            if ($request->filled('coins')) {
+                $coinsEarned = intval($request->coins);
+                $activeChild->increment('coins', $coinsEarned);
+            }
 
             $levelIncreased = false;
             if ($request->input('increase_level')) {
@@ -94,6 +101,7 @@ class LearningController extends Controller
                 'activity_name' => $request->activity_name,
                 'xp_earned' => $request->stars * 2,
                 'stars_earned' => $request->stars,
+                'coins_earned' => $coinsEarned,
                 'details' => $levelIncreased ? 'Completed and reached level ' . $activeChild->level : 'Completed tracking',
                 'created_at' => now(),
                 'updated_at' => now()
@@ -102,7 +110,8 @@ class LearningController extends Controller
             return response()->json([
                 'success' => true,
                 'new_stars' => $activeChild->stars,
-                'new_level' => $activeChild->level
+                'new_level' => $activeChild->level,
+                'new_coins' => $activeChild->coins
             ]);
         }
 
@@ -131,5 +140,17 @@ class LearningController extends Controller
     {
         $activeChild = $this->getActiveChild();
         return view('learning.quiz', compact('activeChild'));
+    }
+
+    public function letterAVideo()
+    {
+        $activeChild = $this->getActiveChild();
+        return view('learning.letter_a_video', compact('activeChild'));
+    }
+
+    public function alphabetAdventure()
+    {
+        $activeChild = $this->getActiveChild();
+        return view('learning.alphabet_adventure', compact('activeChild'));
     }
 }

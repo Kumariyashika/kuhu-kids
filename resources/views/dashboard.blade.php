@@ -331,43 +331,35 @@
             <span class="card-subtitle">Answer questions & win stars!</span>
         </a>
 
+        <!-- 13. Alphabet Adventure -->
+        <a href="{{ route('learning.alphabet_adventure') }}" class="module-card" style="background: linear-gradient(135deg, #FF66C4 0%, #FF914D 100%); border-bottom: 8px solid #CC4E9C; color: white;">
+            <div class="card-icon-container">
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <!-- Map/Path with letters -->
+                    <path d="M 20 75 Q 40 40 50 60 T 80 25" fill="none" stroke="#FFF" stroke-width="6" stroke-linecap="round" stroke-dasharray="8,8" />
+                    <!-- Map pins -->
+                    <circle cx="20" cy="75" r="10" fill="#FF5252" stroke="#FFF" stroke-width="2" />
+                    <text x="16" y="79" font-family="'Fredoka', sans-serif" font-size="12" font-weight="900" fill="#FFF">A</text>
+                    
+                    <circle cx="50" cy="60" r="10" fill="#FFDE59" stroke="#FFF" stroke-width="2" />
+                    <text x="46" y="64" font-family="'Fredoka', sans-serif" font-size="12" font-weight="900" fill="#4A3B00">B</text>
+
+                    <circle cx="80" cy="25" r="12" fill="#7ED957" stroke="#FFF" stroke-width="3" />
+                    <polygon points="80,18 82,22 87,22 83,25 85,30 80,27 75,30 77,25 73,22 78,22" fill="#FFD54F" />
+
+                    <!-- Floating clouds decoration -->
+                    <path d="M 65 42 Q 72 37 78 42 Q 84 42 80 49 L 64 49 Z" fill="#FFF" opacity="0.8" />
+                </svg>
+            </div>
+            <h2 class="card-title" style="color: white; text-shadow: 2px 2px 0px rgba(0,0,0,0.15);">Alphabet Adventure 🗺️</h2>
+            <span class="card-subtitle" style="color: rgba(255,255,255,0.9);">Videos, tracing, mini games & stickers!</span>
+        </a>
 
     </main>
 
 
-    <!-- Bottom Actions Section (Parent Zone & Profile Switcher) -->
-    <footer class="bottom-section">
-        <!-- Parent Zone Lock Button -->
-        <a href="{{ route('parent.dashboard') }}" class="bottom-pill">
-            <div class="pill-left">
-                <div class="parent-avatar-frame">
-                    <!-- Parent SVG Profile -->
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="48" fill="#FFEAE6" />
-                        <!-- Mother face vector -->
-                        <circle cx="50" cy="46" r="22" fill="#FFCBB5" />
-                        <!-- Hair -->
-                        <path d="M22 42 C22 25, 78 25, 78 42 C78 22, 22 22, 22 42 Z" fill="#3E2723" />
-                        <circle cx="30" cy="38" r="8" fill="#3E2723" />
-                        <circle cx="70" cy="38" r="8" fill="#3E2723" />
-                        <!-- Eyes & Smile -->
-                        <circle cx="43" cy="45" r="2.5" fill="#222" />
-                        <circle cx="57" cy="45" r="2.5" fill="#222" />
-                        <path d="M44 54 Q50 59 56 54" stroke="#222" stroke-width="2" stroke-linecap="round" fill="none" />
-                        </g>
-                    </svg>
-                </div>
-                <div class="pill-text">
-                    <span class="pill-title" style="color: #6A4DFF;">Parent Zone</span>
-                    <span class="pill-desc">Enter PIN to access</span>
-                </div>
-            </div>
-            <div class="pill-arrow" style="background: #E8E5FF; color: #6A4DFF;">
-                <!-- Right arrow -->
-                &gt;
-            </div>
-        </a>
-
+    <!-- Bottom Actions Section (Profile Switcher) -->
+    <footer class="bottom-section" style="grid-template-columns: 1fr; max-width: 400px; margin: 10px auto;">
         <!-- Current Profile Switching -->
         <a href="{{ route('parent.dashboard') }}" class="bottom-pill">
             <div class="pill-left">

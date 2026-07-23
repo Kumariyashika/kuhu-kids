@@ -36,6 +36,7 @@ Route::prefix('learning')->group(function () {
     Route::get('/phonics', [LearningController::class, 'phonics'])->name('learning.phonics');
     Route::get('/balloon-pop', [LearningController::class, 'balloonPop'])->name('learning.balloon_pop');
     Route::get('/letter-match', [LearningController::class, 'letterMatch'])->name('learning.letter_match');
+    Route::get('/alphabet-adventure', [LearningController::class, 'alphabetAdventure'])->name('learning.alphabet_adventure');
     Route::get('/english-rhymes', [LearningController::class, 'englishRhymes'])->name('learning.english_rhymes');
     Route::get('/hindi-rhymes', [LearningController::class, 'hindiRhymes'])->name('learning.hindi_rhymes');
     Route::get('/devotional', [LearningController::class, 'devotional'])->name('learning.devotional');

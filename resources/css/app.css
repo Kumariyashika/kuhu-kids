@@ -622,9 +622,15 @@ body {
 
 .inner-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 16px;
     margin-bottom: 24px;
+}
+
+.inner-header a.btn-3d {
+    order: -1;
+    flex-shrink: 0;
 }
 
 .inner-title {
@@ -1681,11 +1687,11 @@ body {
    ========================================== */
 .reels-viewport {
     position: relative;
-    max-width: 800px;
+    max-width: 100%;
     margin: 0 auto;
-    height: 70vh;
-    min-height: 520px;
-    max-height: 680px;
+    height: 80vh;
+    min-height: 550px;
+    max-height: 800px;
     border-radius: 36px;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.45) 100%);
     backdrop-filter: blur(15px);
@@ -1746,12 +1752,21 @@ body {
 }
 
 .reel-title {
-    font-size: 2.3rem;
+    position: relative;
+    z-index: 10;
+    font-size: 2rem;
     font-weight: 900;
-    margin: 0 0 10px 0;
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.03);
+    color: #FFFFFF !important;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.45);
+    padding: 10px 24px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    margin: 10px auto;
+    max-width: 85%;
     text-align: center;
-    width: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .reel-lyrics {
@@ -1922,8 +1937,9 @@ body {
 .floating-element {
     position: absolute;
     pointer-events: none;
-    font-size: 2rem;
-    opacity: 0.18;
+    font-size: 2.2rem;
+    opacity: 0.75;
+    z-index: 5;
     animation: floatAround 6s ease-in-out infinite alternate;
 }
 
@@ -1968,12 +1984,14 @@ body {
 .swipe-tip {
     font-size: 0.95rem;
     font-weight: 800;
-    color: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.85);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
     text-align: center;
     width: 100%;
     position: absolute;
-    bottom: 6px;
+    bottom: 12px;
     left: 0;
+    z-index: 90;
     animation: pulseTip 2s infinite;
     pointer-events: none;
 }
@@ -2321,19 +2339,60 @@ body {
 
 /* Sleek Full-Card Video Container (9:16 Vertical Reels Format) */
 .video-container {
-    width: 100%;
-    flex: 1;
-    margin: 10px 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
     background: #000;
-    border-radius: 28px;
-    border: 6px solid #FFF;
-    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.15), inset 0 2px 6px rgba(255, 255, 255, 0.6);
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
     overflow: hidden;
-    position: relative;
-    aspect-ratio: 9/16;
-    max-width: 280px;
-    max-height: 440px;
-    align-self: center;
+    z-index: 1;
+    aspect-ratio: auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.video-container-hindi {
+    border-color: #FFFDF0;
+    box-shadow: 0 16px 35px rgba(18, 176, 197, 0.25);
+}
+
+.video-container-devotional {
+    border-color: #FFFDF0;
+    box-shadow: 0 16px 35px rgba(140, 82, 255, 0.25);
+}
+
+/* Sleek Full-Card Video Container (9:16 Vertical Reels Format) */
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
+    background: #000;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    z-index: 1;
+    aspect-ratio: auto !important;
     display: flex;
     justify-content: center;
     align-items: center;
