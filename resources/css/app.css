@@ -122,6 +122,13 @@ body {
     justify-content: space-between;
 }
 
+/* Edge-to-edge full width for Reels / Rhymes pages */
+.app-container:has(.reels-mode),
+.app-container:has(.reels-viewport) {
+    max-width: 100% !important;
+    padding: 8px !important;
+}
+
 /* Background Scene Details */
 .bg-scene {
     position: fixed;
@@ -1682,25 +1689,53 @@ body {
 }
 
 
-/* ==========================================
-   REELS SWIPER INTERACTIVE MODULES CSS
-   ========================================== */
+/* Container override for Reels mode - Removes white card background & padding */
+.inner-container.reels-mode,
+.inner-container:has(.reels-viewport) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+}
+
 .reels-viewport {
     position: relative;
+    width: 100%;
     max-width: 100%;
     margin: 0 auto;
-    height: 80vh;
-    min-height: 550px;
-    max-height: 800px;
-    border-radius: 36px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.45) 100%);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 8px solid rgba(255, 255, 255, 0.9);
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.12), inset 0 2px 6px rgba(255, 255, 255, 0.6);
+    height: calc(100vh - 100px);
+    min-height: 520px;
+    max-height: none;
+    border-radius: 28px;
+    background: #000000;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+.swipe-tip {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: #FFFFFF;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    z-index: 80;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
 }
 
 .reels-container {
@@ -1726,11 +1761,13 @@ body {
     scroll-snap-stop: always;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 30px;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
     box-sizing: border-box;
     position: relative;
     overflow: hidden;
+    background: #000000 !important;
 }
 
 /* Glass content box inside the card */
@@ -2042,9 +2079,9 @@ body {
 /* Responsive Overrides */
 @media (max-width: 768px) {
     .reels-viewport {
-        height: 72vh;
-        border-width: 5px;
-        border-radius: 28px;
+        height: calc(100vh - 85px) !important;
+        border: none !important;
+        border-radius: 20px;
     }
 
     .reels-navigation {
@@ -2366,51 +2403,8 @@ body {
     display: block;
 }
 
-.video-container-hindi {
-    border-color: #FFFDF0;
-    box-shadow: 0 16px 35px rgba(18, 176, 197, 0.25);
-}
-
+.video-container-hindi,
 .video-container-devotional {
-    border-color: #FFFDF0;
-    box-shadow: 0 16px 35px rgba(140, 82, 255, 0.25);
-}
-
-/* Sleek Full-Card Video Container (9:16 Vertical Reels Format) */
-.video-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    background: #000;
-    border-radius: 0 !important;
     border: none !important;
     box-shadow: none !important;
-    overflow: hidden;
-    z-index: 1;
-    aspect-ratio: auto !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.video-container iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
-}
-
-.video-container-hindi {
-    border-color: #FFFDF0;
-    box-shadow: 0 16px 35px rgba(18, 176, 197, 0.25);
-}
-
-.video-container-devotional {
-    border-color: #FFFDF0;
-    box-shadow: 0 16px 35px rgba(140, 82, 255, 0.25);
 }

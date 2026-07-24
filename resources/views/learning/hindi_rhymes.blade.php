@@ -3,7 +3,7 @@
 @section('title', 'Kuhu Kids Learning - Hindi Rhymes')
 
 @section('content')
-    <div class="inner-container">
+    <div class="inner-container reels-mode" style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important;">
         <div class="inner-header"
             style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; gap: 15px;">
             <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
@@ -22,7 +22,7 @@
         </div>
 
         <!-- Reels Swiper Viewport -->
-        <div class="reels-viewport" style="border-color: rgba(18, 176, 197, 0.25);">
+        <div class="reels-viewport">
             <!-- Playlist drawer toggle -->
             <button class="drawer-toggle-btn" style="border-color: var(--color-teal);" onclick="toggleDrawer(true)"
                 title="कविता सूची">☰</button>
@@ -137,19 +137,9 @@
                 }
             });
 
-            // Predefined pastel gradient backgrounds for each reel slide (Teal/Green/Orange theme for Hindi)
-            const gradients = [
-                'linear-gradient(135deg, #E0F2F1 0%, #B2DFDB 100%)',
-                'linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%)',
-                'linear-gradient(135deg, #FFF3E0 0%, #FFE0B2 100%)',
-                'linear-gradient(135deg, #FFFDE7 0%, #FFF59D 100%)',
-                'linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%)',
-                'linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%)'
-            ];
-
             const card = document.getElementById(`reel-${idx}`);
             if (card) {
-                card.style.background = gradients[idx % gradients.length];
+                card.style.background = '#000000';
             }
 
             // Wait for scroll snapping deceleration before loading active video

@@ -458,15 +458,22 @@
         if (currentLevel === 20) {
             miniGameTitle.innerText = "🏆 GRAND CHAMPION! 🏆";
             miniGameSub.innerText = "You completed all 20 levels! Pop 5 bubbles to claim your 100 bonus coins! 🪙";
+            if (localStorage.getItem('voice_enabled') !== 'false') {
+                SoundFX.speak("Congratulations! Pop 5 bubbles to win!", 'en-US');
+            }
         } else {
             const icon = isBubbleMode ? '🫧' : '🎈';
             const typeText = isBubbleMode ? 'bubbles' : 'balloons';
-            miniGameTitle.innerText = `${icon} Level ${currentLevel} Complete! ${icon}`;
-            miniGameSub.innerText = `Pop 5 ${typeText} to unlock Level ${currentLevel + 1}!`;
+            miniGameTitle.innerText = `${icon} Balloon Pop Game! ${icon}`;
+            miniGameSub.innerHTML = `<span style="background: #FFFDF0; border: 2px solid #FFDE59; padding: 4px 14px; border-radius: 16px; color: #4A3B00;">${icon} Popped: <strong id="popCounter" style="color: #FF914D; font-size: 1.4rem;">0</strong> / 5 ⭐</span>`;
+            
+            if (localStorage.getItem('voice_enabled') !== 'false') {
+                SoundFX.speak(`Pop five ${typeText} with your finger!`, 'en-US');
+            }
         }
 
         spawnBalloon();
-        balloonInterval = setInterval(spawnBalloon, 800);
+        balloonInterval = setInterval(spawnBalloon, 750);
     }
 
     function spawnBalloon() {
@@ -480,36 +487,50 @@
         const isBubbleMode = (currentLevel % 2 === 0);
         
         balloon.style.position = 'absolute';
-        balloon.style.bottom = '-100px';
+        balloon.style.bottom = '-110px';
         
-        const size = Math.floor(Math.random() * 25) + 55; // 55 to 80px
+        // Bigger size (80 to 110px) so children can easily tap
+        const size = Math.floor(Math.random() * 30) + 80; 
         balloon.style.width = size + 'px';
-        balloon.style.height = (isBubbleMode ? size : size * 1.25) + 'px';
+        balloon.style.height = (isBubbleMode ? size : size * 1.22) + 'px';
         
-        const randomX = Math.random() * (areaRect.width - size - 20) + 10;
+        const randomX = Math.random() * (areaRect.width - size - 30) + 15;
         balloon.style.left = randomX + 'px';
+        balloon.style.display = 'flex';
+        balloon.style.alignItems = 'center';
+        balloon.style.justifyContent = 'center';
+        balloon.style.userSelect = 'none';
+
+        // Cute Animal Emojis inside each balloon!
+        const animalEmojis = ['🐱', '🐶', '🐻', '🦁', '🐰', '🐥', '⭐', '🦄', '🍎', '🍓'];
+        const randomEmoji = animalEmojis[Math.floor(Math.random() * animalEmojis.length)];
         
         if (isBubbleMode) {
-            // Bubble Style
-            balloon.style.background = 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9) 0%, rgba(56, 182, 255, 0.45) 50%, rgba(140, 82, 255, 0.6) 100%)';
+            // Shiny 3D Bubble Style
+            balloon.style.background = 'radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(56, 182, 255, 0.5) 50%, rgba(140, 82, 255, 0.7) 100%)';
             balloon.style.borderRadius = '50%';
-            balloon.style.border = '2.5px solid rgba(255, 255, 255, 0.6)';
-            balloon.style.boxShadow = 'inset -5px -5px 15px rgba(0,0,0,0.08), 0 5px 10px rgba(0,0,0,0.05)';
+            balloon.style.border = '3px solid rgba(255, 255, 255, 0.8)';
+            balloon.style.boxShadow = 'inset -6px -6px 18px rgba(0,0,0,0.1), 0 8px 16px rgba(56, 182, 255, 0.2)';
+            balloon.innerHTML = `<span style="font-size: ${size * 0.45}px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));">${randomEmoji}</span>`;
         } else {
-            // Balloon Style
-            const colorsList = ['#FF66C4', '#38B6FF', '#FFDE59', '#7ED957', '#8C52FF', '#FF914D'];
+            // Bright Glossy 3D Balloon Style
+            const colorsList = ['#FF5252', '#38B6FF', '#FFDE59', '#7ED957', '#8C52FF', '#FF914D', '#FF66C4'];
             const color = colorsList[Math.floor(Math.random() * colorsList.length)];
             balloon.style.backgroundColor = color;
             balloon.style.borderRadius = '50% 50% 50% 50% / 40% 40% 60% 60%';
-            balloon.style.boxShadow = 'inset -8px -8px 0 rgba(0,0,0,0.15)';
+            balloon.style.boxShadow = 'inset -10px -10px 0 rgba(0,0,0,0.15), inset 6px 6px 12px rgba(255,255,255,0.4), 0 8px 18px rgba(0,0,0,0.1)';
+            balloon.innerHTML = `<span style="font-size: ${size * 0.42}px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); position: relative; top: -4px;">${randomEmoji}</span>`;
             
+            // String at bottom
             const string = document.createElement('div');
             string.style.position = 'absolute';
-            string.style.bottom = '-14px';
+            string.style.bottom = '-16px';
             string.style.left = '50%';
-            string.style.width = '2px';
-            string.style.height = '14px';
+            string.style.transform = 'translateX(-50%)';
+            string.style.width = '3px';
+            string.style.height = '16px';
             string.style.backgroundColor = '#8D6E63';
+            string.style.borderRadius = '2px';
             balloon.appendChild(string);
         }
         
@@ -542,10 +563,9 @@
             setTimeout(() => balloon.remove(), 100);
 
             balloonsPopped++;
-            if (isBubbleMode) {
-                miniGameSub.innerText = `Popped: ${balloonsPopped} / 5 🫧`;
-            } else {
-                miniGameSub.innerText = `Popped: ${balloonsPopped} / 5 🎈`;
+            const counterEl = document.getElementById('popCounter');
+            if (counterEl) {
+                counterEl.innerText = balloonsPopped;
             }
 
             if (balloonsPopped === 5) {

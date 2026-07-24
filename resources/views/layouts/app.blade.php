@@ -204,22 +204,26 @@
 
             speak(text, lang = 'en-US', onend = null) {
                 if (localStorage.getItem('voice_enabled') === 'false') {
-                    if (onend) setTimeout(onend, 1000);
+                    if (onend) setTimeout(onend, 500);
                     return;
                 }
                 if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    window.speechSynthesis.resume();
+                    try {
+                        window.speechSynthesis.cancel();
+                        if (window.speechSynthesis.paused) {
+                            window.speechSynthesis.resume();
+                        }
+                    } catch (e) {}
 
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = lang;
-                    utterance.rate = 0.85;
-                    utterance.pitch = 1.3;
+                    utterance.rate = 0.88;
+                    utterance.pitch = 1.40; // Cute high pitch child voice simulation
 
                     try {
                         const voices = window.speechSynthesis.getVoices();
                         if (voices && voices.length > 0) {
-                            let voice = voices.find(v => v.lang.toLowerCase() === lang.toLowerCase());
+                            let voice = voices.find(v => v.lang.toLowerCase() === lang.toLowerCase() || v.lang.toLowerCase().replace('_', '-') === lang.toLowerCase());
                             if (!voice) {
                                 const prefix = lang.split('-')[0].toLowerCase();
                                 voice = voices.find(v => v.lang.toLowerCase().startsWith(prefix));
@@ -237,14 +241,20 @@
                         utterance.onerror = onend;
                     }
 
-                    setTimeout(() => {
-                        window.speechSynthesis.speak(utterance);
-                    }, 100);
+                    // Speak directly
+                    window.speechSynthesis.speak(utterance);
                 } else if (onend) {
-                    setTimeout(onend, 1000);
+                    setTimeout(onend, 500);
                 }
             }
         };
+
+        // Preload speech synthesis voices
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                try { window.speechSynthesis.getVoices(); } catch(e){}
+            };
+        }
 
 
         // Attach global click event sounds to interactive buttons and cards
@@ -256,17 +266,6 @@
             });
         });
     </script>
-</body>
-
-</html> // Attach global click event sounds to interactive buttons and cards
-document.addEventListener('DOMContentLoaded', () => {
-document.querySelectorAll('.module-card, .btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
-el.addEventListener('click', () => {
-SoundFX.play('click');
-});
-});
-});
-</script>
 </body>
 
 </html>

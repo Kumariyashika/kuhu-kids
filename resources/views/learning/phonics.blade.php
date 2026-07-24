@@ -701,12 +701,26 @@
                 window.SoundFX.play('click');
             }
 
-            if (localStorage.getItem('voice_enabled') !== 'false' && window.SoundFX && typeof window.SoundFX.speak === 'function') {
-                let textToSpeak = item.phrase;
+            if (window.SoundFX && typeof window.SoundFX.speak === 'function') {
+                let textToSpeak = item.phrase || item.word || item.letter || item.display;
+                let lang = item.lang || 'en-US';
+
                 if (currentCategory === 'english_letters') {
-                    textToSpeak = `${item.letter} says ${item.sound}`;
+                    const wordItem = typeof englishWords !== 'undefined' ? englishWords.find(w => w.letter === item.letter) : null;
+                    const wordClean = wordItem ? wordItem.word.replace(/[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu, '').trim() : '';
+                    textToSpeak = `${item.letter}. ${item.letter} for ${wordClean || 'Apple'}!`;
+                } else if (currentCategory === 'hindi_letters') {
+                    const hindiWordItem = typeof hindiWords !== 'undefined' ? hindiWords.find(w => w.letter === item.letter) : null;
+                    textToSpeak = `${item.letter}. ${hindiWordItem ? hindiWordItem.phrase : item.letter}`;
+                    lang = 'hi-IN';
+                } else if (currentCategory === 'numbers') {
+                    textToSpeak = `Number ${item.letter}`;
+                    lang = 'en-US';
+                } else if (currentCategory === 'hindi_words') {
+                    lang = 'hi-IN';
                 }
-                window.SoundFX.speak(textToSpeak, item.lang || 'en-US');
+
+                window.SoundFX.speak(textToSpeak, lang);
             }
 
             // Award stars
@@ -841,5 +855,4 @@
             showScreen('phonicsMenuScreen');
         });
     </script>
-    @endsectiont>
 @endsection

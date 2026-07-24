@@ -3,7 +3,7 @@
 @section('title', 'Kuhu Kids Learning - Devotional Learning')
 
 @section('content')
-    <div class="inner-container">
+    <div class="inner-container reels-mode" style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important;">
         <div class="inner-header"
             style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 15px; gap: 15px; width: 100%;">
             <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
@@ -23,7 +23,7 @@
 
 
         <!-- Reels Swiper Viewport -->
-        <div class="reels-viewport" style="border-color: rgba(140, 82, 255, 0.25);">
+        <div class="reels-viewport">
             <!-- Playlist drawer toggle -->
             <button class="drawer-toggle-btn" style="border-color: var(--color-purple);" onclick="toggleDrawer(true)"
                 title="Select Lesson">☰</button>

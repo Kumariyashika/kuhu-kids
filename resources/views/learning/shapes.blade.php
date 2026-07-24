@@ -16,17 +16,12 @@
         </a>
     </div>
 
-    <!-- Instructions banner -->
-    <div style="background: #FFFDF0; border: 3px solid var(--color-yellow); border-radius: 20px; padding: 15px 24px; text-align: center; margin-bottom: 25px;">
-        <p style="font-size: 1.2rem; font-weight: 800; color: #6A5000;">👇 Tap on any shape to hear its name and learn its form!</p>
-    </div>
-
     <!-- Shapes Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; z-index: 10;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; z-index: 10;">
         
         <!-- Shape 1: Circle -->
         <div class="shape-card card-green" onclick="learnShape('Circle', 'An orange circle has no corners!', this)">
-            <svg viewBox="0 0 100 100" width="100" height="100">
+            <svg viewBox="0 0 100 100" width="56" height="56">
                 <circle cx="50" cy="50" r="36" fill="#FF914D" stroke="#D97336" stroke-width="4"/>
                 <circle cx="40" cy="45" r="3" fill="#FFF"/>
                 <circle cx="60" cy="45" r="3" fill="#FFF"/>
@@ -38,7 +33,7 @@
 
         <!-- Shape 2: Square -->
         <div class="shape-card card-purple" onclick="learnShape('Square', 'A blue square has four equal sides!', this)">
-            <svg viewBox="0 0 100 100" width="100" height="100">
+            <svg viewBox="0 0 100 100" width="56" height="56">
                 <rect x="15" y="15" width="70" height="70" rx="6" fill="#38B6FF" stroke="#2B8EC7" stroke-width="4"/>
                 <circle cx="40" cy="45" r="3" fill="#FFF"/>
                 <circle cx="60" cy="45" r="3" fill="#FFF"/>
@@ -50,7 +45,7 @@
 
         <!-- Shape 3: Triangle -->
         <div class="shape-card card-pink" onclick="learnShape('Triangle', 'A yellow triangle has three corners!', this)">
-            <svg viewBox="0 0 100 100" width="100" height="100">
+            <svg viewBox="0 0 100 100" width="56" height="56">
                 <polygon points="50,15 15,80 85,80" fill="#FFDE59" stroke="#CCB143" stroke-width="4" stroke-linejoin="round"/>
                 <circle cx="44" cy="52" r="3" fill="#4A3B00"/>
                 <circle cx="56" cy="52" r="3" fill="#4A3B00"/>
@@ -62,7 +57,7 @@
 
         <!-- Shape 4: Star -->
         <div class="shape-card card-yellow" onclick="learnShape('Star', 'A shiny star has five points!', this)">
-            <svg viewBox="0 0 100 100" width="100" height="100">
+            <svg viewBox="0 0 100 100" width="56" height="56">
                 <polygon points="50,10 63,38 95,38 69,58 79,90 50,70 21,90 31,58 5,38 37,38" fill="#FF66C4" stroke="#D94B9F" stroke-width="4" stroke-linejoin="round"/>
                 <circle cx="42" cy="48" r="3" fill="#FFF"/>
                 <circle cx="58" cy="48" r="3" fill="#FFF"/>
@@ -74,7 +69,7 @@
 
         <!-- Shape 5: Heart -->
         <div class="shape-card card-green" onclick="learnShape('Heart', 'A red heart represents love!', this)">
-            <svg viewBox="0 0 100 100" width="100" height="100">
+            <svg viewBox="0 0 100 100" width="56" height="56">
                 <path d="M 12,38 C 12,20, 38,15, 50,34 C 62,15, 88,20, 88,38 C 88,60, 50,85, 50,85 C 50,85, 12,60, 12,38 Z" fill="#FF5252" stroke="#C62828" stroke-width="4" stroke-linejoin="round"/>
                 <circle cx="38" cy="38" r="3" fill="#FFF"/>
                 <circle cx="62" cy="38" r="3" fill="#FFF"/>
@@ -86,7 +81,7 @@
 
         <!-- Shape 6: Oval -->
         <div class="shape-card card-teal" onclick="learnShape('Oval', 'An egg-shaped green oval!', this)">
-            <svg viewBox="0 0 100 100" width="100" height="100">
+            <svg viewBox="0 0 100 100" width="56" height="56">
                 <ellipse cx="50" cy="50" rx="26" ry="38" fill="#7ED957" stroke="#63AA43" stroke-width="4"/>
                 <circle cx="42" cy="45" r="3" fill="#FFF"/>
                 <circle cx="58" cy="45" r="3" fill="#FFF"/>
@@ -94,6 +89,30 @@
             </svg>
             <h2 class="shape-title">Oval</h2>
             <span class="shape-desc">Andakar (अण्डाकार)</span>
+        </div>
+
+        <!-- Shape 7: Rectangle -->
+        <div class="shape-card card-orange" onclick="learnShape('Rectangle', 'A purple rectangle has four sides!', this)">
+            <svg viewBox="0 0 100 100" width="56" height="56">
+                <rect x="10" y="25" width="80" height="50" rx="6" fill="#8C52FF" stroke="#6E3CD9" stroke-width="4"/>
+                <circle cx="40" cy="46" r="3" fill="#FFF"/>
+                <circle cx="60" cy="46" r="3" fill="#FFF"/>
+                <path d="M 44 56 Q 50 60 56 56" stroke="#FFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <h2 class="shape-title">Rectangle</h2>
+            <span class="shape-desc">Aayat (आयत)</span>
+        </div>
+
+        <!-- Shape 8: Diamond -->
+        <div class="shape-card card-pink" onclick="learnShape('Diamond', 'A pink diamond shape!', this)">
+            <svg viewBox="0 0 100 100" width="56" height="56">
+                <polygon points="50,10 88,50 50,90 12,50" fill="#FF66C4" stroke="#D94B9F" stroke-width="4" stroke-linejoin="round"/>
+                <circle cx="40" cy="46" r="3" fill="#FFF"/>
+                <circle cx="60" cy="46" r="3" fill="#FFF"/>
+                <path d="M 44 56 Q 50 60 56 56" stroke="#FFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <h2 class="shape-title">Diamond</h2>
+            <span class="shape-desc">Kaju Katli (हीरा)</span>
         </div>
 
     </div>
@@ -105,9 +124,9 @@
     function learnShape(shapeName, description, element) {
         SoundFX.play('pop');
 
-        // Speak details
+        // Speak details in cute child voice
         if (localStorage.getItem('voice_enabled') !== 'false') {
-            SoundFX.speak(shapeName + ". " + description);
+            SoundFX.speak(shapeName + "! " + description, 'en-US');
         }
 
         // Wobble card animation
@@ -148,8 +167,8 @@
 <style>
     /* 3D Shape Card Grid styles */
     .shape-card {
-        border-radius: 28px;
-        padding: 24px;
+        border-radius: 20px;
+        padding: 14px 10px;
         text-align: center;
         color: white;
         cursor: pointer;
@@ -157,44 +176,44 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        box-shadow: 0 8px 0 rgba(0,0,0,0.05);
+        box-shadow: 0 6px 0 rgba(0,0,0,0.05);
     }
     
-    .card-green { background: var(--color-green-real); border-bottom: 8px solid var(--color-green-real-shadow); }
-    .card-purple { background: var(--color-purple); border-bottom: 8px solid var(--color-purple-shadow); }
-    .card-pink { background: var(--color-pink); border-bottom: 8px solid var(--color-pink-shadow); }
-    .card-yellow { background: var(--color-yellow); border-bottom: 8px solid var(--color-yellow-shadow); color: #4A3B00; }
-    .card-teal { background: var(--color-teal); border-bottom: 8px solid var(--color-teal-shadow); }
-    .card-orange { background: var(--color-orange); border-bottom: 8px solid var(--color-orange-shadow); }
+    .card-green { background: var(--color-green-real); border-bottom: 6px solid var(--color-green-real-shadow); }
+    .card-purple { background: var(--color-purple); border-bottom: 6px solid var(--color-purple-shadow); }
+    .card-pink { background: var(--color-pink); border-bottom: 6px solid var(--color-pink-shadow); }
+    .card-yellow { background: var(--color-yellow); border-bottom: 6px solid var(--color-yellow-shadow); color: #4A3B00; }
+    .card-teal { background: var(--color-teal); border-bottom: 6px solid var(--color-teal-shadow); }
+    .card-orange { background: var(--color-orange); border-bottom: 6px solid var(--color-orange-shadow); }
 
     .shape-card:hover {
-        transform: translateY(-6px);
-        border-bottom-width: 12px;
+        transform: translateY(-4px);
+        border-bottom-width: 8px;
     }
     
     .shape-card:active {
-        transform: translateY(4px);
-        border-bottom-width: 4px;
+        transform: translateY(2px);
+        border-bottom-width: 3px;
     }
 
     .shape-card svg {
-        margin-bottom: 12px;
-        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        margin-bottom: 6px;
+        filter: drop-shadow(0 3px 5px rgba(0,0,0,0.1));
         transition: transform 0.3s ease;
     }
 
     .shape-card:hover svg {
-        transform: scale(1.1) rotate(5deg);
+        transform: scale(1.1) rotate(4deg);
     }
 
     .shape-title {
-        font-size: 1.6rem;
+        font-size: 1.2rem;
         font-weight: 900;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .shape-desc {
-        font-size: 0.95rem;
+        font-size: 0.8rem;
         opacity: 0.9;
         font-weight: 600;
     }

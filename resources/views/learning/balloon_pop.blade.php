@@ -161,53 +161,72 @@
                 opacity: 0;
             }
         }
+
+        .mode-chip {
+            background: #FFFFFF;
+            border: 2.5px solid #CBD5E1;
+            border-radius: 16px;
+            padding: 8px 18px;
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: #4B5563;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+            font-family: 'Fredoka', sans-serif;
+        }
+
+        .mode-chip:hover {
+            transform: translateY(-2px);
+            border-color: #9333EA;
+        }
+
+        .mode-chip.active-chip {
+            background: #9333EA !important;
+            border-color: #7E22CE !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 6px 14px rgba(147, 51, 234, 0.35);
+        }
     </style>
 
-    <!-- Score & Mode Switcher Board -->
-    <div class="pop-score-board" style="border-radius: 16px 16px 0 0; border: 3px solid var(--color-green-real); border-bottom: none; background: #F7FAFC; padding: 15px 24px; display: flex; flex-direction: column; gap: 15px;">
-        <!-- Top Row: Selectors and Stats -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-bottom: 2px dashed #E2E8F0; padding-bottom: 12px; width: 100%;">
-            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                <div>
-                    <span style="font-size: 1.1rem; font-weight: bold; color: #4A5568; margin-right: 6px;">🎮 Mode:</span>
-                    <select id="gameModeSelect" onchange="changeMode()" style="font-size: 1rem; padding: 6px 12px; border-radius: 10px; border: 2.3px solid var(--color-green-real); font-weight: bold; cursor: pointer; outline: none; background: white;">
-                        <option value="letters">Letters 🎈</option>
-                        <option value="numbers">Numbers 🔢</option>
-                        <option value="colors">Colors 🎨</option>
-                    </select>
-                </div>
-                <div>
-                    <span style="font-size: 1.1rem; font-weight: bold; color: #4A5568; margin-right: 6px;">🔊 Voice:</span>
-                    <select id="voiceLangSelect" onchange="changeVoiceLang()" style="font-size: 1rem; padding: 6px 12px; border-radius: 10px; border: 2.3px solid var(--color-purple); font-weight: bold; cursor: pointer; outline: none; background: white;">
-                        <option value="en">English 🇬🇧</option>
-                        <option value="hi">Hindi 🇮🇳</option>
-                    </select>
-                </div>
-                <div>
-                    <span style="font-size: 1.1rem; font-weight: bold; color: #4A5568; margin-right: 6px;">🎈 Balloons:</span>
-                    <select id="balloonCountSelect" onchange="changeBalloonCount()" style="font-size: 1rem; padding: 6px 12px; border-radius: 10px; border: 2.3px solid var(--color-pink); font-weight: bold; cursor: pointer; outline: none; background: white;">
-                        <option value="3" selected>3 (Easy)</option>
-                        <option value="4">4 (Normal)</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 15px; font-weight: bold; font-size: 1.15rem;">
-                <span>🏆 Level: <strong id="levelDisplay" style="color: var(--color-pink);">1</strong></span>
-            </div>
+    <!-- Top Category Selector Menu Bar -->
+    <div class="category-menu-bar" style="display: flex; gap: 8px; justify-content: center; align-items: center; width: 100%; margin-bottom: 12px; flex-wrap: wrap; z-index: 10;">
+        <button onclick="setMode('letters')" id="chip-letters" class="mode-chip active-chip">
+            🔤 A-Z
+        </button>
+        <button onclick="setMode('hindi')" id="chip-hindi" class="mode-chip">
+            🇮🇳 क-ज्ञ
+        </button>
+        <button onclick="setMode('numbers')" id="chip-numbers" class="mode-chip">
+            🔢 1-20
+        </button>
+        <button onclick="setMode('colors')" id="chip-colors" class="mode-chip">
+            🎨 Colors
+        </button>
+    </div>
+
+    <!-- Score & Target Prompt Board -->
+    <div class="pop-score-board" style="border-radius: 16px 16px 0 0; border: 3px solid var(--color-green-real); border-bottom: none; background: #F7FAFC; padding: 10px 20px; display: flex; flex-direction: column; gap: 10px;">
+        
+        <!-- Hidden Selectors (Maintained in DOM for JS compatibility) -->
+        <div style="display: none;">
+            <select id="gameModeSelect" onchange="changeMode()"><option value="letters">Letters</option><option value="numbers">Numbers</option><option value="colors">Colors</option></select>
+            <select id="voiceLangSelect" onchange="changeVoiceLang()"><option value="en">English</option><option value="hi">Hindi</option></select>
+            <select id="balloonCountSelect" onchange="changeBalloonCount()"><option value="3" selected>3</option></select>
+            <strong id="levelDisplay">1</strong>
         </div>
 
         <!-- Target Prompt Row -->
-        <div style="display: flex; justify-content: center; align-items: center; gap: 20px; padding: 5px 0; width: 100%;">
-            <div style="text-align: center; display: flex; align-items: center; gap: 12px;">
+        <div style="display: flex; justify-content: center; align-items: center; gap: 16px; padding: 4px 0; width: 100%;">
+            <div style="text-align: center; display: flex; align-items: center; gap: 10px;">
                 <span id="instructionLabel" style="font-size: 1.4rem; font-weight: 800; color: #4A5568;">Find balloon:</span>
-                <div id="targetBadge" style="display: inline-flex; align-items: center; justify-content: center; min-width: 75px; height: 75px; border-radius: 18px; background: white; border: 4px solid var(--color-yellow); box-shadow: 0 6px 12px rgba(0,0,0,0.06); font-size: 2.8rem; font-weight: 900; color: var(--color-purple); padding: 5px; transition: all 0.2s ease;">
+                <div id="targetBadge" style="display: inline-flex; align-items: center; justify-content: center; min-width: 65px; height: 65px; border-radius: 16px; background: white; border: 4px solid var(--color-yellow); box-shadow: 0 4px 10px rgba(0,0,0,0.06); font-size: 2.5rem; font-weight: 900; color: var(--color-purple); padding: 4px; transition: all 0.2s ease;">
                     A
                 </div>
             </div>
             
-            <button onclick="speakInstruction()" class="btn-3d btn-yellow" style="padding: 8px 16px; font-size: 1rem; display: flex; align-items: center; gap: 6px; border-radius: 14px; margin: 0;">
-                📢 Hear Voice
+            <button onclick="speakInstruction()" class="btn-3d btn-yellow" style="width: 44px; height: 44px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin: 0;" title="Hear Voice Audio">
+                🔊
             </button>
         </div>
     </div>
@@ -285,12 +304,21 @@
         }
     }
 
-    function changeMode() {
-        activeMode = gameModeSelect.value;
-        localStorage.setItem('balloon_game_mode', activeMode);
+    function setMode(mode) {
+        activeMode = mode;
+        localStorage.setItem('balloon_game_mode', mode);
+        
+        document.querySelectorAll('.mode-chip').forEach(btn => btn.classList.remove('active-chip'));
+        const activeBtn = document.getElementById('chip-' + mode);
+        if (activeBtn) activeBtn.classList.add('active-chip');
+
         if (isPlaying) {
             loadNextLevel();
         }
+    }
+
+    function changeMode() {
+        setMode(gameModeSelect.value);
     }
 
     function changeVoiceLang() {
@@ -338,7 +366,7 @@
         let options = [];
 
         if (activeMode === 'letters') {
-            instructionLabel.innerText = voiceLang === 'hi' ? "गुब्बारा ढूँढो:" : "Find balloon:";
+            instructionLabel.innerText = "Find balloon:";
             const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             targetValue = alphabet[Math.floor(Math.random() * alphabet.length)];
             targetColorObj = null;
@@ -353,23 +381,39 @@
                 }
             }
         } 
-        else if (activeMode === 'numbers') {
-            instructionLabel.innerText = voiceLang === 'hi' ? "गुब्बारा ढूँढो:" : "Find balloon:";
-            targetValue = String(Math.floor(Math.random() * 10) + 1); 
+        else if (activeMode === 'hindi') {
+            instructionLabel.innerText = "अक्षर ढूँढो:";
+            const hindiVarnamala = ['अ', 'आ', 'इ', 'ई', 'उ', 'ऊ', 'ए', 'ऐ', 'ओ', 'औ', 'क', 'ख', 'ग', 'घ', 'च', 'छ', 'ज', 'झ', 'ट', 'ठ', 'ड', 'ढ', 'त', 'थ', 'द', 'ध', 'न', 'प', 'फ', 'ब', 'भ', 'म', 'य', 'र', 'ल', 'व', 'श', 'ष', 'स', 'ह', 'क्ष', 'त्र', 'ज्ञ'];
+            targetValue = hindiVarnamala[Math.floor(Math.random() * hindiVarnamala.length)];
             targetColorObj = null;
 
             targetBadge.innerText = targetValue;
 
             options = [targetValue];
             while (options.length < balloonCount) {
-                const randomNumber = String(Math.floor(Math.random() * 10) + 1);
+                const randomChar = hindiVarnamala[Math.floor(Math.random() * hindiVarnamala.length)];
+                if (!options.includes(randomChar)) {
+                    options.push(randomChar);
+                }
+            }
+        }
+        else if (activeMode === 'numbers') {
+            instructionLabel.innerText = "Find balloon:";
+            targetValue = String(Math.floor(Math.random() * 20) + 1); 
+            targetColorObj = null;
+
+            targetBadge.innerText = targetValue;
+
+            options = [targetValue];
+            while (options.length < balloonCount) {
+                const randomNumber = String(Math.floor(Math.random() * 20) + 1);
                 if (!options.includes(randomNumber)) {
                     options.push(randomNumber);
                 }
             }
         } 
         else if (activeMode === 'colors') {
-            instructionLabel.innerText = voiceLang === 'hi' ? "रंग ढूँढो:" : "Find color:";
+            instructionLabel.innerText = "Find color:";
             
             targetColorObj = colorsData[Math.floor(Math.random() * colorsData.length)];
             targetValue = targetColorObj.name;
@@ -404,7 +448,7 @@
 
             if (activeMode === 'colors') {
                 balloon.style.backgroundColor = item.val;
-                labelText = voiceLang === 'hi' ? item.hindi : item.name;
+                labelText = item.name;
                 valToCheck = item.name;
             } else {
                 balloon.style.backgroundColor = shuffledColors[idx];
@@ -458,29 +502,22 @@
 
         let phrase = '';
         if (activeMode === 'letters') {
-            if (voiceLang === 'hi') {
-                phrase = (isReminder ? "अरे! " : "") + "गुब्बारा " + targetValue + " कहाँ है? उसे छुओ!";
-            } else {
-                phrase = (isReminder ? "Hey! " : "") + "Where is balloon " + targetValue + "? Touch it!";
-            }
+            phrase = (isReminder ? "Hey! " : "") + "Where is balloon " + targetValue + "? Touch it!";
+            SoundFX.speak(phrase, 'en-US');
         } 
+        else if (activeMode === 'hindi') {
+            phrase = (isReminder ? "अरे! " : "") + "गुब्बारा " + targetValue + " कहाँ है? उसे छुओ!";
+            SoundFX.speak(phrase, 'hi-IN');
+        }
         else if (activeMode === 'numbers') {
-            if (voiceLang === 'hi') {
-                phrase = (isReminder ? "जल्दी से! " : "") + "नंबर " + targetValue + " वाला गुब्बारा ढूँढो!";
-            } else {
-                phrase = (isReminder ? "Come on! " : "") + "Find number " + targetValue + " balloon!";
-            }
+            phrase = (isReminder ? "Come on! " : "") + "Find number " + targetValue + " balloon!";
+            SoundFX.speak(phrase, 'en-US');
         } 
         else if (activeMode === 'colors') {
-            const colorName = voiceLang === 'hi' ? targetColorObj.hindi : targetColorObj.name;
-            if (voiceLang === 'hi') {
-                phrase = (isReminder ? "देखो! " : "") + colorName + " गुब्बारा छुओ!";
-            } else {
-                phrase = (isReminder ? "Look! " : "") + "Touch the " + colorName + " balloon!";
-            }
+            const colorName = targetColorObj.name;
+            phrase = (isReminder ? "Look! " : "") + "Touch the " + colorName + " balloon!";
+            SoundFX.speak(phrase, 'en-US');
         }
-
-        SoundFX.speak(phrase, voiceLang === 'hi' ? 'hi-IN' : 'en-US');
     }
 
     function createPopParticles(x, y, color) {

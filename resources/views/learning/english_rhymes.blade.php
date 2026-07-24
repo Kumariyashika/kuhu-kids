@@ -3,7 +3,7 @@
 @section('title', 'Kuhu Kids Learning - English Rhymes')
 
 @section('content')
-    <div class="inner-container">
+    <div class="inner-container reels-mode" style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important;">
         <div class="inner-header"
             style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; gap: 15px;">
             <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
@@ -134,19 +134,9 @@
                 }
             });
 
-            // Predefined pastel gradient backgrounds for each reel slide
-            const gradients = [
-                'linear-gradient(135deg, #FFE5EC 0%, #FFD6E0 100%)',
-                'linear-gradient(135deg, #E8F0FE 0%, #D2E3FC 100%)',
-                'linear-gradient(135deg, #FCF0E3 0%, #FCE0C5 100%)',
-                'linear-gradient(135deg, #FFF0F5 0%, #FAE0F0 100%)',
-                'linear-gradient(135deg, #E2F0D9 0%, #C9E2B9 100%)',
-                'linear-gradient(135deg, #FFF9E6 0%, #FFF2CC 100%)'
-            ];
-
             const card = document.getElementById(`reel-${idx}`);
             if (card) {
-                card.style.background = gradients[idx % gradients.length];
+                card.style.background = '#000000';
             }
 
             // Wait for scroll snapping deceleration before loading active video

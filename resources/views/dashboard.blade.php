@@ -248,26 +248,7 @@
             <span class="card-subtitle">Hear sweet prayers and mantras</span>
         </a>
 
-        <!-- 8. Cultural Stories -->
-        <a href="{{ route('learning.cultural') }}" class="module-card module-card-dark-orange">
-            <div class="card-icon-container">
-                <!-- Open Book with Om Symbol -->
-                <svg viewBox="0 0 100 100" width="90" height="90">
-                    <g transform="translate(10, 15)">
-                        <!-- Book Pages -->
-                        <path d="M5 40 Q40 30 40 10 L40 60 Q40 50 5 60 Z" fill="#FFFDF0" stroke="#8B4513"
-                            stroke-width="2" />
-                        <path d="M75 40 Q40 30 40 10 L40 60 Q40 50 75 60 Z" fill="#FFFDF0" stroke="#8B4513"
-                            stroke-width="2" />
-                        <!-- Om Symbol (ॐ) -->
-                        <text x="25" y="44" font-family="sans-serif" font-size="22" font-weight="bold"
-                            fill="#D35400">ॐ</text>
-                    </g>
-                </svg>
-            </div>
-            <h2 class="card-title">Fun Stories & Festivals 🎡</h2>
-            <span class="card-subtitle">Learn moral values and festivals</span>
-        </a>
+
 
         <!-- 9. Number Counting -->
         <a href="{{ route('learning.numbers') }}" class="module-card module-card-green">
@@ -331,29 +312,6 @@
             <span class="card-subtitle">Answer questions & win stars!</span>
         </a>
 
-        <!-- 13. Alphabet Adventure -->
-        <a href="{{ route('learning.alphabet_adventure') }}" class="module-card" style="background: linear-gradient(135deg, #FF66C4 0%, #FF914D 100%); border-bottom: 8px solid #CC4E9C; color: white;">
-            <div class="card-icon-container">
-                <svg viewBox="0 0 100 100" width="90" height="90">
-                    <!-- Map/Path with letters -->
-                    <path d="M 20 75 Q 40 40 50 60 T 80 25" fill="none" stroke="#FFF" stroke-width="6" stroke-linecap="round" stroke-dasharray="8,8" />
-                    <!-- Map pins -->
-                    <circle cx="20" cy="75" r="10" fill="#FF5252" stroke="#FFF" stroke-width="2" />
-                    <text x="16" y="79" font-family="'Fredoka', sans-serif" font-size="12" font-weight="900" fill="#FFF">A</text>
-                    
-                    <circle cx="50" cy="60" r="10" fill="#FFDE59" stroke="#FFF" stroke-width="2" />
-                    <text x="46" y="64" font-family="'Fredoka', sans-serif" font-size="12" font-weight="900" fill="#4A3B00">B</text>
-
-                    <circle cx="80" cy="25" r="12" fill="#7ED957" stroke="#FFF" stroke-width="3" />
-                    <polygon points="80,18 82,22 87,22 83,25 85,30 80,27 75,30 77,25 73,22 78,22" fill="#FFD54F" />
-
-                    <!-- Floating clouds decoration -->
-                    <path d="M 65 42 Q 72 37 78 42 Q 84 42 80 49 L 64 49 Z" fill="#FFF" opacity="0.8" />
-                </svg>
-            </div>
-            <h2 class="card-title" style="color: white; text-shadow: 2px 2px 0px rgba(0,0,0,0.15);">Alphabet Adventure 🗺️</h2>
-            <span class="card-subtitle" style="color: rgba(255,255,255,0.9);">Videos, tracing, mini games & stickers!</span>
-        </a>
 
     </main>
 

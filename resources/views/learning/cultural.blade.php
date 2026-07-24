@@ -3,7 +3,7 @@
 @section('title', 'Kuhu Kids Learning - Cultural Stories')
 
 @section('content')
-<div class="inner-container">
+<div class="inner-container reels-mode" style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important;">
     <div class="inner-header" style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; gap: 15px; width: 100%;">
         <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 40px; height: 40px; padding: 0; text-decoration: none; margin: 0; flex-shrink: 0;" title="Back to Home">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -13,12 +13,12 @@
         </a>
 
         <h1 class="inner-title" style="margin: 0; font-size: 1.7rem; line-height: 1.2;">
-            <span style="color: var(--color-orange);">📖 Moral Stories</span>
+            <span style="color: var(--color-orange);">📖 Kids Stories</span>
         </h1>
     </div>
 
     <!-- Reels Swiper Viewport -->
-    <div class="reels-viewport" style="border-color: rgba(255, 145, 77, 0.25);">
+    <div class="reels-viewport">
         <!-- Playlist drawer toggle -->
         <button class="drawer-toggle-btn" style="border-color: var(--color-orange);" onclick="toggleDrawer(true)" title="Select Story">☰</button>
         
@@ -41,66 +41,87 @@
         <div class="reels-container" id="reelsContainer">
             @foreach($course->lessons as $index => $lesson)
                 @php
-                    // Split story content by double newlines into paragraphs
-                    $paragraphs = array_filter(array_map('trim', explode("\n\n", $lesson->body_content)));
-                    $totalSlides = count($paragraphs);
+                    // Emoji themes & morals per story
+                    $storyEmoji = '📖';
+                    $storyMoral = 'Learn & Win 10 Stars!';
+                    $titleLower = strtolower($lesson->title);
+                    if (str_contains($titleLower, 'crow') || str_contains($titleLower, 'thirsty')) {
+                        $storyEmoji = '🐦 🪨 💧';
+                        $storyMoral = 'Where there is a will, there is a way!';
+                    } elseif (str_contains($titleLower, 'tortoise') || str_contains($titleLower, 'hare') || str_contains($titleLower, 'rabbit')) {
+                        $storyEmoji = '🐢 🐇 🏁';
+                        $storyMoral = 'Slow and steady wins the race!';
+                    } elseif (str_contains($titleLower, 'lion') || str_contains($titleLower, 'mouse')) {
+                        $storyEmoji = '🦁 🐭 ✨';
+                        $storyMoral = 'Little friends can be great friends!';
+                    } elseif (str_contains($titleLower, 'fox') || str_contains($titleLower, 'grapes')) {
+                        $storyEmoji = '🦊 🍇 🌳';
+                        $storyMoral = 'Never dislike what you cannot get!';
+                    } elseif (str_contains($titleLower, 'ant') || str_contains($titleLower, 'grasshopper')) {
+                        $storyEmoji = '🐜 🦗 🌾';
+                        $storyMoral = 'Work hard today to enjoy tomorrow!';
+                    } elseif (str_contains($titleLower, 'woodcutter') || str_contains($titleLower, 'honest')) {
+                        $storyEmoji = '🪓 🌊 🪙';
+                        $storyMoral = 'Honesty is the best policy!';
+                    }
                 @endphp
                 
                 <div class="reel-card" 
                      id="reel-{{ $index }}" 
                      data-index="{{ $index }}"
-                     style="padding: 24px;">
+                     style="padding: 10px; background: #000000 !important;">
                      
-                     <h2 class="reel-title" style="color: var(--color-orange); font-size: 1.9rem; margin-bottom: 5px;">{{ $lesson->title }}</h2>
-                     
-                     <!-- 2D Horizontal Page-Flipping Container -->
-                     <div class="story-horizontal-container" id="story-container-{{ $index }}" onscroll="handleStoryScroll({{ $index }})">
-                         @foreach($paragraphs as $pIndex => $paragraph)
-                             <div class="story-horizontal-slide">
-                                 <div class="reel-content-box" style="margin: 0; width: 100%; height: 95%; border-color: #FFE0B2; background: rgba(255,255,255,0.92); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;">
-                                     <div class="reel-lyrics" style="font-size: 1.4rem; line-height: 1.7; max-height: none; overflow: visible; width: 100%;">
-                                         {{ $paragraph }}
-                                     </div>
-                                 </div>
+                     <div class="story-card-wrapper" style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 14px; box-sizing: border-box; background: linear-gradient(135deg, #FFFDF0 0%, #FFE8D6 100%); border-radius: 24px; position: relative; border: none !important; box-shadow: none !important;">
+                         
+                         <!-- Story Header -->
+                         <div style="display: flex; align-items: center; justify-content: center; width: 100%; padding: 4px 8px; z-index: 10;">
+                             <div style="display: flex; align-items: center; gap: 8px;">
+                                 <span style="font-size: 1.8rem;">📖</span>
+                                 <h2 style="font-size: 1.35rem; font-weight: 900; color: #D97336; margin: 0; text-shadow: 1px 1px 0 #FFF;">{{ $lesson->title }}</h2>
                              </div>
-                         @endforeach
-                     </div>
-
-                     <!-- Page Dot Indicators & Navigation -->
-                     <div style="display: flex; flex-direction: column; align-items: center; width: 100%; margin-top: 5px;">
-                         <div class="page-dots" id="dots-{{ $index }}" style="display: flex; gap: 8px; margin-bottom: 8px; z-index: 5;">
-                             @foreach($paragraphs as $pIndex => $paragraph)
-                                 <span class="page-dot {{ $pIndex === 0 ? 'active' : '' }}" 
-                                       style="width: 10px; height: 10px; border-radius: 50%; background: {{ $pIndex === 0 ? 'var(--color-orange)' : '#E2E8F0' }}; transition: all 0.2s;"></span>
-                             @endforeach
                          </div>
                          
-                         <div class="reel-footer" style="margin-top: 0;">
-                             <!-- Play/Stop controls -->
-                             <div class="audio-controls" style="margin: 0; display: flex; gap: 8px;">
-                                 <button onclick="toggleSpeak({{ $index }})" class="btn-3d btn-yellow play-btn" style="font-size: 1rem; padding: 6px 16px;">
-                                     ▶️ Listen
+                         <!-- Single Page Story Card Box -->
+                         <div class="reel-content-box" style="margin: 6px 0; width: 100%; flex: 1; border: none !important; background: #FFFFFF; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 18px; position: relative; overflow-y: auto;">
+                             
+                             <!-- Story Graphics Header -->
+                             <div style="font-size: 2.5rem; margin-bottom: 10px;">
+                                 {{ $storyEmoji }}
+                             </div>
+
+                             <!-- Full Story Text -->
+                             <div class="reel-lyrics" style="font-size: 1.3rem; line-height: 1.7; max-height: none; overflow: visible; width: 100%; color: #2C3E50; font-weight: 600; text-align: center;">
+                                 {{ $lesson->body_content }}
+                             </div>
+
+
+                         </div>
+
+                         <!-- Footer Controls -->
+                         <div class="reel-footer" style="margin-top: 4px; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                             <!-- Speaker Icon Play/Stop button -->
+                             <div class="audio-controls" style="margin: 0; display: flex; gap: 6px;">
+                                 <button onclick="toggleSpeak({{ $index }})" class="btn-3d btn-yellow play-btn" style="font-size: 1.3rem; width: 44px; height: 44px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center; border-bottom-width: 4px;" title="Listen Audio">
+                                     🔊
                                  </button>
-                                 <button onclick="stopSpeak()" class="btn-3d btn-pink stop-btn" style="font-size: 1rem; padding: 6px 16px; display: none;">
-                                     停 Stop
+                                 <button onclick="stopSpeak()" class="btn-3d btn-pink stop-btn" style="font-size: 1.3rem; width: 44px; height: 44px; border-radius: 50%; padding: 0; display: none; align-items: center; justify-content: center; border-bottom-width: 4px;" title="Stop Audio">
+                                     ⏹️
                                  </button>
                              </div>
                              
                              <!-- Progress Bar -->
-                             <div class="reel-progress-container" style="height: 10px; margin: 0 10px;">
-                                 <div class="reel-progress-bar" id="progress-bar-{{ $index }}" style="background: var(--color-orange);"></div>
+                             <div class="reel-progress-container" style="height: 10px; flex: 1; margin: 0 6px; background: #E2E8F0; border-radius: 10px; overflow: hidden;">
+                                 <div class="reel-progress-bar" id="progress-bar-{{ $index }}" style="height: 100%; width: 0%; background: var(--color-orange); transition: width 0.1s linear;"></div>
                              </div>
                              
-                             <!-- Next Slide or Finish Button -->
+                             <!-- Finish Story Button -->
                              <div style="display: flex; gap: 6px;">
-                                 <button id="next-slide-btn-{{ $index }}" onclick="slideStoryNext({{ $index }})" class="btn-3d" style="background: var(--color-green-real); color: white; border-bottom: 4px solid var(--color-green-real-shadow); font-size: 1rem; padding: 6px 16px;">
-                                     Flip Page 📖
-                                 </button>
-                                 <button id="finish-story-btn-{{ $index }}" onclick="finishStory({{ $index }}, '{{ addslashes($lesson->title) }}')" class="btn-3d btn-pink" style="font-size: 1rem; padding: 6px 16px; display: none;">
+                                 <button id="finish-story-btn-{{ $index }}" onclick="finishStory({{ $index }}, '{{ addslashes($lesson->title) }}')" class="btn-3d btn-pink" style="font-size: 0.95rem; padding: 8px 18px;">
                                      Finish! 🌟
                                  </button>
                              </div>
                          </div>
+
                      </div>
                 </div>
             @endforeach
@@ -112,35 +133,25 @@
             <button class="reels-nav-btn" style="border-color: var(--color-orange);" onclick="scrollNext()" title="Next Story">▼</button>
         </div>
         
-        <div class="swipe-tip">Swipe Up/Down for next story, swipe Left/Right for pages! 📖</div>
+        <div class="swipe-tip">Swipe Up/Down for next story! 📖</div>
     </div>
 </div>
 
 <script>
     let activeIndex = 0;
     let speakingIndex = -1;
-    let speakingPage = -1;
     let speakProgressInterval = null;
     let observer = null;
     let stories = [];
-    let horizontalPageIndices = {}; // tracks active page idx per story idx
     let autoplayTimeout = null;
 
-    // Load stories and their slides (paragraphs) into JS
+    // Load stories into JS
     @foreach($course->lessons as $index => $lesson)
-        @php
-            $paragraphs = array_filter(array_map('trim', explode("\n\n", $lesson->body_content)));
-        @endphp
         stories.push({
             id: {{ $lesson->id }},
             title: `{!! addslashes($lesson->title) !!}`,
-            pages: [
-                @foreach($paragraphs as $paragraph)
-                    `{!! str_replace("\n", '\\n', addslashes($paragraph)) !!}`,
-                @endforeach
-            ]
+            text: `{!! str_replace("\n", '\\n', addslashes($lesson->body_content)) !!}`
         });
-        horizontalPageIndices[{{ $index }}] = 0;
     @endforeach
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -198,98 +209,27 @@
         if (card) {
             card.style.background = gradients[idx % gradients.length];
         }
-        
-        updateFooterControls(idx);
 
-        // Auto-play active slide page voice
+        // Auto-play active story voice
         clearTimeout(autoplayTimeout);
         autoplayTimeout = setTimeout(() => {
-            autoPlayActivePage();
+            autoPlayActiveStory();
         }, 800);
     }
 
-    function autoPlayActivePage() {
+    function autoPlayActiveStory() {
         if (localStorage.getItem('voice_enabled') === 'false') return;
         
         const story = stories[activeIndex];
-        const pageIdx = horizontalPageIndices[activeIndex] || 0;
-        if (story && story.pages[pageIdx]) {
-            speakPage(activeIndex, pageIdx, story.title, story.pages[pageIdx]);
+        if (story) {
+            speakPage(activeIndex, story.title, story.text);
         }
     }
 
-    function handleStoryScroll(storyIdx) {
-        const container = document.getElementById(`story-container-${storyIdx}`);
-        if (!container) return;
-        
-        const pageIdx = Math.round(container.scrollLeft / container.clientWidth);
-        
-        if (horizontalPageIndices[storyIdx] !== pageIdx) {
-            horizontalPageIndices[storyIdx] = pageIdx;
-            
-            // Update dots styling
-            const dotsContainer = document.getElementById(`dots-${storyIdx}`);
-            if (dotsContainer) {
-                const dots = dotsContainer.querySelectorAll('.page-dot');
-                dots.forEach((dot, idx) => {
-                    if (idx === pageIdx) {
-                        dot.style.backgroundColor = "var(--color-orange)";
-                        dot.style.transform = "scale(1.2)";
-                    } else {
-                        dot.style.backgroundColor = "#E2E8F0";
-                        dot.style.transform = "none";
-                    }
-                });
-            }
-            
-            updateFooterControls(storyIdx);
-
-            if (activeIndex === storyIdx) {
-                const story = stories[storyIdx];
-                speakPage(storyIdx, pageIdx, story.title, story.pages[pageIdx]);
-            }
-        }
-    }
-
-    function updateFooterControls(storyIdx) {
-        const pageIdx = horizontalPageIndices[storyIdx] || 0;
-        const story = stories[storyIdx];
-        if (!story) return;
-        
-        const nextBtn = document.getElementById(`next-slide-btn-${storyIdx}`);
-        const finishBtn = document.getElementById(`finish-story-btn-${storyIdx}`);
-        
-        if (nextBtn && finishBtn) {
-            if (pageIdx === story.pages.length - 1) {
-                nextBtn.style.display = 'none';
-                finishBtn.style.display = 'inline-flex';
-            } else {
-                nextBtn.style.display = 'inline-flex';
-                finishBtn.style.display = 'none';
-            }
-        }
-    }
-
-    function slideStoryNext(storyIdx) {
-        const container = document.getElementById(`story-container-${storyIdx}`);
-        if (container) {
-            const pageIdx = horizontalPageIndices[storyIdx] || 0;
-            const story = stories[storyIdx];
-            if (pageIdx < story.pages.length - 1) {
-                container.scrollTo({
-                    left: container.clientWidth * (pageIdx + 1),
-                    behavior: 'smooth'
-                });
-                SoundFX.play('click');
-            }
-        }
-    }
-
-    function speakPage(storyIdx, pageIdx, title, text) {
+    function speakPage(storyIdx, title, text) {
         stopSpeak();
         
         speakingIndex = storyIdx;
-        speakingPage = pageIdx;
         
         const card = document.getElementById(`reel-${storyIdx}`);
         if (!card) return;
@@ -297,8 +237,7 @@
         card.querySelector('.play-btn').style.display = 'none';
         card.querySelector('.stop-btn').style.display = 'inline-flex';
         
-        // If it's page 0, mention the title of the story first
-        const textToSpeak = (pageIdx === 0) ? (title + ". " + text.replace(/\\n/g, ". ")) : text.replace(/\\n/g, ". ");
+        const textToSpeak = (title ? title + ". " : "") + text.replace(/\\n/g, ". ");
         const wordCount = textToSpeak.split(/\s+/).length;
         const durationSec = Math.max(6, wordCount / 1.7); // 1.7 words per second
         
@@ -321,8 +260,7 @@
         }, 100);
         
         SoundFX.speak(textToSpeak, 'en-US', () => {
-            // Finished page! If it's the last page, we wait for finish click, or just stop speak.
-            if (speakingIndex === storyIdx && speakingPage === pageIdx) {
+            if (speakingIndex === storyIdx) {
                 stopSpeak();
             }
         });
@@ -330,13 +268,12 @@
 
     function toggleSpeak(storyIdx) {
         const story = stories[storyIdx];
-        const pageIdx = horizontalPageIndices[storyIdx] || 0;
         if (!story) return;
         
-        if (speakingIndex === storyIdx && speakingPage === pageIdx) {
+        if (speakingIndex === storyIdx) {
             stopSpeak();
         } else {
-            speakPage(storyIdx, pageIdx, story.title, story.pages[pageIdx]);
+            speakPage(storyIdx, story.title, story.text);
         }
     }
 
@@ -353,7 +290,6 @@
                 }
             }
             speakingIndex = -1;
-            speakingPage = -1;
         }
         clearInterval(speakProgressInterval);
         window.speechSynthesis.cancel();
