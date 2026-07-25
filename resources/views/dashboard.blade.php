@@ -218,6 +218,7 @@
             <span class="card-subtitle">मजेदार बाल कविताएँ सुनो!</span>
         </a>
 
+
         <!-- 7. Devotional Learning -->
         <a href="{{ route('learning.devotional') }}" class="module-card module-card-dark-purple">
             <div class="card-icon-container">

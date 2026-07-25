@@ -153,4 +153,19 @@ class LearningController extends Controller
         $activeChild = $this->getActiveChild();
         return view('learning.alphabet_adventure', compact('activeChild'));
     }
+
+    public function worksheet(Request $request)
+    {
+        $activeChild = $this->getActiveChild();
+        $selectedLetter = strtoupper($request->query('letter', 'A'));
+        if (!in_array($selectedLetter, range('A', 'Z'))) {
+            $selectedLetter = 'A';
+        }
+        return view('learning.worksheet', compact('activeChild', 'selectedLetter'));
+    }
+
+    public function hindiVarnamala(Request $request)
+    {
+        return redirect()->route('learning.tracing', ['category' => 'hindi']);
+    }
 }

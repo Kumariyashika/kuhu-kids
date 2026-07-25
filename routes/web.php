@@ -47,6 +47,7 @@ Route::prefix('learning')->group(function () {
     Route::get('/shapes', [LearningController::class, 'shapes'])->name('learning.shapes');
     Route::get('/colors', [LearningController::class, 'colors'])->name('learning.colors');
     Route::get('/quiz', [LearningController::class, 'quiz'])->name('learning.quiz');
+    Route::get('/hindi-varnamala', [LearningController::class, 'hindiVarnamala'])->name('learning.hindi_varnamala');
 });
 
 // 5. Stars Progress API
