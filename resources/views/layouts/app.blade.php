@@ -17,6 +17,45 @@
 
 <body>
 
+    <!-- App Startup Full-Screen Welcome Video Overlay (Renders First) -->
+    <div id="appVideoSplashModal" class="video-splash-overlay">
+        <video id="kuhuIntroVideo" class="splash-video-player" playsinline webkit-playsinline autoplay preload="auto">
+            <source src="{{ asset('video/start.mp4') }}" type="video/mp4">
+            <source src="{{ asset('video/kuhu kids.mp4') }}" type="video/mp4">
+            <source src="{{ asset('video/kuhu kid.mp4') }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <script>
+        (function () {
+            var modal = document.getElementById('appVideoSplashModal');
+            var video = document.getElementById('kuhuIntroVideo');
+            var hasPlayed = sessionStorage.getItem('kuhu_intro_video_played');
+
+            if (hasPlayed) {
+                if (modal) {
+                    modal.style.display = 'none';
+                    modal.classList.add('hidden');
+                }
+            } else {
+                if (modal && video) {
+                    document.documentElement.style.overflow = 'hidden';
+                    document.body.style.overflow = 'hidden';
+                    modal.style.display = 'flex';
+                    video.muted = false;
+                    video.playsInline = true;
+                    var p = video.play();
+                    if (p && p.catch) {
+                        p.catch(function () {
+                            video.muted = true;
+                            video.play().catch(function () { });
+                        });
+                    }
+                }
+            }
+        })();
+    </script>
+
     <!-- Background Elements (Cloud and Stars Backdrop) -->
     <div class="bg-scene">
         <!-- 3D Animal Background Illustrations -->
@@ -213,7 +252,7 @@
                         if (window.speechSynthesis.paused) {
                             window.speechSynthesis.resume();
                         }
-                    } catch (e) {}
+                    } catch (e) { }
 
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = lang;
@@ -252,13 +291,319 @@
         // Preload speech synthesis voices
         if ('speechSynthesis' in window) {
             window.speechSynthesis.onvoiceschanged = () => {
-                try { window.speechSynthesis.getVoices(); } catch(e){}
+                try { window.speechSynthesis.getVoices(); } catch (e) { }
             };
         }
 
+        // ============================================
+        // Background Music (BGM) Synthesizer Engine
+        // ============================================
+        const BGM = {
+            ctx: null,
+            isPlaying: false,
+            timer: null,
+            step: 0,
+            volume: 0.08,
 
-        // Attach global click event sounds to interactive buttons and cards
+            // Upbeat kid melody scale (C Major cheerful melody)
+            notes: [
+                523.25, 659.25, 783.99, 880.00, 1046.50, 783.99, 659.25, 783.99,
+                698.46, 880.00, 1046.50, 698.46, 659.25, 783.99, 1046.50, 987.77,
+                523.25, 659.25, 783.99, 1046.50, 1174.66, 1046.50, 880.00, 783.99,
+                698.46, 880.00, 1046.50, 880.00, 783.99, 659.25, 587.33, 523.25
+            ],
+
+            chords: [
+                261.63, 261.63, 349.23, 392.00,
+                261.63, 261.63, 349.23, 392.00
+            ],
+
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+
+            toggle() {
+                if (this.isPlaying) {
+                    this.stop();
+                    localStorage.setItem('bgm_enabled', 'false');
+                } else {
+                    this.start();
+                    localStorage.setItem('bgm_enabled', 'true');
+                }
+                this.updateUI();
+            },
+
+            start() {
+                if (this.isPlaying) return;
+                this.init();
+                if (!this.ctx) return;
+                this.isPlaying = true;
+                this.step = 0;
+                this.playBeat();
+                this.timer = setInterval(() => this.playBeat(), 350);
+                this.updateUI();
+            },
+
+            stop() {
+                this.isPlaying = false;
+                if (this.timer) {
+                    clearInterval(this.timer);
+                    this.timer = null;
+                }
+                this.updateUI();
+            },
+
+            playBeat() {
+                if (!this.isPlaying || !this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+
+                    if (this.step % 4 === 0) {
+                        const chordIdx = Math.floor((this.step / 4) % this.chords.length);
+                        const rootFreq = this.chords[chordIdx];
+
+                        const bassOsc = this.ctx.createOscillator();
+                        const bassGain = this.ctx.createGain();
+                        bassOsc.type = 'triangle';
+                        bassOsc.frequency.setValueAtTime(rootFreq / 2, now);
+
+                        bassGain.gain.setValueAtTime(this.volume * 0.4, now);
+                        bassGain.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+
+                        bassOsc.connect(bassGain);
+                        bassGain.connect(this.ctx.destination);
+                        bassOsc.start(now);
+                        bassOsc.stop(now + 1.1);
+                    }
+
+                    const freq = this.notes[this.step % this.notes.length];
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now);
+
+                    gain.gain.setValueAtTime(this.volume * 0.6, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.32);
+
+                    this.step++;
+                } catch (e) {
+                    console.log('BGM error:', e);
+                }
+            },
+
+            updateUI() {
+                document.querySelectorAll('.bgm-toggle-btn').forEach(btn => {
+                    if (this.isPlaying) {
+                        btn.classList.add('playing');
+                        btn.setAttribute('title', 'Background Music: ON (Click to Mute)');
+                        btn.innerHTML = '🎵';
+                    } else {
+                        btn.classList.remove('playing');
+                        btn.setAttribute('title', 'Background Music: OFF (Click to Play)');
+                        btn.innerHTML = '🔇';
+                    }
+                });
+            }
+        };
+
+        // ============================================
+        // 5-Second Sequential Card Blinking Engine
+        // ============================================
+        const CardBlinker = {
+            cards: [],
+            currentIndex: 0,
+            timer: null,
+
+            init() {
+                const selectors = [
+                    '.module-card',
+                    '.static-balloon',
+                    '.letter-card',
+                    '.phonics-card',
+                    '.color-card',
+                    '.shape-card',
+                    '.quiz-card',
+                    '.vowel-card',
+                    '.consonant-card',
+                    '.game-card'
+                ];
+
+                let found = [];
+                for (const sel of selectors) {
+                    const elements = Array.from(document.querySelectorAll(sel));
+                    if (elements.length > 0) {
+                        found = elements;
+                        break;
+                    }
+                }
+
+                if (found.length === 0) return;
+                this.cards = found;
+
+                // Highlight card 0 initially
+                this.highlightCard(this.currentIndex);
+
+                // Set 5-second interval (5000 ms)
+                this.timer = setInterval(() => {
+                    this.next();
+                }, 5000);
+            },
+
+            highlightCard(index) {
+                this.cards.forEach(c => {
+                    c.classList.remove('card-blink-active');
+                    const badge = c.querySelector('.blink-star-badge');
+                    if (badge) badge.remove();
+                });
+
+                const card = this.cards[index];
+                if (card) {
+                    card.classList.add('card-blink-active');
+                    const badge = document.createElement('div');
+                    badge.className = 'blink-star-badge';
+                    badge.innerHTML = '⭐ TAP ME! ✨';
+                    card.appendChild(badge);
+                }
+            },
+
+            next() {
+                if (this.cards.length === 0) return;
+                this.currentIndex = (this.currentIndex + 1) % this.cards.length;
+                this.highlightCard(this.currentIndex);
+            }
+        };
+
+        // Full-Screen App Startup Video Splash Controller
+        let splashFinished = false;
+
+        function finishSplashVideo() {
+            if (splashFinished) return;
+            splashFinished = true;
+
+            sessionStorage.setItem('kuhu_intro_video_played', 'true');
+            const modal = document.getElementById('appVideoSplashModal');
+            const video = document.getElementById('kuhuIntroVideo');
+
+            if (video) {
+                try { video.pause(); } catch (e) { }
+            }
+
+            if (modal) {
+                modal.classList.add('hidden');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                }, 400);
+            }
+            document.documentElement.style.overflow = '';
+            document.body.style.overflow = '';
+        }
+
+        function initSplashVideo() {
+            const modal = document.getElementById('appVideoSplashModal');
+            const video = document.getElementById('kuhuIntroVideo');
+            const hasPlayed = sessionStorage.getItem('kuhu_intro_video_played');
+
+            if (hasPlayed) {
+                if (modal) {
+                    modal.classList.add('hidden');
+                    modal.style.display = 'none';
+                }
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+                return;
+            }
+
+            if (modal && video) {
+                modal.style.display = 'flex';
+                modal.classList.remove('hidden');
+                document.documentElement.style.overflow = 'hidden';
+                document.body.style.overflow = 'hidden';
+
+                // Default to unmuted playback with audio
+                video.muted = false;
+                video.playsInline = true;
+
+                // Handle user gesture to unmute if browser initially blocked unmuted autoplay
+                const enableAudioGesture = function () {
+                    if (video && video.muted) {
+                        video.muted = false;
+                        video.play().catch(function () { });
+                    }
+                };
+
+                window.addEventListener('click', enableAudioGesture, { capture: true, passive: true });
+                window.addEventListener('touchstart', enableAudioGesture, { capture: true, passive: true });
+                modal.addEventListener('click', enableAudioGesture, { capture: true, passive: true });
+
+                video.onended = finishSplashVideo;
+                video.onerror = function () {
+                    console.warn('Splash welcome video playback error, continuing to app.');
+                    finishSplashVideo();
+                };
+
+                // Fallback: If metadata loaded, schedule finish based on video duration
+                video.onloadedmetadata = function () {
+                    if (video.duration && video.duration > 0) {
+                        setTimeout(function () {
+                            if (!splashFinished) {
+                                finishSplashVideo();
+                            }
+                        }, (video.duration + 1) * 1000);
+                    }
+                };
+
+                // Play video automatically with audio
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(function (err) {
+                        console.warn('Unmuted autoplay blocked by browser policy, falling back to muted play until screen tap:', err);
+                        video.muted = true;
+                        video.play().catch(function (e) {
+                            console.error('Splash video autoplay failed:', e);
+                            finishSplashVideo();
+                        });
+                    });
+                }
+            }
+        }
+
+        // Attach global click event sounds, start card blinking & BGM
         document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Full-Screen Video Splash
+            initSplashVideo();
+
+            // Start 5-second card blinking
+            CardBlinker.init();
+
+            // Auto-start BGM on user interaction if enabled
+            const bgmPref = localStorage.getItem('bgm_enabled');
+            if (bgmPref !== 'false') {
+                BGM.updateUI();
+                const startBgmOnce = () => {
+                    if (localStorage.getItem('bgm_enabled') !== 'false') {
+                        BGM.start();
+                    }
+                    document.removeEventListener('click', startBgmOnce);
+                    document.removeEventListener('touchstart', startBgmOnce);
+                };
+                document.addEventListener('click', startBgmOnce);
+                document.addEventListener('touchstart', startBgmOnce);
+            } else {
+                BGM.updateUI();
+            }
+
             document.querySelectorAll('.module-card, .btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
                 el.addEventListener('click', () => {
                     SoundFX.play('click');
@@ -266,6 +611,47 @@
             });
         });
     </script>
+
+
+    <!-- Global Floating Background Music (BGM) Controller Icon -->
+    <div class="floating-bgm-container">
+        <button id="globalBgmBtn" class="btn-bgm bgm-toggle-btn" onclick="BGM.toggle()" title="Toggle Background Music"
+            aria-label="Toggle Background Music">
+            🎵
+        </button>
+    </div>
+</body>
+
+</html> BGM.updateUI();
+const startBgmOnce = () => {
+if (localStorage.getItem('bgm_enabled') !== 'false') {
+BGM.start();
+}
+document.removeEventListener('click', startBgmOnce);
+document.removeEventListener('touchstart', startBgmOnce);
+};
+document.addEventListener('click', startBgmOnce);
+document.addEventListener('touchstart', startBgmOnce);
+} else {
+BGM.updateUI();
+}
+
+document.querySelectorAll('.module-card, .btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
+el.addEventListener('click', () => {
+SoundFX.play('click');
+});
+});
+});
+</script>
+
+
+<!-- Global Fixed Top-Right Sound Icon Controller -->
+<div class="floating-bgm-container">
+    <button id="globalBgmBtn" class="btn-bgm bgm-toggle-btn" onclick="BGM.toggle()" title="Toggle Sound"
+        aria-label="Toggle Sound">
+        🔊
+    </button>
+</div>
 </body>
 
 </html>

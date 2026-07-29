@@ -8,7 +8,8 @@
 
     <div class="inner-container" style="max-width: 850px; margin: 0 auto; padding: 15px;">
         <!-- Header -->
-        <div class="inner-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+        <div class="inner-header"
+            style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
             <div style="display: flex; align-items: center; gap: 12px;">
                 <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
                     style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 44px; height: 44px; padding: 0; text-decoration: none; margin: 0;"
@@ -25,7 +26,8 @@
             </div>
 
             <!-- Score Pill -->
-            <div style="background: #FFFDF0; border: 3px solid #FFDE59; border-radius: 20px; padding: 6px 16px; font-weight: 900; color: #4A3B00; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); font-size: 1.1rem;">
+            <div
+                style="background: #FFFDF0; border: 3px solid #FFDE59; border-radius: 20px; padding: 6px 16px; font-weight: 900; color: #4A3B00; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.06); font-size: 1.1rem;">
                 ⭐ Score: <span id="scoreDisplay" style="color: #FF914D; font-size: 1.3rem;">0</span>
             </div>
         </div>
@@ -35,17 +37,21 @@
             style="background: linear-gradient(135deg, #FFFDF0 0%, #F3E5F5 100%); border: 4px solid #D8B4FE; border-radius: 28px; padding: 22px; min-height: 440px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; position: relative; box-shadow: 0 12px 30px rgba(140, 82, 255, 0.12);">
 
             <!-- Top Progress Header -->
-            <div id="progressArea" style="width: 100%; margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: #6B21A8; font-size: 1.1rem;">
+            <div id="progressArea"
+                style="width: 100%; margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: #6B21A8; font-size: 1.1rem;">
                     <span style="display: flex; align-items: center; gap: 6px;">
                         <span>📖 Question</span>
-                        <span id="currentQuestionNum" style="background: #9333EA; color: white; padding: 2px 10px; border-radius: 12px; font-size: 1rem;">1</span>
+                        <span id="currentQuestionNum"
+                            style="background: #9333EA; color: white; padding: 2px 10px; border-radius: 12px; font-size: 1rem;">1</span>
                         <span>of 5</span>
                     </span>
                 </div>
 
                 <!-- Animated Progress Bar -->
-                <div style="width: 100%; height: 14px; background: #E9D5FF; border-radius: 10px; overflow: hidden; padding: 2px;">
+                <div
+                    style="width: 100%; height: 14px; background: #E9D5FF; border-radius: 10px; overflow: hidden; padding: 2px;">
                     <div id="progressBarFill"
                         style="width: 20%; height: 100%; background: linear-gradient(90deg, #A855F7 0%, #EC4899 100%); border-radius: 8px; transition: width 0.4s ease;">
                     </div>
@@ -53,30 +59,37 @@
             </div>
 
             <!-- Active Question Content -->
-            <div id="quizContent" style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; flex: 1;">
-                
+            <div id="quizContent"
+                style="width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-between; flex: 1;">
+
                 <!-- Question Box with Mascot & Big Emoji Illustration -->
-                <div class="question-illustration-box" style="width: 100%; background: #FFFFFF; border-radius: 24px; padding: 18px; border: 3px solid #E9D5FF; box-shadow: 0 8px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 18px; text-align: center;">
-                    
-                    <div id="questionEmoji" style="font-size: 4rem; margin-bottom: 8px; animation: floatEmoji 2.5s ease-in-out infinite alternate;">
+                <div class="question-illustration-box"
+                    style="width: 100%; background: #FFFFFF; border-radius: 24px; padding: 18px; border: 3px solid #E9D5FF; box-shadow: 0 8px 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 18px; text-align: center;">
+
+                    <div id="questionEmoji"
+                        style="font-size: 4rem; margin-bottom: 8px; animation: floatEmoji 2.5s ease-in-out infinite alternate;">
                         🍌
                     </div>
 
-                    <h2 id="questionText" style="font-size: 1.45rem; font-weight: 900; color: #2C3E50; margin: 0; line-height: 1.4; font-family: 'Fredoka', sans-serif;">
+                    <h2 id="questionText"
+                        style="font-size: 1.45rem; font-weight: 900; color: #2C3E50; margin: 0; line-height: 1.4; font-family: 'Fredoka', sans-serif;">
                         Loading question...
                     </h2>
                 </div>
 
                 <!-- 2x2 Options Grid -->
-                <div id="optionsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; margin-bottom: 10px;">
+                <div id="optionsGrid"
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; margin-bottom: 10px;">
                     <!-- Choice buttons generated via JS -->
                 </div>
             </div>
 
             <!-- Completion & Reward Celebration Screen -->
-            <div id="resultCard" style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 16px; padding: 15px; width: 100%; flex: 1;">
+            <div id="resultCard"
+                style="display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 16px; padding: 15px; width: 100%; flex: 1;">
                 <div style="font-size: 5rem; animation: trophyBounce 1s ease infinite alternate;">🏆</div>
-                <h2 style="font-size: 2.2rem; font-weight: 900; color: var(--color-green-real); text-shadow: 2px 2px 0 #FFF; margin: 0;">
+                <h2
+                    style="font-size: 2.2rem; font-weight: 900; color: var(--color-green-real); text-shadow: 2px 2px 0 #FFF; margin: 0;">
                     SUPER QUIZ CHAMPION! 🎉
                 </h2>
                 <p style="font-size: 1.25rem; font-weight: 800; color: #4B5563; margin: 0;">
@@ -84,7 +97,8 @@
                 </p>
 
                 <!-- Stars Earned Badge -->
-                <div style="background: linear-gradient(135deg, #FFDE59 0%, #FF914D 100%); border: 3px solid #E6A100; padding: 14px 36px; border-radius: 22px; box-shadow: 0 8px 20px rgba(255, 145, 77, 0.3); margin: 10px 0;">
+                <div
+                    style="background: linear-gradient(135deg, #FFDE59 0%, #FF914D 100%); border: 3px solid #E6A100; padding: 14px 36px; border-radius: 22px; box-shadow: 0 8px 20px rgba(255, 145, 77, 0.3); margin: 10px 0;">
                     <span style="font-size: 1.8rem; font-weight: 900; color: #4A3B00;">⭐ +25 Golden Stars!</span>
                 </div>
 
@@ -92,7 +106,8 @@
                     <button onclick="restartQuiz()" class="btn-3d btn-pink" style="font-size: 1.1rem; padding: 10px 24px;">
                         🔄 Play Again
                     </button>
-                    <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="font-size: 1.1rem; padding: 10px 24px; text-decoration: none;">
+                    <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
+                        style="font-size: 1.1rem; padding: 10px 24px; text-decoration: none;">
                         🏠 Home
                     </a>
                 </div>
@@ -103,13 +118,23 @@
 
     <style>
         @keyframes floatEmoji {
-            0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(-8px) scale(1.08); }
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                transform: translateY(-8px) scale(1.08);
+            }
         }
 
         @keyframes trophyBounce {
-            0% { transform: translateY(0) scale(1); }
-            100% { transform: translateY(-15px) scale(1.15) rotate(5deg); }
+            0% {
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                transform: translateY(-15px) scale(1.15) rotate(5deg);
+            }
         }
 
         .quiz-option-btn {
@@ -127,7 +152,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
             font-family: 'Fredoka', sans-serif;
         }
 
@@ -158,15 +183,33 @@
         }
 
         @keyframes pulseCorrect {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.06); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.06);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         @keyframes shakeWrong {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-8px);
+            }
+
+            75% {
+                transform: translateX(8px);
+            }
         }
     </style>
 
@@ -371,15 +414,15 @@
                     activity_name: 'Completed Kids Learning Quiz'
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const starsPill = document.querySelector('.stars-pill span');
-                    if (starsPill) {
-                        starsPill.innerText = data.new_stars;
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const starsPill = document.querySelector('.stars-pill span');
+                        if (starsPill) {
+                            starsPill.innerText = data.new_stars;
+                        }
                     }
-                }
-            });
+                });
         }
 
         function restartQuiz() {
