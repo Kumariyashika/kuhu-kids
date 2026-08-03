@@ -295,8 +295,8 @@
                     <path d="M 35 65 Q 50 72 65 65" fill="none" stroke="#7A6F5D" stroke-width="3" stroke-linecap="round" />
                 </svg>
             </div>
-            <h2 class="card-title">Color Fun! 🎨</h2>
-            <span class="card-subtitle">Tap and learn beautiful colors!</span>
+            <h2 class="card-title">Colors Name / रंगों के नाम 🎨</h2>
+            <span class="card-subtitle">Learn Red (लाल), Blue (नीला) & more!</span>
         </a>
 
         <!-- 12. Quiz Time -->

@@ -653,9 +653,9 @@
             if (currentCategory === 'english_letters' || currentCategory === 'hindi_letters' || currentCategory === 'numbers') {
                 const tapLabel = currentCategory === 'english_letters' ? 'Tap Me! 🔊' : (currentCategory === 'hindi_letters' ? 'सुनें! 🔊' : 'Count! 🔢');
                 card.innerHTML = `
-                            <span class="giant-big-letter" style="color: ${color};">${item.display}</span>
-                            <span class="giant-tap-label">${tapLabel}</span>
-                        `;
+                                <span class="giant-big-letter" style="color: ${color};">${item.display}</span>
+                                <span class="giant-tap-label">${tapLabel}</span>
+                            `;
             } else {
                 // Extract emoji
                 let wordText = item.word;
@@ -670,13 +670,13 @@
                 const subLabel = currentCategory === 'english_words' ? `${item.letter} for` : (currentCategory === 'hindi_words' ? `${item.letter} से` : `value of`);
 
                 card.innerHTML = `
-                            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                                <span class="giant-letter-bubble" style="background: ${color};">${item.letter}</span>
-                                <span style="font-size: 1.15rem; color: #888; font-weight: bold; font-family: 'Fredoka', sans-serif;">${subLabel}</span>
-                            </div>
-                            <span class="giant-emoji-graphic">${emoji}</span>
-                            <span class="giant-word-label">${wordText}</span>
-                        `;
+                                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
+                                    <span class="giant-letter-bubble" style="background: ${color};">${item.letter}</span>
+                                    <span style="font-size: 1.15rem; color: #888; font-weight: bold; font-family: 'Fredoka', sans-serif;">${subLabel}</span>
+                                </div>
+                                <span class="giant-emoji-graphic">${emoji}</span>
+                                <span class="giant-word-label">${wordText}</span>
+                            `;
             }
 
             container.innerHTML = '';

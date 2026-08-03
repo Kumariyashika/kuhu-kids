@@ -1330,70 +1330,13 @@
             }
         };
 
-        // ============================================
-        // 5-Second Sequential Card Blinking Engine
-        // ============================================
-        const CardBlinker = {
-            cards: [],
-            currentIndex: 0,
-            timer: null,
-
-            init() {
-                const selectors = [
-                    '.letter-chip',
-                    '.varga-tab',
-                    '.card-container',
-                    '.module-card'
-                ];
-
-                let found = [];
-                for (const sel of selectors) {
-                    const elements = Array.from(document.querySelectorAll(sel));
-                    if (elements.length > 0) {
-                        found = elements;
-                        break;
-                    }
-                }
-
-                if (found.length === 0) return;
-                this.cards = found;
-
-                this.highlightCard(this.currentIndex);
-
-                this.timer = setInterval(() => {
-                    this.next();
-                }, 5000);
-            },
-
-            highlightCard(index) {
-                this.cards.forEach(c => {
-                    c.classList.remove('card-blink-active');
-                    const badge = c.querySelector('.blink-star-badge');
-                    if (badge) badge.remove();
-                });
-
-                const card = this.cards[index];
-                if (card) {
-                    card.classList.add('card-blink-active');
-                    const badge = document.createElement('div');
-                    badge.className = 'blink-star-badge';
-                    badge.innerHTML = '⭐ TAP ME! ✨';
-                    card.appendChild(badge);
-                }
-            },
-
-            next() {
-                if (this.cards.length === 0) return;
-                this.currentIndex = (this.currentIndex + 1) % this.cards.length;
-                this.highlightCard(this.currentIndex);
-            }
-        };
+        // Card Blinking Engine (Disabled)
+        const CardBlinker = { init() {}, stop() {} };
 
         // Initialize Module on Load
         window.addEventListener('DOMContentLoaded', () => {
             initTabsAndChips();
             loadLetterCard();
-            setTimeout(() => { CardBlinker.init(); }, 300);
 
             const bgmPref = localStorage.getItem('bgm_enabled');
             if (bgmPref !== 'false') {

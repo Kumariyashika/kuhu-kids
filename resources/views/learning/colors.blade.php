@@ -3,258 +3,299 @@
 @section('title', 'Kuhu Kids Learning - Colors Learning')
 
 @section('content')
-<div class="inner-container">
-    <div class="inner-header">
-        <h1 class="inner-title">
-            <span style="color: var(--color-pink);">🎨 Colors Learning Game</span>
-        </h1>
-        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 44px; height: 44px; padding: 0; text-decoration: none; margin: 0;" title="Back to Home">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-        </a>
-    </div>
-
-    <!-- Colors Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; z-index: 10;">
-        
-        <!-- Color 1: Red -->
-        <div class="color-card" style="background: #FF5252; border-bottom: 6px solid #C62828;" onclick="learnColor('Red', 'Lal', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#FF5252"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#FF5252" stroke="#C62828" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#FFF"/>
-                <circle cx="57" cy="62" r="2.5" fill="#FFF"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Red</h2>
-            <span class="color-hindi">Lal (लाल)</span>
-        </div>
-
-        <!-- Color 2: Blue -->
-        <div class="color-card" style="background: #38B6FF; border-bottom: 6px solid #2B8EC7;" onclick="learnColor('Blue', 'Neela', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#38B6FF"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#38B6FF" stroke="#2B8EC7" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#FFF"/>
-                <circle cx="57" cy="62" r="2.5" fill="#FFF"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Blue</h2>
-            <span class="color-hindi">Neela (नीला)</span>
-        </div>
-
-        <!-- Color 3: Green -->
-        <div class="color-card" style="background: #7ED957; border-bottom: 6px solid #63AA43;" onclick="learnColor('Green', 'Hara', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#7ED957"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#7ED957" stroke="#63AA43" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#FFF"/>
-                <circle cx="57" cy="62" r="2.5" fill="#FFF"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Green</h2>
-            <span class="color-hindi">Hara (हरा)</span>
-        </div>
-
-        <!-- Color 4: Yellow -->
-        <div class="color-card" style="background: #FFDE59; border-bottom: 6px solid #CCB143; color: #4A3B00;" onclick="learnColor('Yellow', 'Peela', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#FFDE59"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#FFDE59" stroke="#CCB143" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#4A3B00"/>
-                <circle cx="57" cy="62" r="2.5" fill="#4A3B00"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#4A3B00" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Yellow</h2>
-            <span class="color-hindi">Peela (पीला)</span>
-        </div>
-
-        <!-- Color 5: Orange -->
-        <div class="color-card" style="background: #FF914D; border-bottom: 6px solid #D97336;" onclick="learnColor('Orange', 'Narangee', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#FF914D"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#FF914D" stroke="#D97336" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#FFF"/>
-                <circle cx="57" cy="62" r="2.5" fill="#FFF"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Orange</h2>
-            <span class="color-hindi">Narangee (नारंगी)</span>
-        </div>
-
-        <!-- Color 6: Purple -->
-        <div class="color-card" style="background: #8C52FF; border-bottom: 6px solid #6E3CD9;" onclick="learnColor('Purple', 'Bainganee', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#8C52FF"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#8C52FF" stroke="#6E3CD9" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#FFF"/>
-                <circle cx="57" cy="62" r="2.5" fill="#FFF"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Purple</h2>
-            <span class="color-hindi">Bainganee (बैंगनी)</span>
-        </div>
-
-        <!-- Color 7: Pink -->
-        <div class="color-card" style="background: #FF66C4; border-bottom: 6px solid #D94B9F;" onclick="learnColor('Pink', 'Gulabi', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#FF66C4"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#FF66C4" stroke="#D94B9F" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#FFF"/>
-                <circle cx="57" cy="62" r="2.5" fill="#FFF"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Pink</h2>
-            <span class="color-hindi">Gulabi (गुलाबी)</span>
-        </div>
-
-        <!-- Color 8: Brown -->
-        <div class="color-card" style="background: #8D6E63; border-bottom: 6px solid #5D4037;" onclick="learnColor('Brown', 'Bhoora', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#8D6E63"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#8D6E63" stroke="#5D4037" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#FFF"/>
-                <circle cx="57" cy="62" r="2.5" fill="#FFF"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Brown</h2>
-            <span class="color-hindi">Bhoora (भूरा)</span>
-        </div>
-
-        <!-- Color 9: Black -->
-        <div class="color-card" style="background: #2D3748; border-bottom: 6px solid #1A202C;" onclick="learnColor('Black', 'Kala', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#2D3748"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#2D3748" stroke="#1A202C" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#FFF"/>
-                <circle cx="57" cy="62" r="2.5" fill="#FFF"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#FFF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title">Black</h2>
-            <span class="color-hindi">Kala (काला)</span>
-        </div>
-
-        <!-- Color 10: White -->
-        <div class="color-card" style="background: #FFFFFF; border-bottom: 6px solid #CBD5E1; color: #2C3E50;" onclick="learnColor('White', 'Safed', this)">
-            <svg viewBox="0 0 100 100" width="54" height="54">
-                <path d="M 30,30 L 70,30 L 75,80 L 25,80 Z" fill="#F8FAFC" stroke="#94A3B8" stroke-width="2"/>
-                <path d="M 25,50 C 35,50, 45,55, 50,60 C 55,55, 65,50, 75,50 L 75,80 L 25,80 Z" fill="#E2E8F0"/>
-                <ellipse cx="50" cy="28" rx="20" ry="6" fill="#E2E8F0" stroke="#94A3B8" stroke-width="2"/>
-                <circle cx="43" cy="62" r="2.5" fill="#2C3E50"/>
-                <circle cx="57" cy="62" r="2.5" fill="#2C3E50"/>
-                <path d="M 46 68 Q 50 71 54 68" stroke="#2C3E50" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="color-title" style="text-shadow: none;">White</h2>
-            <span class="color-hindi" style="text-shadow: none;">Safed (सफेद)</span>
-        </div>
-
-    </div>
-</div>
-
-<script>
-    const learnedColors = new Set();
-
-    function learnColor(colorName, hindiName, element) {
-        SoundFX.play('pop');
-
-        // Speak the colors out loud in cute child voice
-        if (localStorage.getItem('voice_enabled') !== 'false') {
-            SoundFX.speak(colorName + "! " + hindiName + "!", 'en-US');
+    <style>
+        html,
+        body {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            background: #000000 !important;
         }
 
-        // Wobble card animation
-        element.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            element.style.transform = '';
-        }, 150);
+        .app-container {
+            max-width: 100% !important;
+            width: 100% !important;
+            height: 100vh !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
 
-        // Earn stars if learning this color for the first time
-        if (!learnedColors.has(colorName)) {
-            learnedColors.add(colorName);
-            
-            // Trigger 2 stars award
-            fetch("{{ route('api.add_stars') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    stars: 2,
-                    activity_name: 'Learned Color ' + colorName
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const starsPill = document.querySelector('.stars-pill span');
-                    if (starsPill) {
-                        starsPill.innerText = data.new_stars;
-                    }
+        .bg-scene {
+            display: none !important;
+        }
+
+        /* Full Screen Colors Page Layout */
+        .colors-page-container {
+            background: #000000 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+
+        /* Top Bar Overlay */
+        .colors-top-bar {
+            padding: 10px 18px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            flex-shrink: 0;
+        }
+
+        /* Full Screen Video Container */
+        .colors-fullscreen-wrapper {
+            flex: 1;
+            width: 100%;
+            height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .colors-fullscreen-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transform: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Top-Right Circular Sound Icon Button */
+        .colors-sound-circle-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            z-index: 300;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #38B6FF 0%, #0088CC 100%);
+            color: #FFFFFF;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            user-select: none;
+        }
+
+        .colors-sound-circle-btn.muted {
+            background: linear-gradient(145deg, #FF5252 0%, #C62828 100%);
+        }
+
+        .colors-sound-circle-btn:hover {
+            transform: scale(1.12);
+        }
+
+        .colors-sound-circle-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* Bottom-Right Start/Stop Action Button */
+        .colors-play-pause-btn {
+            position: absolute;
+            bottom: 36px;
+            right: 24px;
+            z-index: 200;
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: linear-gradient(145deg, #FF914D 0%, #FF6600 100%);
+            color: #FFFFFF;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            user-select: none;
+        }
+
+        .colors-play-pause-btn:hover {
+            transform: scale(1.08);
+            background: linear-gradient(145deg, #FFA066 0%, #FF771A 100%);
+        }
+
+        .colors-play-pause-btn:active {
+            transform: scale(0.94);
+        }
+
+        @media (max-width: 640px) {
+            .colors-top-bar {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+
+            .colors-fullscreen-video {
+                object-fit: contain !important;
+                transform: none !important;
+            }
+
+            .colors-sound-circle-btn {
+                top: 12px;
+                right: 12px;
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+
+            .colors-play-pause-btn {
+                bottom: 24px;
+                right: 16px;
+                padding: 10px 18px;
+                font-size: 1.0rem;
+            }
+        }
+    </style>
+
+    <div class="colors-page-container">
+        <!-- Top Navigation Bar -->
+        <div class="colors-top-bar">
+            <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
+                style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 42px; height: 42px; padding: 0; text-decoration: none; margin: 0; flex-shrink: 0;"
+                title="Back to Home">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+            <h1 style="margin: 0; font-size: 1.5rem; line-height: 1.2; font-family: 'Fredoka', sans-serif;">
+                <span style="color: #FF66C4; text-shadow: 0 2px 4px rgba(0,0,0,0.6);">🎨 Colors Name / रंगों के नाम</span>
+            </h1>
+        </div>
+
+        <!-- Full Screen Video Player -->
+        <div class="colors-fullscreen-wrapper">
+            <!-- Top Right Sound Speaker Icon Button -->
+            <button id="colorsSoundBtn" class="colors-sound-circle-btn" onclick="toggleColorsVideoSound()" title="Sound Mute / Unmute">
+                <span id="colorsSoundIcon">🔊</span>
+            </button>
+
+            <video id="colorsLearningVideo" class="colors-fullscreen-video" autoplay loop playsinline controls onclick="toggleColorsVideoPlay()">
+                <source src="{{ asset('video/colors.mp4') }}" type="video/mp4">
+                Your browser does not support HTML5 video playback.
+            </video>
+
+            <!-- Bottom Right Start / Stop Floating Button -->
+            <button id="colorsPlayPauseBtn" class="colors-play-pause-btn" onclick="toggleColorsVideoPlay()" title="Play or Stop Video">
+                <span id="colorsPlayPauseIcon">⏸</span>
+                <span id="colorsPlayPauseText">Stop ⏸</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function toggleColorsVideoSound() {
+            const video = document.getElementById('colorsLearningVideo');
+            const btn = document.getElementById('colorsSoundBtn');
+            const icon = document.getElementById('colorsSoundIcon');
+
+            if (video) {
+                video.muted = !video.muted;
+                updateSoundUI(video.muted);
+            }
+        }
+
+        function updateSoundUI(isMuted) {
+            const btn = document.getElementById('colorsSoundBtn');
+            const icon = document.getElementById('colorsSoundIcon');
+            if (isMuted) {
+                if (icon) icon.innerText = '🔇';
+                if (btn) btn.classList.add('muted');
+            } else {
+                if (icon) icon.innerText = '🔊';
+                if (btn) btn.classList.remove('muted');
+            }
+        }
+
+        function toggleColorsVideoPlay() {
+            const video = document.getElementById('colorsLearningVideo');
+            const icon = document.getElementById('colorsPlayPauseIcon');
+            const text = document.getElementById('colorsPlayPauseText');
+
+            if (video) {
+                // Unmute audio on user tap
+                if (video.muted) {
+                    video.muted = false;
+                    updateSoundUI(false);
                 }
-            });
+
+                if (video.paused) {
+                    video.play().then(() => {
+                        if (icon) icon.innerText = '⏸';
+                        if (text) text.innerText = 'Stop ⏸';
+                    }).catch(err => {
+                        console.log('Play error:', err);
+                    });
+                } else {
+                    video.pause();
+                    if (icon) icon.innerText = '▶';
+                    if (text) text.innerText = 'Start ▶';
+                }
+            }
         }
-    }
-</script>
 
-<style>
-    /* Color card grid styles */
-    .color-card {
-        border-radius: 20px;
-        padding: 14px 10px;
-        text-align: center;
-        color: white;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        box-shadow: 0 6px 0 rgba(0,0,0,0.05);
-    }
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('colorsLearningVideo');
+            const icon = document.getElementById('colorsPlayPauseIcon');
+            const text = document.getElementById('colorsPlayPauseText');
 
-    .color-card:hover {
-        transform: translateY(-4px);
-        border-bottom-width: 8px;
-    }
-    
-    .color-card:active {
-        transform: translateY(2px);
-        border-bottom-width: 3px;
-    }
+            if (video) {
+                video.muted = false;
+                updateSoundUI(false);
 
-    .color-card svg {
-        margin-bottom: 6px;
-        filter: drop-shadow(0 3px 5px rgba(0,0,0,0.1));
-        transition: transform 0.3s ease;
-    }
+                video.play().catch(function(err) {
+                    console.log('Unmuted autoplay prevented, using muted fallback:', err);
+                    video.muted = true;
+                    updateSoundUI(true);
+                    video.play().catch(e => {
+                        if (icon) icon.innerText = '▶';
+                        if (text) text.innerText = 'Start ▶';
+                    });
+                });
 
-    .color-card:hover svg {
-        transform: scale(1.1) rotate(4deg);
-    }
+                video.addEventListener('play', function() {
+                    if (icon) icon.innerText = '⏸';
+                    if (text) text.innerText = 'Stop ⏸';
+                });
 
-    .color-title {
-        font-size: 1.2rem;
-        font-weight: 900;
-        margin-bottom: 2px;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    }
+                video.addEventListener('pause', function() {
+                    if (icon) icon.innerText = '▶';
+                    if (text) text.innerText = 'Start ▶';
+                });
 
-    .color-hindi {
-        font-size: 0.8rem;
-        opacity: 0.9;
-        font-weight: 600;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    }
-</style>
+                // Unmute on first touch/click
+                document.body.addEventListener('click', function enableAudioOnFirstTouch() {
+                    if (video && video.muted) {
+                        video.muted = false;
+                        updateSoundUI(false);
+                    }
+                }, { once: true });
+            }
+        });
+    </script>
 @endsection

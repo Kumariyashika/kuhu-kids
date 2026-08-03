@@ -3,219 +3,300 @@
 @section('title', 'Kuhu Kids Learning - Shapes Learning')
 
 @section('content')
-<div class="inner-container">
-    <div class="inner-header">
-        <h1 class="inner-title">
-            <span style="color: var(--color-orange);">📐 Shapes Learning Game</span>
-        </h1>
-        <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow" style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 44px; height: 44px; padding: 0; text-decoration: none; margin: 0;" title="Back to Home">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-        </a>
-    </div>
-
-    <!-- Shapes Grid -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; z-index: 10;">
-        
-        <!-- Shape 1: Circle -->
-        <div class="shape-card card-green" onclick="learnShape('Circle', 'An orange circle has no corners!', this)">
-            <svg viewBox="0 0 100 100" width="56" height="56">
-                <circle cx="50" cy="50" r="36" fill="#FF914D" stroke="#D97336" stroke-width="4"/>
-                <circle cx="40" cy="45" r="3" fill="#FFF"/>
-                <circle cx="60" cy="45" r="3" fill="#FFF"/>
-                <path d="M 43 55 Q 50 60 57 55" stroke="#FFF" stroke-width="3" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="shape-title">Circle</h2>
-            <span class="shape-desc">Gola (गोला)</span>
-        </div>
-
-        <!-- Shape 2: Square -->
-        <div class="shape-card card-purple" onclick="learnShape('Square', 'A blue square has four equal sides!', this)">
-            <svg viewBox="0 0 100 100" width="56" height="56">
-                <rect x="15" y="15" width="70" height="70" rx="6" fill="#38B6FF" stroke="#2B8EC7" stroke-width="4"/>
-                <circle cx="40" cy="45" r="3" fill="#FFF"/>
-                <circle cx="60" cy="45" r="3" fill="#FFF"/>
-                <path d="M 43 55 Q 50 60 57 55" stroke="#FFF" stroke-width="3" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="shape-title">Square</h2>
-            <span class="shape-desc">Varg (वर्ग)</span>
-        </div>
-
-        <!-- Shape 3: Triangle -->
-        <div class="shape-card card-pink" onclick="learnShape('Triangle', 'A yellow triangle has three corners!', this)">
-            <svg viewBox="0 0 100 100" width="56" height="56">
-                <polygon points="50,15 15,80 85,80" fill="#FFDE59" stroke="#CCB143" stroke-width="4" stroke-linejoin="round"/>
-                <circle cx="44" cy="52" r="3" fill="#4A3B00"/>
-                <circle cx="56" cy="52" r="3" fill="#4A3B00"/>
-                <path d="M 44 62 Q 50 66 56 62" stroke="#4A3B00" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="shape-title">Triangle</h2>
-            <span class="shape-desc">Trikon (त्रिकोण)</span>
-        </div>
-
-        <!-- Shape 4: Star -->
-        <div class="shape-card card-yellow" onclick="learnShape('Star', 'A shiny star has five points!', this)">
-            <svg viewBox="0 0 100 100" width="56" height="56">
-                <polygon points="50,10 63,38 95,38 69,58 79,90 50,70 21,90 31,58 5,38 37,38" fill="#FF66C4" stroke="#D94B9F" stroke-width="4" stroke-linejoin="round"/>
-                <circle cx="42" cy="48" r="3" fill="#FFF"/>
-                <circle cx="58" cy="48" r="3" fill="#FFF"/>
-                <path d="M 45 56 Q 50 60 55 56" stroke="#FFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="shape-title">Star</h2>
-            <span class="shape-desc">Tara (तारा)</span>
-        </div>
-
-        <!-- Shape 5: Heart -->
-        <div class="shape-card card-green" onclick="learnShape('Heart', 'A red heart represents love!', this)">
-            <svg viewBox="0 0 100 100" width="56" height="56">
-                <path d="M 12,38 C 12,20, 38,15, 50,34 C 62,15, 88,20, 88,38 C 88,60, 50,85, 50,85 C 50,85, 12,60, 12,38 Z" fill="#FF5252" stroke="#C62828" stroke-width="4" stroke-linejoin="round"/>
-                <circle cx="38" cy="38" r="3" fill="#FFF"/>
-                <circle cx="62" cy="38" r="3" fill="#FFF"/>
-                <path d="M 44 48 Q 50 52 56 48" stroke="#FFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="shape-title">Heart</h2>
-            <span class="shape-desc">Dil (दिल)</span>
-        </div>
-
-        <!-- Shape 6: Oval -->
-        <div class="shape-card card-teal" onclick="learnShape('Oval', 'An egg-shaped green oval!', this)">
-            <svg viewBox="0 0 100 100" width="56" height="56">
-                <ellipse cx="50" cy="50" rx="26" ry="38" fill="#7ED957" stroke="#63AA43" stroke-width="4"/>
-                <circle cx="42" cy="45" r="3" fill="#FFF"/>
-                <circle cx="58" cy="45" r="3" fill="#FFF"/>
-                <path d="M 44 54 Q 50 58 56 54" stroke="#FFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="shape-title">Oval</h2>
-            <span class="shape-desc">Andakar (अण्डाकार)</span>
-        </div>
-
-        <!-- Shape 7: Rectangle -->
-        <div class="shape-card card-orange" onclick="learnShape('Rectangle', 'A purple rectangle has four sides!', this)">
-            <svg viewBox="0 0 100 100" width="56" height="56">
-                <rect x="10" y="25" width="80" height="50" rx="6" fill="#8C52FF" stroke="#6E3CD9" stroke-width="4"/>
-                <circle cx="40" cy="46" r="3" fill="#FFF"/>
-                <circle cx="60" cy="46" r="3" fill="#FFF"/>
-                <path d="M 44 56 Q 50 60 56 56" stroke="#FFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="shape-title">Rectangle</h2>
-            <span class="shape-desc">Aayat (आयत)</span>
-        </div>
-
-        <!-- Shape 8: Diamond -->
-        <div class="shape-card card-pink" onclick="learnShape('Diamond', 'A pink diamond shape!', this)">
-            <svg viewBox="0 0 100 100" width="56" height="56">
-                <polygon points="50,10 88,50 50,90 12,50" fill="#FF66C4" stroke="#D94B9F" stroke-width="4" stroke-linejoin="round"/>
-                <circle cx="40" cy="46" r="3" fill="#FFF"/>
-                <circle cx="60" cy="46" r="3" fill="#FFF"/>
-                <path d="M 44 56 Q 50 60 56 56" stroke="#FFF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            </svg>
-            <h2 class="shape-title">Diamond</h2>
-            <span class="shape-desc">Kaju Katli (हीरा)</span>
-        </div>
-
-    </div>
-</div>
-
-<script>
-    const learnedShapes = new Set();
-
-    function learnShape(shapeName, description, element) {
-        SoundFX.play('pop');
-
-        // Speak details in cute child voice
-        if (localStorage.getItem('voice_enabled') !== 'false') {
-            SoundFX.speak(shapeName + "! " + description, 'en-US');
+    <style>
+        html,
+        body {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            background: #000000 !important;
         }
 
-        // Wobble card animation
-        element.style.transform = 'scale(0.95)';
-        setTimeout(() => {
-            element.style.transform = '';
-        }, 150);
+        .app-container {
+            max-width: 100% !important;
+            width: 100% !important;
+            height: 100vh !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
 
-        // Earn stars if learning this shape for the first time
-        if (!learnedShapes.has(shapeName)) {
-            learnedShapes.add(shapeName);
-            
-            // Trigger 2 stars award
-            fetch("{{ route('api.add_stars') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    stars: 2,
-                    activity_name: 'Learned Shape ' + shapeName
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const starsPill = document.querySelector('.stars-pill span');
-                    if (starsPill) {
-                        starsPill.innerText = data.new_stars;
-                    }
+        .bg-scene {
+            display: none !important;
+        }
+
+        /* Full Screen Shapes Page Layout */
+        .shapes-page-container {
+            background: #000000 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+
+        /* Top Bar Overlay */
+        .shapes-top-bar {
+            padding: 10px 18px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            flex-shrink: 0;
+        }
+
+        /* Full Screen Video Container */
+        .shapes-fullscreen-wrapper {
+            flex: 1;
+            width: 100%;
+            height: calc(100vh - 60px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shapes-fullscreen-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transform: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Top-Right Circular Sound Icon Button */
+        .shapes-sound-circle-btn {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            z-index: 300;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #38B6FF 0%, #0088CC 100%);
+            color: #FFFFFF;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            user-select: none;
+        }
+
+        .shapes-sound-circle-btn.muted {
+            background: linear-gradient(145deg, #FF5252 0%, #C62828 100%);
+        }
+
+        .shapes-sound-circle-btn:hover {
+            transform: scale(1.12);
+        }
+
+        .shapes-sound-circle-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* Bottom-Right Start/Stop Action Button */
+        .shapes-play-pause-btn {
+            position: absolute;
+            bottom: 36px;
+            right: 24px;
+            z-index: 200;
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: linear-gradient(145deg, #FF914D 0%, #FF6600 100%);
+            color: #FFFFFF;
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.4);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            user-select: none;
+        }
+
+        .shapes-play-pause-btn:hover {
+            transform: scale(1.08);
+            background: linear-gradient(145deg, #FFA066 0%, #FF771A 100%);
+        }
+
+        .shapes-play-pause-btn:active {
+            transform: scale(0.94);
+        }
+
+        @media (max-width: 640px) {
+            .shapes-top-bar {
+                padding: 8px 12px;
+                gap: 10px;
+            }
+
+            .shapes-fullscreen-video {
+                object-fit: contain !important;
+                transform: none !important;
+            }
+
+            .shapes-sound-circle-btn {
+                top: 12px;
+                right: 12px;
+                width: 44px;
+                height: 44px;
+                font-size: 1.2rem;
+            }
+
+            .shapes-play-pause-btn {
+                bottom: 24px;
+                right: 16px;
+                padding: 10px 18px;
+                font-size: 1.0rem;
+            }
+        }
+    </style>
+
+    <div class="shapes-page-container">
+        <!-- Top Navigation Bar -->
+        <div class="shapes-top-bar">
+            <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
+                style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 42px; height: 42px; padding: 0; text-decoration: none; margin: 0; flex-shrink: 0;"
+                title="Back to Home">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </a>
+            <h1 style="margin: 0; font-size: 1.5rem; line-height: 1.2; font-family: 'Fredoka', sans-serif;">
+                <span style="color: #FF914D; text-shadow: 0 2px 4px rgba(0,0,0,0.6);">📐 Shapes / आकार</span>
+            </h1>
+        </div>
+
+        <!-- Full Screen Video Player -->
+        <div class="shapes-fullscreen-wrapper">
+            <!-- Top Right Sound Speaker Icon Button -->
+            <button id="shapesSoundBtn" class="shapes-sound-circle-btn" onclick="toggleShapesVideoSound()" title="Sound Mute / Unmute">
+                <span id="shapesSoundIcon">🔊</span>
+            </button>
+
+            <video id="shapesLearningVideo" class="shapes-fullscreen-video" autoplay loop playsinline controls onclick="toggleShapesVideoPlay()">
+                <source src="{{ asset('video/shapes.mp4') }}" type="video/mp4">
+                Your browser does not support HTML5 video playback.
+            </video>
+
+            <!-- Bottom Right Start / Stop Floating Button -->
+            <button id="shapesPlayPauseBtn" class="shapes-play-pause-btn" onclick="toggleShapesVideoPlay()" title="Play or Stop Video">
+                <span id="shapesPlayPauseIcon">⏸</span>
+                <span id="shapesPlayPauseText">Stop ⏸</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function toggleShapesVideoSound() {
+            const video = document.getElementById('shapesLearningVideo');
+            const btn = document.getElementById('shapesSoundBtn');
+            const icon = document.getElementById('shapesSoundIcon');
+
+            if (video) {
+                video.muted = !video.muted;
+                updateSoundUI(video.muted);
+            }
+        }
+
+        function updateSoundUI(isMuted) {
+            const btn = document.getElementById('shapesSoundBtn');
+            const icon = document.getElementById('shapesSoundIcon');
+            if (isMuted) {
+                if (icon) icon.innerText = '🔇';
+                if (btn) btn.classList.add('muted');
+            } else {
+                if (icon) icon.innerText = '🔊';
+                if (btn) btn.classList.remove('muted');
+            }
+        }
+
+        function toggleShapesVideoPlay() {
+            const video = document.getElementById('shapesLearningVideo');
+            const icon = document.getElementById('shapesPlayPauseIcon');
+            const text = document.getElementById('shapesPlayPauseText');
+
+            if (video) {
+                // Unmute audio when user interacts
+                if (video.muted) {
+                    video.muted = false;
+                    updateSoundUI(false);
                 }
-            });
+
+                if (video.paused) {
+                    video.play().then(() => {
+                        if (icon) icon.innerText = '⏸';
+                        if (text) text.innerText = 'Stop ⏸';
+                    }).catch(err => {
+                        console.log('Play error:', err);
+                    });
+                } else {
+                    video.pause();
+                    if (icon) icon.innerText = '▶';
+                    if (text) text.innerText = 'Start ▶';
+                }
+            }
         }
-    }
-</script>
 
-<style>
-    /* 3D Shape Card Grid styles */
-    .shape-card {
-        border-radius: 20px;
-        padding: 14px 10px;
-        text-align: center;
-        color: white;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        box-shadow: 0 6px 0 rgba(0,0,0,0.05);
-    }
-    
-    .card-green { background: var(--color-green-real); border-bottom: 6px solid var(--color-green-real-shadow); }
-    .card-purple { background: var(--color-purple); border-bottom: 6px solid var(--color-purple-shadow); }
-    .card-pink { background: var(--color-pink); border-bottom: 6px solid var(--color-pink-shadow); }
-    .card-yellow { background: var(--color-yellow); border-bottom: 6px solid var(--color-yellow-shadow); color: #4A3B00; }
-    .card-teal { background: var(--color-teal); border-bottom: 6px solid var(--color-teal-shadow); }
-    .card-orange { background: var(--color-orange); border-bottom: 6px solid var(--color-orange-shadow); }
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('shapesLearningVideo');
+            const icon = document.getElementById('shapesPlayPauseIcon');
+            const text = document.getElementById('shapesPlayPauseText');
 
-    .shape-card:hover {
-        transform: translateY(-4px);
-        border-bottom-width: 8px;
-    }
-    
-    .shape-card:active {
-        transform: translateY(2px);
-        border-bottom-width: 3px;
-    }
+            if (video) {
+                // Try playing unmuted first
+                video.muted = false;
+                updateSoundUI(false);
 
-    .shape-card svg {
-        margin-bottom: 6px;
-        filter: drop-shadow(0 3px 5px rgba(0,0,0,0.1));
-        transition: transform 0.3s ease;
-    }
+                video.play().catch(function(err) {
+                    console.log('Unmuted autoplay prevented, playing muted fallback:', err);
+                    video.muted = true;
+                    updateSoundUI(true);
+                    video.play().catch(e => {
+                        if (icon) icon.innerText = '▶';
+                        if (text) text.innerText = 'Start ▶';
+                    });
+                });
 
-    .shape-card:hover svg {
-        transform: scale(1.1) rotate(4deg);
-    }
+                video.addEventListener('play', function() {
+                    if (icon) icon.innerText = '⏸';
+                    if (text) text.innerText = 'Stop ⏸';
+                });
 
-    .shape-title {
-        font-size: 1.2rem;
-        font-weight: 900;
-        margin-bottom: 2px;
-    }
+                video.addEventListener('pause', function() {
+                    if (icon) icon.innerText = '▶';
+                    if (text) text.innerText = 'Start ▶';
+                });
 
-    .shape-desc {
-        font-size: 0.8rem;
-        opacity: 0.9;
-        font-weight: 600;
-    }
-</style>
+                // Enable sound on first touch/click
+                document.body.addEventListener('click', function enableAudioOnFirstTouch() {
+                    if (video && video.muted) {
+                        video.muted = false;
+                        updateSoundUI(false);
+                    }
+                }, { once: true });
+            }
+        });
+    </script>
 @endsection

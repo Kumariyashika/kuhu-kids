@@ -17,38 +17,66 @@
 
 <body>
 
-    <!-- App Startup Full-Screen Welcome Video Overlay (Renders First) -->
-    <div id="appVideoSplashModal" class="video-splash-overlay">
-        <video id="kuhuIntroVideo" class="splash-video-player" playsinline webkit-playsinline autoplay preload="auto">
+    <!-- App Launch Full-Screen Welcome Video Overlay (Plays public/video/start.mp4) -->
+    <div id="appWelcomeVideoModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 999999; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+        <button onclick="finishWelcomeVideo()" style="position: absolute; top: 20px; right: 20px; z-index: 1000000; padding: 10px 22px; font-family: 'Fredoka', sans-serif; font-size: 1.1rem; font-weight: 800; color: #FFF; background: #FF5252; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">Skip ▶</button>
+        <video id="kuhuWelcomeVideo" playsinline webkit-playsinline autoplay preload="auto" style="width: 100%; height: 100%; object-fit: contain; background: #000;">
             <source src="{{ asset('video/start.mp4') }}" type="video/mp4">
-            <source src="{{ asset('video/kuhu kids.mp4') }}" type="video/mp4">
-            <source src="{{ asset('video/kuhu kid.mp4') }}" type="video/mp4">
-            Your browser does not support the video tag.
+            Your browser does not support video playback.
         </video>
     </div>
     <script>
         (function () {
-            var modal = document.getElementById('appVideoSplashModal');
-            var video = document.getElementById('kuhuIntroVideo');
-            var hasPlayed = sessionStorage.getItem('kuhu_intro_video_played');
+            var modal = document.getElementById('appWelcomeVideoModal');
+            var video = document.getElementById('kuhuWelcomeVideo');
+            var hasPlayed = sessionStorage.getItem('kuhu_welcome_video_played');
+
+            window.finishWelcomeVideo = function() {
+                sessionStorage.setItem('kuhu_welcome_video_played', 'true');
+                if (video) {
+                    try { video.pause(); } catch(e){}
+                }
+                if (modal) {
+                    modal.style.opacity = '0';
+                    modal.style.transition = 'opacity 0.3s ease';
+                    setTimeout(function() {
+                        modal.style.display = 'none';
+                    }, 300);
+                }
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+            };
 
             if (hasPlayed) {
-                if (modal) {
-                    modal.style.display = 'none';
-                    modal.classList.add('hidden');
-                }
+                if (modal) modal.style.display = 'none';
             } else {
                 if (modal && video) {
                     document.documentElement.style.overflow = 'hidden';
                     document.body.style.overflow = 'hidden';
-                    modal.style.display = 'flex';
                     video.muted = false;
-                    video.playsInline = true;
+                    
+                    video.onended = finishWelcomeVideo;
+                    video.onerror = finishWelcomeVideo;
+
+                    // Unmute on first screen touch/tap if browser blocked initial audio autoplay
+                    var handleUserTouch = function() {
+                        if (video && video.muted) {
+                            video.muted = false;
+                            video.play().catch(function(){});
+                        }
+                        window.removeEventListener('click', handleUserTouch);
+                        window.removeEventListener('touchstart', handleUserTouch);
+                    };
+                    window.addEventListener('click', handleUserTouch, { capture: true, passive: true });
+                    window.addEventListener('touchstart', handleUserTouch, { capture: true, passive: true });
+
                     var p = video.play();
                     if (p && p.catch) {
                         p.catch(function () {
                             video.muted = true;
-                            video.play().catch(function () { });
+                            video.play().catch(function () {
+                                finishWelcomeVideo();
+                            });
                         });
                     }
                 }
@@ -256,16 +284,27 @@
 
                     const utterance = new SpeechSynthesisUtterance(text);
                     utterance.lang = lang;
-                    utterance.rate = 0.88;
-                    utterance.pitch = 1.40; // Cute high pitch child voice simulation
+                    utterance.rate = 0.94; // Cheerful kids speech rate
+                    utterance.pitch = 1.48; // Cute high-pitch child voice simulation
 
                     try {
                         const voices = window.speechSynthesis.getVoices();
                         if (voices && voices.length > 0) {
-                            let voice = voices.find(v => v.lang.toLowerCase() === lang.toLowerCase() || v.lang.toLowerCase().replace('_', '-') === lang.toLowerCase());
+                            const langPrefix = lang.split('-')[0].toLowerCase();
+
+                            // Priority 1: Match language AND preferred natural/child/female voice names
+                            let voice = voices.find(v => {
+                                const lMatch = v.lang.toLowerCase().startsWith(langPrefix);
+                                const name = v.name.toLowerCase();
+                                return lMatch && (name.includes('natural') || name.includes('child') || name.includes('kid') || name.includes('female') || name.includes('google') || name.includes('zira') || name.includes('samantha') || name.includes('aria') || name.includes('swara') || name.includes('kalpana') || name.includes('neural'));
+                            });
+
+                            // Priority 2: Match language exact or prefix
                             if (!voice) {
-                                const prefix = lang.split('-')[0].toLowerCase();
-                                voice = voices.find(v => v.lang.toLowerCase().startsWith(prefix));
+                                voice = voices.find(v => v.lang.toLowerCase() === lang.toLowerCase() || v.lang.toLowerCase().replace('_', '-') === lang.toLowerCase());
+                            }
+                            if (!voice) {
+                                voice = voices.find(v => v.lang.toLowerCase().startsWith(langPrefix));
                             }
                             if (voice) {
                                 utterance.voice = voice;
@@ -280,7 +319,7 @@
                         utterance.onerror = onend;
                     }
 
-                    // Speak directly
+                    // Speak directly with child voice profile
                     window.speechSynthesis.speak(utterance);
                 } else if (onend) {
                     setTimeout(onend, 500);
@@ -418,174 +457,30 @@
             }
         };
 
-        // ============================================
-        // 5-Second Sequential Card Blinking Engine
-        // ============================================
-        const CardBlinker = {
+        // ====================================================
+        // Interactive Single Card Highlight & Hover Engine
+        // ====================================================
+        const CardHighlightManager = {
             cards: [],
-            currentIndex: 0,
-            timer: null,
+            activeIndex: 0,
+            autoTimer: null,
 
-            init() {
-                const selectors = [
-                    '.module-card',
-                    '.static-balloon',
-                    '.letter-card',
-                    '.phonics-card',
-                    '.color-card',
-                    '.shape-card',
-                    '.quiz-card',
-                    '.vowel-card',
-                    '.consonant-card',
-                    '.game-card'
-                ];
-
-                let found = [];
-                for (const sel of selectors) {
-                    const elements = Array.from(document.querySelectorAll(sel));
-                    if (elements.length > 0) {
-                        found = elements;
-                        break;
-                    }
-                }
-
-                if (found.length === 0) return;
-                this.cards = found;
-
-                // Highlight card 0 initially
-                this.highlightCard(this.currentIndex);
-
-                // Set 5-second interval (5000 ms)
-                this.timer = setInterval(() => {
-                    this.next();
-                }, 5000);
-            },
-
-            highlightCard(index) {
-                this.cards.forEach(c => {
-                    c.classList.remove('card-blink-active');
-                    const badge = c.querySelector('.blink-star-badge');
-                    if (badge) badge.remove();
-                });
-
-                const card = this.cards[index];
-                if (card) {
-                    card.classList.add('card-blink-active');
-                    const badge = document.createElement('div');
-                    badge.className = 'blink-star-badge';
-                    badge.innerHTML = '⭐ TAP ME! ✨';
-                    card.appendChild(badge);
-                }
-            },
-
-            next() {
-                if (this.cards.length === 0) return;
-                this.currentIndex = (this.currentIndex + 1) % this.cards.length;
-                this.highlightCard(this.currentIndex);
-            }
+            init() { },
+            setActive(index) { },
+            startAutoTimer() { }
         };
 
         // Full-Screen App Startup Video Splash Controller
-        let splashFinished = false;
+        function finishSplashVideo() {}
+        function initSplashVideo() {}
 
-        function finishSplashVideo() {
-            if (splashFinished) return;
-            splashFinished = true;
-
-            sessionStorage.setItem('kuhu_intro_video_played', 'true');
-            const modal = document.getElementById('appVideoSplashModal');
-            const video = document.getElementById('kuhuIntroVideo');
-
-            if (video) {
-                try { video.pause(); } catch (e) { }
-            }
-
-            if (modal) {
-                modal.classList.add('hidden');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                }, 400);
-            }
-            document.documentElement.style.overflow = '';
-            document.body.style.overflow = '';
-        }
-
-        function initSplashVideo() {
-            const modal = document.getElementById('appVideoSplashModal');
-            const video = document.getElementById('kuhuIntroVideo');
-            const hasPlayed = sessionStorage.getItem('kuhu_intro_video_played');
-
-            if (hasPlayed) {
-                if (modal) {
-                    modal.classList.add('hidden');
-                    modal.style.display = 'none';
-                }
-                document.documentElement.style.overflow = '';
-                document.body.style.overflow = '';
-                return;
-            }
-
-            if (modal && video) {
-                modal.style.display = 'flex';
-                modal.classList.remove('hidden');
-                document.documentElement.style.overflow = 'hidden';
-                document.body.style.overflow = 'hidden';
-
-                // Default to unmuted playback with audio
-                video.muted = false;
-                video.playsInline = true;
-
-                // Handle user gesture to unmute if browser initially blocked unmuted autoplay
-                const enableAudioGesture = function () {
-                    if (video && video.muted) {
-                        video.muted = false;
-                        video.play().catch(function () { });
-                    }
-                };
-
-                window.addEventListener('click', enableAudioGesture, { capture: true, passive: true });
-                window.addEventListener('touchstart', enableAudioGesture, { capture: true, passive: true });
-                modal.addEventListener('click', enableAudioGesture, { capture: true, passive: true });
-
-                video.onended = finishSplashVideo;
-                video.onerror = function () {
-                    console.warn('Splash welcome video playback error, continuing to app.');
-                    finishSplashVideo();
-                };
-
-                // Fallback: If metadata loaded, schedule finish based on video duration
-                video.onloadedmetadata = function () {
-                    if (video.duration && video.duration > 0) {
-                        setTimeout(function () {
-                            if (!splashFinished) {
-                                finishSplashVideo();
-                            }
-                        }, (video.duration + 1) * 1000);
-                    }
-                };
-
-                // Play video automatically with audio
-                const playPromise = video.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(function (err) {
-                        console.warn('Unmuted autoplay blocked by browser policy, falling back to muted play until screen tap:', err);
-                        video.muted = true;
-                        video.play().catch(function (e) {
-                            console.error('Splash video autoplay failed:', e);
-                            finishSplashVideo();
-                        });
-                    });
-                }
-            }
-        }
-
-        // Attach global click event sounds, start card blinking & BGM
+        // Attach global click event sounds, card highlight & BGM
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize Full-Screen Video Splash
             initSplashVideo();
 
-            // Start 5-second card blinking
-            CardBlinker.init();
+            // Initialize Single Card Highlight & Hover Engine
+            CardHighlightManager.init();
 
             // Auto-start BGM on user interaction if enabled
             const bgmPref = localStorage.getItem('bgm_enabled');
@@ -620,38 +515,6 @@
             🎵
         </button>
     </div>
-</body>
-
-</html> BGM.updateUI();
-const startBgmOnce = () => {
-if (localStorage.getItem('bgm_enabled') !== 'false') {
-BGM.start();
-}
-document.removeEventListener('click', startBgmOnce);
-document.removeEventListener('touchstart', startBgmOnce);
-};
-document.addEventListener('click', startBgmOnce);
-document.addEventListener('touchstart', startBgmOnce);
-} else {
-BGM.updateUI();
-}
-
-document.querySelectorAll('.module-card, .btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
-el.addEventListener('click', () => {
-SoundFX.play('click');
-});
-});
-});
-</script>
-
-
-<!-- Global Fixed Top-Right Sound Icon Controller -->
-<div class="floating-bgm-container">
-    <button id="globalBgmBtn" class="btn-bgm bgm-toggle-btn" onclick="BGM.toggle()" title="Toggle Sound"
-        aria-label="Toggle Sound">
-        🔊
-    </button>
-</div>
 </body>
 
 </html>

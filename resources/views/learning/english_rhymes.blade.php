@@ -3,9 +3,43 @@
 @section('title', 'Kuhu Kids Learning - English Rhymes')
 
 @section('content')
-    <div class="inner-container reels-mode" style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important;">
-        <div class="inner-header"
-            style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px; gap: 15px;">
+    <style>
+        html, body {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            background: #000000 !important;
+        }
+
+        .app-container {
+            max-width: 100% !important;
+            width: 100% !important;
+            height: 100vh !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .bg-scene {
+            display: none !important;
+        }
+
+        .rhymes-top-bar {
+            padding: 10px 16px;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            flex-shrink: 0;
+        }
+    </style>
+
+    <div class="inner-container reels-mode" style="background: #000 !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; height: 100vh !important; display: flex; flex-direction: column;">
+        <div class="rhymes-top-bar">
             <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
                 style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 40px; height: 40px; padding: 0; text-decoration: none; margin: 0; flex-shrink: 0;"
                 title="Back to Home">
@@ -16,8 +50,8 @@
                 </svg>
             </a>
 
-            <h1 class="inner-title" style="margin: 0; font-size: 1.7rem; line-height: 1.2;">
-                <span style="color: var(--color-pink);">🏆 English Rhymes</span>
+            <h1 class="inner-title" style="margin: 0; font-size: 1.5rem; line-height: 1.2;">
+                <span style="color: #FF66C4; font-family: 'Fredoka', sans-serif; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">🏆 English Rhymes</span>
             </h1>
         </div>
 

@@ -69,6 +69,51 @@
     </div>
 
     <style>
+        html, body {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100% !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+            background: linear-gradient(180deg, #60C5FF 0%, #A8E5FF 55%, #E0F7FF 100%) !important;
+        }
+
+        .app-container {
+            max-width: 100% !important;
+            width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .bg-scene {
+            display: none !important;
+        }
+
+        .inner-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 12px 10px 30px 10px !important;
+            margin: 0 !important;
+            min-height: 100vh;
+            background: transparent !important;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box !important;
+        }
+
+        .matching-game-area {
+            border-radius: 28px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            margin: 0 auto;
+            border: 4px solid #7ED957 !important;
+            border-bottom: 12px solid #59B233 !important;
+            box-shadow: inset 0 5px 0 rgba(255,255,255,0.7), 0 16px 32px rgba(0,0,0,0.14) !important;
+        }
+
         .match-item {
             position: relative;
             display: flex;
