@@ -7,106 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* Dragonfly Mascot CSS animations */
-        .dragonfly-mascot {
-            animation: floatDragonfly 3s ease-in-out infinite alternate;
-            z-index: 10;
-            position: relative;
-            margin-bottom: 5px;
-            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.12));
-        }
-
-        @keyframes floatDragonfly {
-            0% {
-                transform: translateY(0) rotate(-2deg);
-            }
-
-            100% {
-                transform: translateY(-16px) rotate(2deg);
-            }
-        }
-
-        .wing {
-            animation: flapWingLeft 0.1s linear infinite alternate;
-        }
-
-        .wing-left-top,
-        .wing-left-bottom {
-            animation-name: flapWingLeft;
-        }
-
-        .wing-right-top,
-        .wing-right-bottom {
-            animation-name: flapWingRight;
-        }
-
-        @keyframes flapWingLeft {
-            0% {
-                transform: scaleY(0.5) rotate(-8deg);
-            }
-
-            100% {
-                transform: scaleY(1.1) rotate(8deg);
-            }
-        }
-
-        @keyframes flapWingRight {
-            0% {
-                transform: scaleY(0.5) rotate(8deg);
-            }
-
-            100% {
-                transform: scaleY(1.1) rotate(-8deg);
-            }
-        }
-
-        /* Speech Bubble */
-        .dragonfly-bubble {
-            position: relative;
-            background: #FFFDF0;
-            border: 4px solid #00C2CB;
-            border-radius: 24px;
-            padding: 14px 28px;
-            text-align: center;
-            max-width: 480px;
-            box-shadow: 0 8px 0 rgba(0, 194, 203, 0.2);
-            animation: pulseBubble 3s ease-in-out infinite alternate;
-            margin-bottom: 25px;
-        }
-
-        @keyframes pulseBubble {
-            0% {
-                transform: scale(0.98);
-            }
-
-            100% {
-                transform: scale(1.02);
-            }
-        }
-
-        .dragonfly-bubble::after {
-            content: '';
-            position: absolute;
-            top: -24px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 12px;
-            border-style: solid;
-            border-color: transparent transparent #FFFDF0 transparent;
-            z-index: 2;
-        }
-
-        .dragonfly-bubble::before {
-            content: '';
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 13px;
-            border-style: solid;
-            border-color: transparent transparent #00C2CB transparent;
-            z-index: 1;
-        }
 
         /* Giant Phonics Flashcard Styling */
         .giant-phonic-card {
@@ -208,101 +108,540 @@
                 transform: translateY(-15px) scale(1.15);
             }
         }
+
+        /* --- NEW PHONICS MENU UI --- */
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@700;800;900&family=Poppins:wght@700;800;900&display=swap');
+
+        /* Override App Background */
+        body {
+            background-image: url('{{ asset("img/phonics/bg_phonics.png") }}') !important;
+            background-size: cover !important;
+            background-position: center top !important;
+            background-attachment: fixed !important;
+            background-repeat: no-repeat !important;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .main-container {
+            background: transparent !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            max-width: 450px !important;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Header */
+        .phonics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 15px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-back-circle {
+            background: #FFB800;
+            border: 4px solid #FFF;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 0 #D97336, 0 8px 15px rgba(0,0,0,0.2);
+            color: #8C3A00;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+        
+        .btn-back-circle:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #D97336, 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .btn-sound-circle {
+            background: #A36BFF;
+            border: 4px solid #FFF;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 0 #7A42D1, 0 8px 15px rgba(0,0,0,0.2);
+            color: #FFF;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+            outline: none;
+        }
+        .btn-sound-circle:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #7A42D1, 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .header-title-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: -10px;
+        }
+
+        .megaphone-icon {
+            font-size: 2rem;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+            margin-bottom: -15px;
+            z-index: 2;
+            transform: rotate(-10deg);
+        }
+
+        .phonics-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 0.9;
+            text-align: center;
+            letter-spacing: -1px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .phonics-title-top {
+            text-shadow: 
+                -3px -3px 0 #FFF, 3px -3px 0 #FFF, -3px 3px 0 #FFF, 3px 3px 0 #FFF, 
+                -4px -4px 0 #FFF, 4px -4px 0 #FFF, -4px 4px 0 #FFF, 4px 4px 0 #FFF,
+                0 6px 0 rgba(0,0,0,0.15);
+        }
+        
+        .phonics-title-bottom {
+            font-size: 2.2rem;
+            margin-top: -2px;
+            text-shadow: 
+                -3px -3px 0 #FFF, 3px -3px 0 #FFF, -3px 3px 0 #FFF, 3px 3px 0 #FFF, 
+                -4px -4px 0 #FFF, 4px -4px 0 #FFF, -4px 4px 0 #FFF, 4px 4px 0 #FFF,
+                0 6px 0 rgba(0,0,0,0.15);
+        }
+
+        /* Wooden Signboard */
+        .signboard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .wooden-board {
+            background-image: url('{{ asset("img/phonics/wooden_board.png") }}');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 300px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.25));
+        }
+
+        .board-text {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #6B3E00;
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.4);
+            margin-top: -8px;
+        }
+
+        .pointing-hand {
+            font-size: 3.5rem;
+            margin-top: -25px;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+            animation: pointUp 0.8s infinite alternate ease-in-out;
+            z-index: 2;
+        }
+
+        @keyframes pointUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-12px); }
+        }
+
+        /* Deck Grid */
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            padding: 0 16px 40px 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Card Styles */
+        .deck-card {
+            border-radius: 20px;
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15), inset 0 6px 0 rgba(255,255,255,0.3);
+            overflow: hidden;
+            aspect-ratio: 0.85; 
+        }
+        
+        .deck-card:hover {
+            transform: scale(1.03) translateY(-5px);
+        }
+        
+        .deck-card:active {
+            transform: scale(0.96);
+        }
+
+        .card-illustration {
+            width: 80%;
+            height: 55%;
+            object-fit: contain;
+            margin-bottom: 5px;
+            z-index: 2;
+            filter: drop-shadow(0 8px 10px rgba(0,0,0,0.15));
+        }
+
+        /* The white curve section at bottom */
+        .card-bottom-curve {
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 120%;
+            height: 55%;
+            background: #FFF;
+            border-radius: 50%;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 18px;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+        }
+
+        .card-label {
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: #A3A3A3;
+            margin-bottom: 4px;
+            z-index: 3;
+            position: relative;
+        }
+
+        .card-play-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFF;
+            font-size: 1.3rem;
+            z-index: 3;
+            position: relative;
+            padding-left: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 2px 0 rgba(255,255,255,0.4);
+            transition: transform 0.15s;
+        }
+        
+        .deck-card:hover .card-play-btn {
+            transform: scale(1.1);
+        }
+
+        /* Card Specific Colors */
+        .bg-pink { background: linear-gradient(180deg, #FF72A1 0%, #FF4D8B 100%); }
+        .play-pink { background: #FF4D8B; border: 3px solid #FFF; }
+        
+        .bg-orange { background: linear-gradient(180deg, #FFB233 0%, #FF8F00 100%); }
+        .play-orange { background: #FF8F00; border: 3px solid #FFF; }
+        
+        .bg-yellow { background: linear-gradient(180deg, #FFDE59 0%, #FFC107 100%); }
+        .play-yellow { background: #FFC107; border: 3px solid #FFF; }
+        
+        .bg-green { background: linear-gradient(180deg, #8DE34B 0%, #68CC18 100%); }
+        .play-green { background: #68CC18; border: 3px solid #FFF; }
+        
+        .bg-purple { background: linear-gradient(180deg, #AA66FF 0%, #8833FF 100%); }
+        .play-purple { background: #8833FF; border: 3px solid #FFF; }
+        
+        .bg-teal { background: linear-gradient(180deg, #26D0CE 0%, #0093E9 100%); }
+        .play-teal { background: #0093E9; border: 3px solid #FFF; }
+
+        .sparkle {
+            position: absolute;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.9);
+            animation: twinkle 1.5s infinite alternate;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            z-index: 2;
+        }
+
+        /* --- NEW AUDIO & ANIMATION CLASSES --- */
+        
+        /* Fade and Scale Screen Transition */
+        .screen-enter {
+            animation: screenFadeIn 0.4s ease-out forwards;
+        }
+        @keyframes screenFadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Slide Transition for Cards */
+        .slide-in-right { animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .slide-in-left { animation: slideInLeft 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        
+        @keyframes slideInRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideInLeft {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Haptic Bounce Click */
+        .bounce-click {
+            animation: bounceClick 0.2s ease-in-out;
+        }
+        @keyframes bounceClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1.05); }
+        }
+
+        /* Sound Wave Pulsing Ring */
+        .sound-wave-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+        }
+        .sound-wave-active {
+            animation: pulseWave 1s infinite;
+        }
+        @keyframes pulseWave {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+        }
+
+        /* Staggered Element Animations */
+        .anim-stagger-1 { opacity: 0; animation: scaleBounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; animation-delay: 0.1s; }
+        .anim-stagger-2 { opacity: 0; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; animation-delay: 0.4s; }
+        .anim-stagger-3 { opacity: 0; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; animation-delay: 0.5s; }
+
+        @keyframes scaleBounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes popIn {
+            0% { transform: translateY(20px) scale(0.8); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        /* Clip Path Sweep (Draw-on simulation) */
+        .clip-reveal {
+            clip-path: polygon(0 0, 0 100%, 0 100%, 0 0);
+            animation: sweepReveal 0.6s ease-out forwards;
+            animation-delay: 0.1s;
+        }
+        @keyframes sweepReveal {
+            to { clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0); }
+        }
+
+        /* Idle Floating */
+        .float-idle {
+            animation: floatUpDn 3s ease-in-out infinite alternate;
+        }
+        @keyframes floatUpDn {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        /* Circular Dot Stepper Progress */
+        .dot-stepper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 15px auto;
+            flex-wrap: wrap;
+            max-width: 90%;
+        }
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #E2E8F0;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .step-dot.active {
+            width: 18px;
+            height: 18px;
+            background: #FF914D;
+            box-shadow: 0 4px 8px rgba(255, 145, 77, 0.4);
+            transform: scale(1.1);
+        }
+        .step-dot.completed {
+            background: #4CAF50;
+        }
+
+        /* Visual Mascot Instruction */
+        .mascot-icon {
+            font-size: 2rem;
+            animation: bounceClick 2s infinite;
+        }
     </style>
 
-    <!-- Phonics Welcome Screen: Dragonfly Dashboard -->
-    <div id="phonicsMenuScreen" style="width: 100%; max-width: 900px; margin: 0 auto; font-family: 'Fredoka', sans-serif;">
+    <!-- Phonics Welcome Screen: 2026 Redesign -->
+    <main id="phonicsMenuScreen" class="main-container">
         <!-- Header -->
-        <div class="inner-header">
-            <h1 class="inner-title">
-                <span style="color: var(--color-orange);">📢 Phonics Sounds</span>
-            </h1>
-            <a href="{{ route('dashboard') }}" class="btn-3d btn-yellow"
-                style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 44px; height: 44px; padding: 0; text-decoration: none; margin: 0;"
-                title="Back to Home">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
-                    stroke-linecap="round" stroke-linejoin="round">
+        <header class="phonics-header">
+            <!-- Back Button -->
+            <a href="{{ route('dashboard') }}" class="btn-back-circle" aria-label="Back to Home">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="19" y1="12" x2="5" y2="12"></line>
                     <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
             </a>
-        </div>
 
-        <!-- Dragonfly Welcome Mascot -->
-        <div style="display: flex; flex-direction: column; align-items: center; margin: 10px 0;">
-            <div class="dragonfly-mascot">
-                <svg viewBox="0 0 100 100" width="130" height="130">
-                    <ellipse cx="32" cy="38" rx="25" ry="8" fill="rgba(179, 229, 252, 0.85)" stroke="#0288D1"
-                        stroke-width="2.5" class="wing wing-left-top" style="transform-origin: 50px 45px;" />
-                    <ellipse cx="35" cy="48" rx="20" ry="7" fill="rgba(179, 229, 252, 0.65)" stroke="#0288D1"
-                        stroke-width="2" class="wing wing-left-bottom" style="transform-origin: 50px 45px;" />
-                    <ellipse cx="68" cy="38" rx="25" ry="8" fill="rgba(179, 229, 252, 0.85)" stroke="#0288D1"
-                        stroke-width="2.5" class="wing wing-right-top" style="transform-origin: 50px 45px;" />
-                    <ellipse cx="65" cy="48" rx="20" ry="7" fill="rgba(179, 229, 252, 0.65)" stroke="#0288D1"
-                        stroke-width="2" class="wing wing-right-bottom" style="transform-origin: 50px 45px;" />
-                    <ellipse cx="50" cy="45" rx="8" ry="14" fill="#00C2CB" stroke="#0097A7" stroke-width="3" />
-                    <path d="M 50 59 C 50 75, 47 88, 48 94" stroke="#00C2CB" stroke-width="7" stroke-linecap="round"
-                        fill="none" />
-                    <circle cx="44" cy="36" r="5" fill="#FFF" />
-                    <circle cx="44" cy="36" r="2.2" fill="#000" />
-                    <circle cx="56" cy="36" r="5" fill="#FFF" />
-                    <circle cx="56" cy="36" r="2.2" fill="#000" />
-                    <path d="M 46 45 Q 50 49 54 45" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round" />
+            <!-- Center Title -->
+            <div class="header-title-container">
+                <div class="megaphone-icon">📣</div>
+                <div class="phonics-title">
+                    <div class="phonics-title-top">
+                        <span style="color:#FF4B4B">P</span><span style="color:#33CCFF">h</span><span style="color:#FFD13B">o</span><span style="color:#8833FF">n</span><span style="color:#68CC18">i</span><span style="color:#FF8F00">c</span><span style="color:#FF4D8B">s</span>
+                    </div>
+                    <div class="phonics-title-bottom">
+                        <span style="color:#FF4D8B">S</span><span style="color:#8833FF">o</span><span style="color:#FFB800">u</span><span style="color:#FF4B4B">n</span><span style="color:#33CCFF">d</span><span style="color:#68CC18">s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sound Toggle -->
+            <button class="btn-sound-circle" onclick="BGM.toggle()" aria-label="Toggle Sound">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
                 </svg>
+            </button>
+        </header>
+
+        <!-- Title Banner -->
+        <div class="signboard-container">
+            <div class="wooden-board">
+                <span class="board-text">Pick a deck to play!</span>
             </div>
-            <!-- Speech Bubble -->
-            <div class="dragonfly-bubble">
-                <span style="font-size: 1.3rem; font-weight: bold; color: #4A3B00;">Hi! Chalo card decks padhna shuru
-                    karein! 🐉✨</span>
-            </div>
+            <div class="pointing-hand">👇</div>
         </div>
 
         <!-- Deck Selector Grid -->
-        <div
-            style="background: radial-gradient(circle, #FFFDF0 0%, #FFF5D1 100%); padding: 30px; border-radius: 36px; border: 6px solid var(--color-orange); box-shadow: 0 15px 0 var(--color-orange-shadow); margin-bottom: 24px; text-align: center;">
-            <h2
-                style="color: var(--color-orange); font-size: 1.6rem; font-weight: 900; margin: 0 0 25px 0; text-shadow: 1px 1px 0 #FFF;">
-                Select a Deck to Play! 👇</h2>
+        <nav class="deck-grid" aria-label="Phonics Card Decks">
+            <!-- English Letters (Now Video) -->
+            <a href="javascript:void(0)" onclick="playAbcVideo()" class="deck-card bg-pink" role="button" aria-label="Play English Letters Video">
+                <span class="sparkle" style="top: 10%; left: 20%;" aria-hidden="true">✨</span>
+                <span class="sparkle" style="top: 30%; right: 15%; font-size: 0.7rem;" aria-hidden="true">✨</span>
+                <img src="{{ asset('img/phonics/card_letters.png') }}" class="card-illustration" alt="English Letters" loading="lazy" decoding="async">
+                <div class="card-bottom-curve">
+                    <span class="card-label">Letters</span>
+                    <div class="card-play-btn play-pink">▶</div>
+                </div>
+            </a>
 
-            <div class="menu-decks-grid"
-                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
-                <!-- English Letters -->
-                <button onclick="startReader('english_letters')" class="btn-3d btn-pink"
-                    style="padding: 24px 16px; border-radius: 24px; font-size: 1.25rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;">
-                    <span style="font-size: 3rem;">🔤</span>
-                    <span>English Letters (A-Z)</span>
-                </button>
-                <!-- English Words -->
-                <button onclick="startReader('english_words')" class="btn-3d btn-pink"
-                    style="padding: 24px 16px; border-radius: 24px; font-size: 1.25rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; background: #FF914D; border-bottom-color: #D97336;">
-                    <span style="font-size: 3rem;">🍎</span>
-                    <span>English Words (A-Z)</span>
-                </button>
-                <!-- Numbers 1 to 50 -->
-                <button onclick="startReader('numbers')" class="btn-3d"
-                    style="padding: 24px 16px; border-radius: 24px; font-size: 1.25rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; background: #FFDE59; border-bottom: 8px solid #CCB143; color: #4A3B00;">
-                    <span style="font-size: 3rem;">🔢</span>
-                    <span>Numbers (1 to 50)</span>
-                </button>
-                <!-- Number Words -->
-                <button onclick="startReader('number_words')" class="btn-3d"
-                    style="padding: 24px 16px; border-radius: 24px; font-size: 1.25rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; background: #7ED957; border-bottom: 8px solid #63AA43; color: #FFF;">
-                    <span style="font-size: 3rem;">🪙</span>
-                    <span>Number Words (1-20)</span>
-                </button>
-                <!-- Hindi Letters -->
-                <button onclick="startReader('hindi_letters')" class="btn-3d"
-                    style="padding: 24px 16px; border-radius: 24px; font-size: 1.25rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; background: #8C52FF; border-bottom: 8px solid #6E3CD9; color: #FFF;">
-                    <span style="font-size: 3rem;">🕉️</span>
-                    <span>Hindi Letters (क-ज्ञ)</span>
-                </button>
-                <!-- Hindi Words -->
-                <button onclick="startReader('hindi_words')" class="btn-3d"
-                    style="padding: 24px 16px; border-radius: 24px; font-size: 1.25rem; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; background: #00C2CB; border-bottom: 8px solid #0097A7; color: #FFF;">
-                    <span style="font-size: 3rem;">🕊️</span>
-                    <span>Hindi Words (क-ज्ञ)</span>
-                </button>
-            </div>
+            <!-- English Words -->
+            <a href="javascript:void(0)" onclick="startReader('english_words')" class="deck-card bg-orange" role="button" aria-label="Play English Words Deck">
+                <span class="sparkle" style="top: 15%; right: 20%;" aria-hidden="true">✨</span>
+                <img src="{{ asset('img/phonics/card_words.png') }}" class="card-illustration" alt="English Words" loading="lazy" decoding="async">
+                <div class="card-bottom-curve">
+                    <span class="card-label">Words</span>
+                    <div class="card-play-btn play-orange">▶</div>
+                </div>
+            </a>
+
+            <!-- Numbers 1 to 50 -->
+            <a href="javascript:void(0)" onclick="startReader('numbers')" class="deck-card bg-yellow" role="button" aria-label="Play Numbers Deck">
+                <span class="sparkle" style="top: 10%; left: 10%;" aria-hidden="true">✨</span>
+                <span class="sparkle" style="bottom: 40%; right: 10%;" aria-hidden="true">✨</span>
+                <img src="{{ asset('img/phonics/card_numbers.png') }}" class="card-illustration" alt="Numbers" loading="lazy" decoding="async">
+                <div class="card-bottom-curve">
+                    <span class="card-label">Numbers</span>
+                    <div class="card-play-btn play-yellow">▶</div>
+                </div>
+            </a>
+
+            <!-- Number Words -->
+            <a href="javascript:void(0)" onclick="startReader('number_words')" class="deck-card bg-green" role="button" aria-label="Play Number Words Deck">
+                <span class="sparkle" style="top: 20%; right: 15%;" aria-hidden="true">✨</span>
+                <img src="{{ asset('img/phonics/card_number_words.png') }}" class="card-illustration" alt="Number Words" loading="lazy" decoding="async">
+                <div class="card-bottom-curve">
+                    <span class="card-label">Number Words</span>
+                    <div class="card-play-btn play-green">▶</div>
+                </div>
+            </a>
+
+            <!-- Hindi Letters -->
+            <a href="javascript:void(0)" onclick="startReader('hindi_letters')" class="deck-card bg-purple" role="button" aria-label="Play Hindi Letters Deck">
+                <span class="sparkle" style="top: 15%; right: 15%;" aria-hidden="true">✨</span>
+                <span class="sparkle" style="bottom: 30%; left: 15%;" aria-hidden="true">✨</span>
+                <img src="{{ asset('img/phonics/card_hindi.png') }}" class="card-illustration" alt="Hindi Letters" loading="lazy" decoding="async">
+                <div class="card-bottom-curve">
+                    <span class="card-label">Hindi</span>
+                    <div class="card-play-btn play-purple">▶</div>
+                </div>
+            </a>
+
+            <!-- Hindi Words -->
+            <a href="javascript:void(0)" onclick="startReader('hindi_words')" class="deck-card bg-teal" role="button" aria-label="Play Hindi Words Deck">
+                <span class="sparkle" style="top: 10%; left: 20%;" aria-hidden="true">✨</span>
+                <img src="{{ asset('img/phonics/card_hindi_words.png') }}" class="card-illustration" alt="Hindi Words" loading="lazy" decoding="async">
+                <div class="card-bottom-curve">
+                    <span class="card-label">Hindi Words</span>
+                    <div class="card-play-btn play-teal">▶</div>
+                </div>
+            </a>
+        </nav>
+    </main>
+
+    <!-- ABC Video Screen -->
+    <div id="abcVideoScreen" style="display: none; width: 100%; max-width: 700px; margin: 0 auto; font-family: 'Fredoka', sans-serif;">
+        <div class="inner-header" style="margin-bottom: 20px;">
+            <button onclick="goBackToMenuFromVideo()" class="btn-3d btn-yellow"
+                style="display: flex; align-items: center; justify-content: center; border-radius: 50%; width: 44px; height: 44px; padding: 0; font-size: 1.4rem; border: none; cursor: pointer; outline: none; margin: 0;">⬅️</button>
+            <h1 class="inner-title" style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                <span style="color: var(--color-orange);">ABC Video</span>
+            </h1>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; width: 100%; margin-bottom: 30px;">
+            <video id="abcVideoPlayer" controls loop style="width: 100%; max-width: 600px; border-radius: 20px; border: 4px solid var(--color-orange); background-color: #000;">
+                <source src="{{ asset('video/abc.mp4') }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
     </div>
 
@@ -321,8 +660,9 @@
         <!-- Deck Instruction & Start/Stop Controls -->
         <div
             style="background: #FFFDF0; padding: 15px 25px; border-radius: 24px; border: 3px solid #E2E8F0; text-align: center; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
-            <span id="deckInstruction" style="color: #4A3B00; font-size: 1.25rem; font-weight: bold;">Press any card to hear
-                the sounds!</span>
+            <div id="deckInstruction" class="mascot-icon" style="font-size: 2.2rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));" aria-hidden="true">
+                🦜
+            </div>
             <button onclick="toggleAutoplay()" id="autoplayBtn" class="btn-3d"
                 style="background-color: var(--color-green-real); color: white; border-bottom: 5px solid var(--color-green-real-shadow); font-size: 1.1rem; padding: 8px 24px; transition: all 0.15s ease; margin: 0;">
                 ▶️ Start
@@ -336,15 +676,11 @@
             </div>
         </div>
 
-        <!-- Progress Tracking Bar -->
+        <!-- Progress Tracking Dots -->
         <div style="text-align: center; margin-bottom: 25px;">
-            <div
-                style="width: 100%; max-width: 400px; height: 16px; background: #E5E7EB; border-radius: 8px; overflow: hidden; margin: 10px auto; border: 2px solid #E2E8F0;">
-                <div id="readerProgressBar"
-                    style="width: 0%; height: 100%; background: linear-gradient(to right, #4CAF50, #81C784); transition: width 0.3s ease;">
-                </div>
+            <div id="readerProgressDots" class="dot-stepper" aria-label="Progress tracker">
+                <!-- Dots filled dynamically via Javascript -->
             </div>
-            <div id="readerProgressText" style="font-weight: 900; color: #4A3B00; font-size: 1.25rem;">1 of 26</div>
         </div>
 
         <!-- Reader Navigation Controls -->
@@ -368,6 +704,8 @@
     </div>
 
     <script>
+        'use strict';
+
         // Confetti generators
         function triggerConfettiOnCard(event) {
             if (typeof confetti !== 'function') return;
@@ -569,18 +907,44 @@
         let readerIndex = 0;
         let autoplayActive = false;
         let autoplayTimer = null;
+        let swipeDirection = 'right';
 
         function showScreen(screenId) {
-            const screens = ['phonicsMenuScreen', 'phonicsReaderScreen'];
+            const screens = ['phonicsMenuScreen', 'phonicsReaderScreen', 'abcVideoScreen'];
             screens.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
-                    el.style.display = (id === screenId) ? 'block' : 'none';
+                    if (id === screenId) {
+                        el.style.display = 'block';
+                        el.classList.remove('screen-enter');
+                        void el.offsetWidth; // trigger reflow
+                        el.classList.add('screen-enter');
+                    } else {
+                        el.style.display = 'none';
+                        el.classList.remove('screen-enter');
+                    }
                 }
             });
             if (screenId !== 'phonicsReaderScreen') {
                 stopAutoplay();
             }
+            if (screenId !== 'abcVideoScreen') {
+                const vid = document.getElementById('abcVideoPlayer');
+                if (vid) {
+                    vid.pause();
+                    vid.currentTime = 0;
+                }
+            }
+        }
+
+        function playAbcVideo() {
+            showScreen('abcVideoScreen');
+            const vid = document.getElementById('abcVideoPlayer');
+            if (vid) vid.play();
+        }
+
+        function goBackToMenuFromVideo() {
+            showScreen('phonicsMenuScreen');
         }
 
         function startReader(cat) {
@@ -624,20 +988,48 @@
             }
 
             if (titleEl) titleEl.innerText = titleText;
-            if (instrEl) instrEl.innerText = instrText;
 
             showScreen('phonicsReaderScreen');
+            
+            // Build Dot Stepper
+            const dotContainer = document.getElementById('readerProgressDots');
+            if (dotContainer) {
+                dotContainer.innerHTML = '';
+                // If more than 30 items, just show a few dots for performance, or max 26 for alphabet
+                const maxDots = Math.min(currentDataList.length, 26); 
+                for(let i = 0; i < maxDots; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'step-dot';
+                    dot.id = 'dot-' + i;
+                    dotContainer.appendChild(dot);
+                }
+            }
+
             renderCard();
 
-            // Auto speak first card
-            setTimeout(() => {
-                speakCurrentCard();
-            }, 500);
+            // Narrator intro
+            if (window.SoundFX && typeof window.SoundFX.speak === 'function') {
+                window.SoundFX.speak("Let's learn " + (cat.replace('_', ' ')) + "!", "en-US", () => {
+                    setTimeout(() => {
+                        speakCurrentCard();
+                    }, 200);
+                });
+            } else {
+                setTimeout(() => {
+                    speakCurrentCard();
+                }, 500);
+            }
         }
 
         function renderCard() {
             const container = document.getElementById('giantPhonicsCardContainer');
             if (!container || currentDataList.length === 0) return;
+
+            // Optional card transition
+            container.classList.remove('slide-in-right', 'slide-in-left');
+            void container.offsetWidth; // reflow
+            container.classList.add(swipeDirection === 'left' ? 'slide-in-left' : 'slide-in-right');
+            swipeDirection = 'right'; // reset default
 
             const item = currentDataList[readerIndex];
             const color = colors[readerIndex % colors.length];
@@ -646,81 +1038,136 @@
             card.className = 'giant-phonic-card';
             card.style.setProperty('--card-color', color);
             card.onclick = (e) => {
+                card.classList.remove('bounce-click');
+                void card.offsetWidth;
+                card.classList.add('bounce-click');
+                if (window.SoundFX) window.SoundFX.play('pop');
                 triggerConfettiOnCard(e);
-                speakCurrentCard();
+                setTimeout(() => speakCurrentCard(), 150);
             };
 
-            if (currentCategory === 'english_letters' || currentCategory === 'hindi_letters' || currentCategory === 'numbers') {
-                const tapLabel = currentCategory === 'english_letters' ? 'Tap Me! 🔊' : (currentCategory === 'hindi_letters' ? 'सुनें! 🔊' : 'Count! 🔢');
+            // Sound Wave Ring
+            const soundRing = `<div class="sound-wave-ring" id="activeSoundRing"></div>`;
+
+            if (currentCategory === 'english_letters' || currentCategory === 'hindi_letters') {
                 card.innerHTML = `
-                            <span class="giant-big-letter" style="color: ${color};">${item.display}</span>
-                            <span class="giant-tap-label">${tapLabel}</span>
-                        `;
+                    ${soundRing}
+                    <span class="giant-big-letter clip-reveal" style="color: ${color};">${item.display}</span>
+                `;
+            } else if (currentCategory === 'numbers') {
+                card.innerHTML = `
+                    ${soundRing}
+                    <span class="giant-big-letter anim-stagger-1" id="slotMachineNumber" style="color: ${color};">0</span>
+                `;
+                // Slot machine effect
+                let currentNum = 0;
+                const targetNum = parseInt(item.display) || 1;
+                const slotInt = setInterval(() => {
+                    currentNum++;
+                    const slotEl = document.getElementById('slotMachineNumber');
+                    if (slotEl) slotEl.innerText = currentNum;
+                    if (currentNum >= targetNum) clearInterval(slotInt);
+                }, Math.max(10, 400 / targetNum));
             } else {
-                // Extract emoji
                 let wordText = item.word;
                 let emoji = '🍎';
                 const emojiRegex = /[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu;
-                const match = item.word.match(emojiRegex);
+                const match = item.word ? item.word.match(emojiRegex) : null;
                 if (match) {
                     emoji = match[0];
                     wordText = item.word.replace(emojiRegex, '').trim();
                 }
 
-                const subLabel = currentCategory === 'english_words' ? `${item.letter} for` : (currentCategory === 'hindi_words' ? `${item.letter} से` : `value of`);
-
                 card.innerHTML = `
-                            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center; margin-bottom: 5px;">
-                                <span class="giant-letter-bubble" style="background: ${color};">${item.letter}</span>
-                                <span style="font-size: 1.15rem; color: #888; font-weight: bold; font-family: 'Fredoka', sans-serif;">${subLabel}</span>
-                            </div>
-                            <span class="giant-emoji-graphic">${emoji}</span>
-                            <span class="giant-word-label">${wordText}</span>
-                        `;
+                    ${soundRing}
+                    <div style="display: flex; justify-content: center; width: 100%; margin-bottom: 5px;">
+                        <span class="giant-letter-bubble anim-stagger-1 clip-reveal" style="background: ${color}; transform-origin: center;">${item.letter}</span>
+                    </div>
+                    <span class="giant-emoji-graphic float-idle anim-stagger-2">${emoji}</span>
+                    <span class="giant-word-label anim-stagger-3">${wordText}</span>
+                `;
             }
 
             container.innerHTML = '';
             container.appendChild(card);
 
-            // Update Progress Tracking
-            const progressPct = ((readerIndex + 1) / currentDataList.length) * 100;
-            const bar = document.getElementById('readerProgressBar');
-            if (bar) bar.style.width = progressPct + '%';
-
-            const progressText = document.getElementById('readerProgressText');
-            if (progressText) {
-                progressText.innerText = `${readerIndex + 1} of ${currentDataList.length}`;
+            // Update Dot Stepper
+            const maxDots = Math.min(currentDataList.length, 26);
+            let activeDotIndex = readerIndex;
+            if (currentDataList.length > 26) {
+                activeDotIndex = Math.floor((readerIndex / currentDataList.length) * 26);
+            }
+            
+            for(let i = 0; i < maxDots; i++) {
+                const dot = document.getElementById('dot-' + i);
+                if (dot) {
+                    dot.className = 'step-dot';
+                    if (i < activeDotIndex) dot.classList.add('completed');
+                    else if (i === activeDotIndex) dot.classList.add('active');
+                }
             }
         }
+
+        let currentSpeechId = 0;
 
         function speakCurrentCard() {
             if (currentDataList.length === 0) return;
             const item = currentDataList[readerIndex];
+            
+            const speechId = ++currentSpeechId;
 
             if (window.SoundFX && typeof window.SoundFX.play === 'function') {
                 window.SoundFX.play('click');
             }
 
             if (window.SoundFX && typeof window.SoundFX.speak === 'function') {
-                let textToSpeak = item.phrase || item.word || item.letter || item.display;
+                // Activate sound ring
+                const ring = document.getElementById('activeSoundRing');
+                if (ring) {
+                    ring.classList.add('sound-wave-active');
+                }
+
                 let lang = item.lang || 'en-US';
+                let part1 = item.letter || item.display;
+                let part2 = null;
 
                 if (currentCategory === 'english_letters') {
                     const wordItem = typeof englishWords !== 'undefined' ? englishWords.find(w => w.letter === item.letter) : null;
                     const wordClean = wordItem ? wordItem.word.replace(/[\p{Emoji_Presentation}\p{Emoji}\u200d]+/gu, '').trim() : '';
-                    textToSpeak = `${item.letter}. ${item.letter} for ${wordClean || 'Apple'}!`;
+                    part1 = item.letter;
+                    part2 = `${item.letter} for ${wordClean || 'Apple'}!`;
                 } else if (currentCategory === 'hindi_letters') {
                     const hindiWordItem = typeof hindiWords !== 'undefined' ? hindiWords.find(w => w.letter === item.letter) : null;
-                    textToSpeak = `${item.letter}. ${hindiWordItem ? hindiWordItem.phrase : item.letter}`;
+                    part1 = item.letter;
+                    part2 = hindiWordItem ? hindiWordItem.phrase : null;
                     lang = 'hi-IN';
                 } else if (currentCategory === 'numbers') {
-                    textToSpeak = `Number ${item.letter}`;
+                    part1 = `Number ${item.letter}`;
+                    part2 = null;
+                    lang = 'en-US';
+                } else if (currentCategory === 'english_words') {
+                    part1 = item.letter;
+                    part2 = item.phrase;
                     lang = 'en-US';
                 } else if (currentCategory === 'hindi_words') {
+                    part1 = item.letter;
+                    part2 = item.phrase;
                     lang = 'hi-IN';
                 }
 
-                window.SoundFX.speak(textToSpeak, lang);
+                window.SoundFX.speak(part1, lang, () => {
+                    if (part2 && speechId === currentSpeechId) {
+                        setTimeout(() => {
+                            if (speechId === currentSpeechId) {
+                                window.SoundFX.speak(part2, lang, () => {
+                                    if (ring && speechId === currentSpeechId) ring.classList.remove('sound-wave-active');
+                                });
+                            }
+                        }, 200); // Small pause before speaking the object/word
+                    } else {
+                        if (ring && speechId === currentSpeechId) ring.classList.remove('sound-wave-active');
+                    }
+                });
             }
 
             // Award stars
@@ -829,6 +1276,7 @@
                 if (!autoplayActive) return;
 
                 if (readerIndex < currentDataList.length - 1) {
+                    swipeDirection = 'left';
                     readerIndex++;
                     renderCard();
 
@@ -848,7 +1296,34 @@
                     }
                     stopAutoplay();
                 }
-            }, 3500);
+            }, 4500);
+        }
+
+        // Swipe Navigation Logic
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        const readerScreen = document.getElementById('phonicsReaderScreen');
+        if (readerScreen) {
+            readerScreen.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+
+            readerScreen.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+        }
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) {
+                swipeDirection = 'left';
+                nextCard();
+            }
+            if (touchEndX > touchStartX + 50) {
+                swipeDirection = 'right';
+                prevCard();
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {

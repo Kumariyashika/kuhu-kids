@@ -19,7 +19,7 @@
 
     <!-- App Startup Full-Screen Welcome Video Overlay (Renders First) -->
     <div id="appVideoSplashModal" class="video-splash-overlay">
-        <video id="kuhuIntroVideo" class="splash-video-player" playsinline webkit-playsinline autoplay preload="auto">
+        <video id="kuhuIntroVideo" class="splash-video-player" playsinline webkit-playsinline preload="auto">
             <source src="{{ asset('video/start.mp4') }}" type="video/mp4">
             <source src="{{ asset('video/kuhu kids.mp4') }}" type="video/mp4">
             <source src="{{ asset('video/kuhu kid.mp4') }}" type="video/mp4">
@@ -36,6 +36,9 @@
                 if (modal) {
                     modal.style.display = 'none';
                     modal.classList.add('hidden');
+                }
+                if (video) {
+                    video.pause();
                 }
             } else {
                 if (modal && video) {
@@ -255,6 +258,7 @@
                     } catch (e) { }
 
                     const utterance = new SpeechSynthesisUtterance(text);
+                    this.currentUtterance = utterance; // Prevent garbage collection
                     utterance.lang = lang;
                     utterance.rate = 0.88;
                     utterance.pitch = 1.40; // Cute high pitch child voice simulation
@@ -287,6 +291,7 @@
                 }
             }
         };
+        window.SoundFX = SoundFX;
 
         // Preload speech synthesis voices
         if ('speechSynthesis' in window) {
@@ -604,7 +609,16 @@
                 BGM.updateUI();
             }
 
-            document.querySelectorAll('.module-card, .btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
+            document.querySelectorAll('.module-card').forEach(el => {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    SoundFX.play('click');
+                    let targetUrl = this.closest('a').href;
+                    window.location.href = targetUrl;
+                });
+            });
+
+            document.querySelectorAll('.btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
                 el.addEventListener('click', () => {
                     SoundFX.play('click');
                 });
@@ -620,38 +634,6 @@
             🎵
         </button>
     </div>
-</body>
-
-</html> BGM.updateUI();
-const startBgmOnce = () => {
-if (localStorage.getItem('bgm_enabled') !== 'false') {
-BGM.start();
-}
-document.removeEventListener('click', startBgmOnce);
-document.removeEventListener('touchstart', startBgmOnce);
-};
-document.addEventListener('click', startBgmOnce);
-document.addEventListener('touchstart', startBgmOnce);
-} else {
-BGM.updateUI();
-}
-
-document.querySelectorAll('.module-card, .btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
-el.addEventListener('click', () => {
-SoundFX.play('click');
-});
-});
-});
-</script>
-
-
-<!-- Global Fixed Top-Right Sound Icon Controller -->
-<div class="floating-bgm-container">
-    <button id="globalBgmBtn" class="btn-bgm bgm-toggle-btn" onclick="BGM.toggle()" title="Toggle Sound"
-        aria-label="Toggle Sound">
-        🔊
-    </button>
-</div>
 </body>
 
 </html>
