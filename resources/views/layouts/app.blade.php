@@ -17,16 +17,10 @@
 
 <body>
 
-<<<<<<< HEAD
     <!-- App Launch Full-Screen Welcome Video Overlay (Plays public/video/start.mp4) -->
     <div id="appWelcomeVideoModal" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 999999; display: flex; align-items: center; justify-content: center; overflow: hidden;">
         <button onclick="finishWelcomeVideo()" style="position: absolute; top: 20px; right: 20px; z-index: 1000000; padding: 10px 22px; font-family: 'Fredoka', sans-serif; font-size: 1.1rem; font-weight: 800; color: #FFF; background: #FF5252; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">Skip ▶</button>
         <video id="kuhuWelcomeVideo" playsinline webkit-playsinline autoplay preload="auto" style="width: 100%; height: 100%; object-fit: contain; background: #000;">
-=======
-    <!-- App Startup Full-Screen Welcome Video Overlay (Renders First) -->
-    <div id="appVideoSplashModal" class="video-splash-overlay">
-        <video id="kuhuIntroVideo" class="splash-video-player" playsinline webkit-playsinline preload="auto">
->>>>>>> a5b7b629521f9349d88b677d4f0fc9e3435260eb
             <source src="{{ asset('video/start.mp4') }}" type="video/mp4">
             Your browser does not support video playback.
         </video>
@@ -54,17 +48,7 @@
             };
 
             if (hasPlayed) {
-<<<<<<< HEAD
                 if (modal) modal.style.display = 'none';
-=======
-                if (modal) {
-                    modal.style.display = 'none';
-                    modal.classList.add('hidden');
-                }
-                if (video) {
-                    video.pause();
-                }
->>>>>>> a5b7b629521f9349d88b677d4f0fc9e3435260eb
             } else {
                 if (modal && video) {
                     document.documentElement.style.overflow = 'hidden';
@@ -299,7 +283,6 @@
                     } catch (e) { }
 
                     const utterance = new SpeechSynthesisUtterance(text);
-                    this.currentUtterance = utterance; // Prevent garbage collection
                     utterance.lang = lang;
                     utterance.rate = 0.94; // Cheerful kids speech rate
                     utterance.pitch = 1.48; // Cute high-pitch child voice simulation
@@ -343,7 +326,6 @@
                 }
             }
         };
-        window.SoundFX = SoundFX;
 
         // Preload speech synthesis voices
         if ('speechSynthesis' in window) {
@@ -517,16 +499,7 @@
                 BGM.updateUI();
             }
 
-            document.querySelectorAll('.module-card').forEach(el => {
-                el.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    SoundFX.play('click');
-                    let targetUrl = this.closest('a').href;
-                    window.location.href = targetUrl;
-                });
-            });
-
-            document.querySelectorAll('.btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
+            document.querySelectorAll('.module-card, .btn-3d, .bottom-pill, .sidebar-link, .pin-key').forEach(el => {
                 el.addEventListener('click', () => {
                     SoundFX.play('click');
                 });

@@ -79,57 +79,208 @@
     <!-- 8 Learning Modules Grid -->
     <main class="modules-grid">
         <!-- 1. Alphabet Tracing -->
-        <a href="{{ route('learning.tracing') }}" class="module-card" >
-                <img src="{{ asset('img/card_img/trace.png') }}" alt="Write Letters" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.tracing') }}" class="module-card module-card-purple">
+            <div class="card-icon-container">
+                <!-- SVG Letter Tracing A with Hand Outline -->
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <text x="35" y="80" font-family="'Fredoka', sans-serif" font-size="80" font-weight="900" fill="none"
+                        stroke="#FFFFFF" stroke-width="4" stroke-dasharray="4,4">A</text>
+                    <!-- Hand Icon Tracing -->
+                    <g transform="translate(42, 45) scale(0.6)">
+                        <path
+                            d="M30 45 C30 40 25 35 20 35 C15 35 15 45 15 45 C15 45 12 30 5 30 C-2 30 -2 45 -2 45 C-2 45 -5 28 -12 28 C-19 28 -19 45 -19 45 L-19 55 C-19 65 -10 75 0 75 L15 75 C25 75 30 65 30 55 Z"
+                            fill="#FFE0B2" stroke="#E65100" stroke-width="3" />
+                        <rect x="-35" y="40" width="18" height="35" rx="3" fill="#FFE0B2" stroke="#E65100" stroke-width="3"
+                            transform="rotate(-30)" />
+                    </g>
+                    <!-- Sparkle Stars -->
+                    <polygon points="12,12 15,18 22,18 17,22 19,28 12,24 5,28 7,22 2,18 9,18" fill="#FFDE59" />
+                    <polygon points="85,60 87,63 90,63 88,65 89,68 85,66 81,68 82,65 80,63 83,63" fill="#FFDE59" />
+                </svg>
+            </div>
+            <h2 class="card-title">Write Letters ✏️</h2>
+            <span class="card-subtitle">Trace A-Z with your finger!</span>
         </a>
 
         <!-- 2. Phonics Sounds -->
-        <a href="{{ route('learning.phonics') }}" class="module-card">
-            
-                <img src="{{ asset('img/card_img/phonic.png') }}" alt="Phonics Sounds" style="width: 100%; height: 100%;  border-radius: 20px;">
-            
+        <a href="{{ route('learning.phonics') }}" class="module-card module-card-orange">
+            <div class="card-icon-container">
+                <!-- Megaphone with music notes -->
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <g transform="translate(10, 10)">
+                        <!-- Megaphone body -->
+                        <path d="M15 30 L45 15 L45 65 L15 50 Z" fill="#29B6F6" stroke="#0288D1" stroke-width="3" />
+                        <path d="M45 15 C52 15, 52 65, 45 65" fill="#B3E5FC" stroke="#0288D1" stroke-width="3" />
+                        <rect x="5" y="32" width="12" height="16" rx="4" fill="#B0BEC5" stroke="#37474F" stroke-width="3" />
+                        <!-- Music Notes -->
+                        <path
+                            d="M60 25 C60 15, 75 10, 75 10 L75 25 M60 25 C55 25, 50 30, 50 35 C50 40, 55 45, 60 45 C65 45, 65 35, 65 25 M75 20 C70 20, 68 25, 68 30 C68 35, 73 40, 78 40 C83 40, 83 30, 83 20"
+                            fill="none" stroke="#FF5252" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                </svg>
+            </div>
+            <h2 class="card-title">A for Apple 🔊</h2>
+            <span class="card-subtitle">Hear and say letters!</span>
         </a>
 
         <!-- 3. Balloon Pop -->
-        <a href="{{ route('learning.balloon_pop') }}" class="module-card">
-                <img src="{{ asset('img/card_img/pop.png') }}" alt="Balloon Pop" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.balloon_pop') }}" class="module-card module-card-green">
+            <div class="card-icon-container">
+                <!-- Group of Balloons A, B, C -->
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <!-- Balloon C -->
+                    <g transform="translate(62, 35)">
+                        <ellipse cx="0" cy="0" rx="14" ry="18" fill="#29B6F6" />
+                        <text x="-7" y="7" fill="white" font-weight="bold" font-size="16">C</text>
+                    </g>
+                    <!-- Balloon B -->
+                    <g transform="translate(18, 38)">
+                        <ellipse cx="0" cy="0" rx="14" ry="18" fill="#AB47BC" />
+                        <text x="-6" y="7" fill="white" font-weight="bold" font-size="16">B</text>
+                    </g>
+                    <!-- Balloon A (Center) -->
+                    <g transform="translate(42, 22)">
+                        <ellipse cx="0" cy="0" rx="18" ry="22" fill="#FF5252" />
+                        <text x="-7" y="8" fill="white" font-weight="bold" font-size="20">A</text>
+                    </g>
+                </svg>
+            </div>
+            <h2 class="card-title">Pop Balloons! 🎈</h2>
+            <span class="card-subtitle">Tap and pop letters!</span>
         </a>
 
         <!-- 4. Letter Match -->
-        <a href="{{ route('learning.letter_match') }}" class="module-card">
-                <img src="{{ asset('img/card_img/match.png') }}" alt="Letter Match" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.letter_match') }}" class="module-card module-card-blue">
+            <div class="card-icon-container">
+                <!-- Two Puzzle Pieces A and B -->
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <!-- Left Piece (Yellow A) -->
+                    <g transform="translate(15, 20)">
+                        <path d="M0 0 L25 0 Q30 -8 38 0 L50 0 L50 15 Q58 20 50 28 L50 40 L0 40 Z" fill="#FFCA28"
+                            stroke="#F57F17" stroke-width="2" />
+                        <text x="15" y="28" font-size="24" font-weight="bold" fill="#F57F17">A</text>
+                    </g>
+                    <!-- Right Piece (Pink B) -->
+                    <g transform="translate(45, 28)">
+                        <path d="M0 0 L25 0 L25 35 L0 35 L0 25 Q-8 20 0 15 Z" fill="#EC407A" stroke="#C2185B"
+                            stroke-width="2" />
+                        <text x="8" y="25" font-size="22" font-weight="bold" fill="white">B</text>
+                    </g>
+                </svg>
+            </div>
+            <h2 class="card-title">Match Same Letters 🧩</h2>
+            <span class="card-subtitle">Put matching letters together!</span>
         </a>
 
         <!-- 5. English Rhymes -->
-        <a href="{{ route('learning.english_rhymes') }}" class="module-card">
-                <img src="{{ asset('img/card_img/english_song.png') }}" alt="English Songs" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.english_rhymes') }}" class="module-card module-card-pink">
+            <div class="card-icon-container">
+                <!-- Trophy Graphic (from English Rhymes icon) -->
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <g transform="translate(20, 10)">
+                        <!-- Gold Cup -->
+                        <path d="M10 10 L50 10 L45 45 C40 55, 20 55, 15 45 Z" fill="#FFDE59" stroke="#E6A100"
+                            stroke-width="3" />
+                        <rect x="25" y="52" width="10" height="15" fill="#E6A100" />
+                        <ellipse cx="30" cy="68" rx="20" ry="6" fill="#FFDE59" stroke="#E6A100" stroke-width="3" />
+                        <!-- Handles -->
+                        <path d="M10 20 C0 20, 0 35, 12 35" fill="none" stroke="#FFDE59" stroke-width="4"
+                            stroke-linecap="round" />
+                        <path d="M50 20 C60 20, 60 35, 48 35" fill="none" stroke="#FFDE59" stroke-width="4"
+                            stroke-linecap="round" />
+                        <!-- Star on Trophy -->
+                        <polygon points="30,22 33,28 39,28 34,31 36,36 30,33 24,36 26,31 21,28 27,28" fill="#FF914D" />
+                    </g>
+                </svg>
+            </div>
+            <h2 class="card-title">English Songs 🎶</h2>
+            <span class="card-subtitle">Sing and dance along!</span>
         </a>
 
         <!-- 6. Hindi Rhymes -->
-        <a href="{{ route('learning.hindi_rhymes') }}" class="module-card">
-                <img src="{{ asset('img/card_img/hindi_song.png') }}" alt="Hindi Songs" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.hindi_rhymes') }}" class="module-card module-card-teal">
+            <div class="card-icon-container">
+                <!-- Devanagari Letters क ख ग -->
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <text x="10" y="45" font-family="'Fredoka', sans-serif" font-size="34" font-weight="bold" fill="#FFE5A3"
+                        stroke="#D18700" stroke-width="1.5">क</text>
+                    <text x="50" y="50" font-family="'Fredoka', sans-serif" font-size="34" font-weight="bold" fill="#FFC9F3"
+                        stroke="#A82885" stroke-width="1.5">ख</text>
+                    <text x="30" y="85" font-family="'Fredoka', sans-serif" font-size="36" font-weight="bold" fill="#C3FFD8"
+                        stroke="#12702F" stroke-width="1.5">ग</text>
+                    <!-- Music Note -->
+                    <circle cx="82" cy="30" r="5" fill="#FFF" />
+                    <line x1="87" y1="15" x2="87" y2="30" stroke="#FFF" stroke-width="3" />
+                    <polygon points="87,15 95,18 95,22 87,19" fill="#FFF" />
+                </svg>
+            </div>
+            <h2 class="card-title">Hindi Songs 🎤</h2>
+            <span class="card-subtitle">मजेदार बाल कविताएँ सुनो!</span>
         </a>
 
 
         <!-- 7. Devotional Learning -->
-        <a href="{{ route('learning.devotional') }}" class="module-card">
-                <img src="{{ asset('img/card_img/devotee.png') }}" alt="God Stories" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.devotional') }}" class="module-card module-card-dark-purple">
+            <div class="card-icon-container">
+                <!-- Cute Krishna silhouette/graphics -->
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <g transform="translate(15, 10)">
+                        <!-- Face -->
+                        <circle cx="35" cy="45" r="22" fill="#A0E0FF" stroke="#0088CC" stroke-width="2" />
+                        <!-- Peacock Feather -->
+                        <path d="M 35 23 Q 48 10 52 2 M 35 23 Q 22 10 35 23" fill="none" stroke="#228B22"
+                            stroke-width="2" />
+                        <ellipse cx="44" cy="12" rx="6" ry="10" fill="#008080" transform="rotate(30, 44, 12)" />
+                        <circle cx="44" cy="12" r="3" fill="#FF8C00" />
+                        <!-- Flute -->
+                        <rect x="15" y="48" width="50" height="6" rx="2" fill="#D2B48C" stroke="#8B4513" stroke-width="1.5"
+                            transform="rotate(-15, 35, 50)" />
+                        <circle cx="20" cy="46" r="1.5" fill="#FF2E2E" />
+                        <circle cx="25" cy="45" r="1.5" fill="#FF2E2E" />
+                        <!-- Eyes & Smile -->
+                        <circle cx="28" cy="42" r="2" fill="#222" />
+                        <circle cx="42" cy="42" r="2" fill="#222" />
+                        <path d="M 31 52 Q 35 56 39 52" stroke="#222" stroke-width="1.5" stroke-linecap="round"
+                            fill="none" />
+                    </g>
+                </svg>
+            </div>
+            <h2 class="card-title">God Stories & Prayers 🙏</h2>
+            <span class="card-subtitle">Hear sweet prayers and mantras</span>
         </a>
 
 
 
         <!-- 9. Number Counting -->
-        <a href="{{ route('learning.numbers') }}" class="module-card">
-                <img src="{{ asset('img/card_img/count.png') }}" alt="Count 1-2-3" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.numbers') }}" class="module-card module-card-green">
+            <div class="card-icon-container">
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <text x="12" y="55" font-family="'Fredoka', sans-serif" font-size="44" font-weight="900" fill="#FFDE59"
+                        stroke="#E6A100" stroke-width="2">1</text>
+                    <text x="38" y="75" font-family="'Fredoka', sans-serif" font-size="48" font-weight="900" fill="#FF5252"
+                        stroke="#C62828" stroke-width="2">2</text>
+                    <text x="68" y="55" font-family="'Fredoka', sans-serif" font-size="44" font-weight="900" fill="#38B6FF"
+                        stroke="#1B8EC7" stroke-width="2">3</text>
+                </svg>
+            </div>
+            <h2 class="card-title">Count 1-2-3! 🔢</h2>
+            <span class="card-subtitle">Learn counting numbers!</span>
         </a>
 
         <!-- 10. Shapes Learning -->
-        <a href="{{ route('learning.shapes') }}" class="module-card">
-                <img src="{{ asset('img/card_img/shape.png') }}" alt="Play with Shapes" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.shapes') }}" class="module-card module-card-orange">
+            <div class="card-icon-container">
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <circle cx="30" cy="40" r="16" fill="#7ED957" stroke="#63AA43" stroke-width="2" />
+                    <rect x="52" y="24" width="28" height="28" rx="4" fill="#FF66C4" stroke="#D94B9F" stroke-width="2" />
+                    <polygon points="50,55 25,85 75,85" fill="#FFDE59" stroke="#CCB143" stroke-width="2" />
+                </svg>
+            </div>
+            <h2 class="card-title">Play with Shapes 🔴</h2>
+            <span class="card-subtitle">Find circles, squares and stars!</span>
         </a>
 
         <!-- 11. Colors Pop -->
-<<<<<<< HEAD
         <a href="{{ route('learning.colors') }}" class="module-card module-card-pink">
             <div class="card-icon-container">
                 <svg viewBox="0 0 100 100" width="90" height="90">
@@ -146,15 +297,20 @@
             </div>
             <h2 class="card-title">Colors Name / रंगों के नाम 🎨</h2>
             <span class="card-subtitle">Learn Red (लाल), Blue (नीला) & more!</span>
-=======
-        <a href="{{ route('learning.colors') }}" class="module-card">
-                <img src="{{ asset('img/card_img/color.png') }}" alt="Color Fun" style="width: 100%; height: 100%;  border-radius: 20px;">
->>>>>>> a5b7b629521f9349d88b677d4f0fc9e3435260eb
         </a>
 
         <!-- 12. Quiz Time -->
-        <a href="{{ route('learning.quiz') }}" class="module-card">
-                <img src="{{ asset('img/card_img/quiz.png') }}" alt="Kids Quiz Game" style="width: 100%; height: 100%;  border-radius: 20px;">
+        <a href="{{ route('learning.quiz') }}" class="module-card module-card-purple">
+            <div class="card-icon-container">
+                <svg viewBox="0 0 100 100" width="90" height="90">
+                    <text x="35" y="70" font-family="'Fredoka', sans-serif" font-size="64" font-weight="900" fill="#FFDE59"
+                        stroke="#E6A100" stroke-width="3" transform="rotate(-5, 50, 50)">?</text>
+                    <polygon points="20,20 22,25 28,25 24,28 26,34 20,30 14,34 16,28 12,25 18,25" fill="#FFF" />
+                    <polygon points="80,75 82,80 88,80 84,83 86,89 80,85 74,89 76,83 72,80 78,80" fill="#FFF" />
+                </svg>
+            </div>
+            <h2 class="card-title">Kids Quiz Game ❓</h2>
+            <span class="card-subtitle">Answer questions & win stars!</span>
         </a>
 
 

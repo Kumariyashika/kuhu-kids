@@ -479,24 +479,17 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-
+    color: white;
     text-decoration: none;
     cursor: pointer;
     height: 250px;
 }
 
-<<<<<<< HEAD
 /* Module Card & Garden Path Colors */
 .module-card-purple,
 .garden-path-btn-purple {
     background: linear-gradient(160deg, #A873FF 0%, #8C52FF 50%, #6E3CD9 100%) !important;
     border-bottom: 10px solid #521FAD !important;
-=======
-/* Shadow offsets for 3D card borders */
-.module-card-purple {
-    background: var(--color-purple);
-    border-bottom: solid var(--color-purple-shadow);
->>>>>>> a5b7b629521f9349d88b677d4f0fc9e3435260eb
 }
 
 .module-card-orange,
